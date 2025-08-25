@@ -1,40 +1,30 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import firebase from '@react-native-firebase/app';
-import CreateAccountScreen from './screens/CreateAccountScreen';
+import React, { useEffect, useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import OnboardingScreen from './screens/OnboardingScreen';
 
-function App() {
+const Stack = createNativeStackNavigator();
+
+const App = () => {
+  const [initialRoute, setInitialRoute] = useState('OnboardingScreen');
+
   useEffect(() => {
-  if (firebase.apps.length === 0) {
-    console.log("No Firebase app found");
-  } else {
-    console.log("Firebase initialized:", firebase.app().name);
-  }
-}, []);
+    const checkLogin = async () => {
+      setInitialRoute('OnboardingScreen');
+    };
+    checkLogin();
+  }, []);
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
-        <View style={styles.container}>
-          <CreateAccountScreen />
-        </View>
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName={initialRoute}
+        screenOptions={{ headerShown: false }}
+      >
+        <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1, // fill screen
-    justifyContent: 'center', 
-    alignItems: 'center',
-    backgroundColor: '#fff',
-  },
-  text: {
-    fontSize: 18,
-    textAlign: 'center',
-  },
-});
+};
 
 export default App;
