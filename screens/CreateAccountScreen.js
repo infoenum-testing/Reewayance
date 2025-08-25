@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from "react-native";
 import AppTextInput from "../components/AppTextInput";
+import { validateInput } from "../validation/validateInput";
 import AppButton from "../components/AppButton";
+import Google from "../assets/googleIcon.png";
+import Facebook from "../assets/facebookIcon.png";
+import colors from "../constants/colors";
 
 export default function CreateAccountScreen({ navigation }) {
     const [fullName, setFullName] = useState("");
@@ -12,8 +16,15 @@ export default function CreateAccountScreen({ navigation }) {
         console.log("Creating Account:", { fullName, email, password });
     };
 
+    // Check if all fields are valid
+    const isFullNameValid = validateInput("name", fullName).isValid;
+    const isEmailValid = validateInput("email", email).isValid;
+    const isPasswordValid = validateInput("password", password).isValid;
+
+    const isFormValid = isFullNameValid && isEmailValid && isPasswordValid;
+
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView style={styles.container}>
             {/* Header */}
             <Text style={styles.title}>Create an account</Text>
             <Text style={styles.subtitle}>Let’s create your account.</Text>
@@ -33,7 +44,6 @@ export default function CreateAccountScreen({ navigation }) {
                 onChangeText={setEmail}
                 type="email"
             />
-
             <AppTextInput
                 label="Password"
                 placeholder="Enter your password"
@@ -52,7 +62,12 @@ export default function CreateAccountScreen({ navigation }) {
             </Text>
 
             {/* Create Account Button */}
-            <AppButton title="Create an Account" onPress={handleCreateAccount} />
+            <AppButton
+                title="Create an Account"
+                onPress={handleCreateAccount}
+                disabled={!isFormValid} // disabled until all fields are valid
+                color={isFormValid ? "#000" : "#999"} // change color based on validity
+            />
 
             {/* Divider */}
             <View style={styles.dividerContainer}>
@@ -61,13 +76,15 @@ export default function CreateAccountScreen({ navigation }) {
                 <View style={styles.divider} />
             </View>
 
-            {/* Social Buttons (no icons) */}
-            <TouchableOpacity style={[styles.socialButton, { backgroundColor: "#DB4437" }]}>
+            {/* Social Buttons */}
+            <TouchableOpacity style={[styles.socialButton, { backgroundColor: colors.google }]}>
+                <Image source={Google} style={styles.socialIcon}></Image>
                 <Text style={styles.socialText}>Sign Up with Google</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.socialButton, { backgroundColor: "#1877F2" }]}>
-                <Text style={styles.socialText}>Sign Up with Facebook</Text>
+            <TouchableOpacity style={[styles.socialButton, { backgroundColor: colors.facebook }]}>
+                <Image source={Facebook} style={styles.socialIcon}></Image>
+                <Text style={styles.socialFacebookText}>Sign Up with Facebook</Text>
             </TouchableOpacity>
 
             {/* Footer */}
@@ -83,20 +100,20 @@ export default function CreateAccountScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        flexGrow: 1,
+        // flexGrow: 1,
         paddingHorizontal: 20,
         paddingVertical: 40,
-        backgroundColor: "#fff",
+        backgroundColor: colors.background,
     },
     title: {
         fontSize: 30,
         fontWeight: "700",
-        color: "#000",
+        color: colors.primary,
         marginBottom: 6,
     },
     subtitle: {
         fontSize: 16,
-        color: "#666",
+        color: colors.secondary,
         marginBottom: 24,
     },
     terms: {
@@ -134,12 +151,26 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginBottom: 14,
+        borderWidth: 1,
+        borderColor: "#ddd",
+        flexDirection: "row",
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
     },
     socialText: {
+        color: "#000",
+        fontSize: 15,
+        fontWeight: "500",
+    },
+    socialFacebookText: {
         color: "#fff",
         fontSize: 15,
         fontWeight: "500",
     },
+
     footer: {
         flexDirection: "row",
         justifyContent: "center",
@@ -157,4 +188,10 @@ const styles = StyleSheet.create({
         textDecorationColor: "#000",
         textDecorationStyle: "solid",
     },
+    socialIcon: {
+        width: 20,
+        height: 20,
+        marginRight: 8,            // spacing between icon and text
+        resizeMode: "contain",
+    }
 });
