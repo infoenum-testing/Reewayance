@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import firebase from '@react-native-firebase/app';
+import CreateAccountScreen from './screens/CreateAccountScreen';
 
 function App() {
   useEffect(() => {
@@ -16,9 +17,7 @@ function App() {
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         <View style={styles.container}>
-          <Text style={styles.text}>
-            🚀 Firebase is ready!
-          </Text>
+          <CreateAccountScreen />
         </View>
       </SafeAreaView>
     </SafeAreaProvider>
