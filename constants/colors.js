@@ -1,5 +1,5 @@
-
-export default {
+// constants/colors.js
+const colors = {
   primary: "#000",          // main black
   secondary: "#666",        // gray for text
   placeholder: "#999",      // input placeholder
@@ -11,3 +11,5 @@ export default {
   border: "#ddd",
   link: "#000",
 };
+
+export default colors;

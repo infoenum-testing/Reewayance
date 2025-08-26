@@ -5,8 +5,9 @@ import { validateInput } from "../validation/validateInput";
 import AppButton from "../components/AppButton";
 import Google from "../assets/googleIcon.png";
 import Facebook from "../assets/facebookIcon.png";
-import colors from "../constants/colors";
+// import colors from "../constants/colors";  
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { ROUTES } from "../helper/routes";
 
 export default function CreateAccountScreen({ navigation }) {
     const [fullName, setFullName] = useState("");
@@ -15,6 +16,10 @@ export default function CreateAccountScreen({ navigation }) {
 
     const handleCreateAccount = () => {
         console.log("Creating Account:", { fullName, email, password });
+    };
+
+    const handleLoginNavigation = () => {
+        navigation.pop(); // Go back to the previous screen (LoginScreen)
     };
 
     const isFullNameValid = validateInput("name", fullName).isValid;
@@ -61,7 +66,7 @@ export default function CreateAccountScreen({ navigation }) {
             </Text>
 
             <AppButton
-                title="Create an Account"
+                title="Sign Up"
                 onPress={handleCreateAccount}
                 disabled={!isFormValid} // disabled until all fields are valid
                 color={isFormValid ? "#000" : "#999"} // change color based on validity
@@ -73,19 +78,19 @@ export default function CreateAccountScreen({ navigation }) {
                 <View style={styles.divider} />
             </View>
 
-            <TouchableOpacity style={[styles.socialButton, { backgroundColor: colors.google }]}>
+            <TouchableOpacity style={[styles.socialButton, { backgroundColor: "#fff" }]}>
                 <Image source={Google} style={styles.socialIcon}></Image>
                 <Text style={styles.socialText}>Sign Up with Google</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.socialButton, { backgroundColor: colors.facebook }]}>
+            <TouchableOpacity style={[styles.socialButton, { backgroundColor: "#1877F2" }]}>
                 <Image source={Facebook} style={styles.socialIcon}></Image>
                 <Text style={styles.socialFacebookText}>Sign Up with Facebook</Text>
             </TouchableOpacity>
 
             <View style={styles.footer}>
                 <Text style={styles.footerText}>Already have an account?</Text>
-                <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                <TouchableOpacity onPress={handleLoginNavigation}>
                     <Text style={styles.footerLink}> Log In</Text>
                 </TouchableOpacity>
             </View>
@@ -99,17 +104,17 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: colors.background,
+        backgroundColor: '#fff',
     },
     title: {
         fontSize: 30,
         fontWeight: "700",
-        color: colors.primary,
+        color: "#000",
         marginBottom: 6,
     },
     subtitle: {
         fontSize: 16,
-        color: colors.secondary,
+        color: '#666',
         marginBottom: 24,
     },
     terms: {
@@ -187,7 +192,7 @@ const styles = StyleSheet.create({
     socialIcon: {
         width: 20,
         height: 20,
-        marginRight: 8,            // spacing between icon and text
+        marginRight: 8,           
         resizeMode: "contain",
     }
 });

@@ -16,7 +16,7 @@ const OnboardingScreen = () => {
    const navigation = useNavigation();
 
    const handleGetStarted = () => {
-    navigation.navigate(ROUTES.CREATE_ACCOUNT);
+    navigation.navigate(ROUTES.Login_SCREEN);
   };
 
   return (
