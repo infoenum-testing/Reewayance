@@ -85,7 +85,7 @@ export default function CreateAccountScreen({ navigation }) {
 
             <View style={styles.footer}>
                 <Text style={styles.footerText}>Already have an account?</Text>
-                <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}>
                     <Text style={styles.footerLink}> Log In</Text>
                 </TouchableOpacity>
             </View>
