@@ -1,0 +1,4 @@
+<resources>
+    <!-- Add your splash background color -->
+    <color name="splash_bg">#fff</color> <!-- Blue example -->
+</resources>
