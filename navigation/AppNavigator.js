@@ -5,9 +5,12 @@ import OnboardingScreen from '../screens/OnboardingScreen';
 import CreateAccountScreen from '../screens/CreateAccountScreen';
 import HomeScreen from '../screens/HomeScreen';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
+import LoginScreen from '../screens/LoginScreen';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+import VarificationScreen from '../screens/VarificationScreen';
+import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import SplashScreen from 'react-native-splash-screen';
 import { ROUTES } from '../helper/routes';
-
 
 const Stack = createNativeStackNavigator();
 
