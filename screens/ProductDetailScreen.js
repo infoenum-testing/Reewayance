@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Heart from '../assets/images/heart.png';
-import Arrow from '../assets/images/Arrow.png';
+import Arrow from '../assets/backButtonImage.png';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 const ProductDetails = () => {
