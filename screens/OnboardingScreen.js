@@ -7,8 +7,18 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import MenImage from '../assets/images/menImage.png'
+import { useNavigation } from '@react-navigation/native';
+import { ROUTES } from '../helper/routes';
 
 const OnboardingScreen = () => {
+
+   const navigation = useNavigation();
+
+   const handleGetStarted = () => {
+    navigation.navigate(ROUTES.CREATE_ACCOUNT);
+  };
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
@@ -21,14 +31,14 @@ const OnboardingScreen = () => {
 
         <View style={styles.imageWrapper}>
           <Image
-            source={require('/Users/ie14/Projects/MyApp/React-Native/eCommerce/MainEcommerce/Reewayance/assets/images/menImage.png')} // <-- apna path yaha update karo
+            source={MenImage}
             style={styles.image}
             resizeMode="cover"
           />
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleGetStarted}>
             <Text style={styles.buttonText}>Get Started</Text>
           </TouchableOpacity>
         </View>

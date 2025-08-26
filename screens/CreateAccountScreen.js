@@ -6,6 +6,7 @@ import AppButton from "../components/AppButton";
 import Google from "../assets/googleIcon.png";
 import Facebook from "../assets/facebookIcon.png";
 import colors from "../constants/colors";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export default function CreateAccountScreen({ navigation }) {
     const [fullName, setFullName] = useState("");
@@ -16,7 +17,6 @@ export default function CreateAccountScreen({ navigation }) {
         console.log("Creating Account:", { fullName, email, password });
     };
 
-    // Check if all fields are valid
     const isFullNameValid = validateInput("name", fullName).isValid;
     const isEmailValid = validateInput("email", email).isValid;
     const isPasswordValid = validateInput("password", password).isValid;
@@ -24,12 +24,12 @@ export default function CreateAccountScreen({ navigation }) {
     const isFormValid = isFullNameValid && isEmailValid && isPasswordValid;
 
     return (
-        <ScrollView style={styles.container}>
-            {/* Header */}
+        <SafeAreaProvider>
+            <SafeAreaView style={styles.container}>
+        <ScrollView >
             <Text style={styles.title}>Create an account</Text>
             <Text style={styles.subtitle}>Let’s create your account.</Text>
 
-            {/* Inputs */}
             <AppTextInput
                 label="Full Name"
                 placeholder="Enter your full name"
@@ -53,7 +53,6 @@ export default function CreateAccountScreen({ navigation }) {
                 type="password"
             />
 
-            {/* Terms & Conditions */}
             <Text style={styles.terms}>
                 By signing up you agree to our{" "}
                 <Text style={styles.link}>Terms</Text>,{" "}
@@ -61,7 +60,6 @@ export default function CreateAccountScreen({ navigation }) {
                 <Text style={styles.link}>Cookie Use</Text>
             </Text>
 
-            {/* Create Account Button */}
             <AppButton
                 title="Create an Account"
                 onPress={handleCreateAccount}
@@ -69,14 +67,12 @@ export default function CreateAccountScreen({ navigation }) {
                 color={isFormValid ? "#000" : "#999"} // change color based on validity
             />
 
-            {/* Divider */}
             <View style={styles.dividerContainer}>
                 <View style={styles.divider} />
                 <Text style={styles.dividerText}>Or</Text>
                 <View style={styles.divider} />
             </View>
 
-            {/* Social Buttons */}
             <TouchableOpacity style={[styles.socialButton, { backgroundColor: colors.google }]}>
                 <Image source={Google} style={styles.socialIcon}></Image>
                 <Text style={styles.socialText}>Sign Up with Google</Text>
@@ -87,7 +83,6 @@ export default function CreateAccountScreen({ navigation }) {
                 <Text style={styles.socialFacebookText}>Sign Up with Facebook</Text>
             </TouchableOpacity>
 
-            {/* Footer */}
             <View style={styles.footer}>
                 <Text style={styles.footerText}>Already have an account?</Text>
                 <TouchableOpacity onPress={() => navigation.navigate("Login")}>
@@ -95,14 +90,15 @@ export default function CreateAccountScreen({ navigation }) {
                 </TouchableOpacity>
             </View>
         </ScrollView>
+        </SafeAreaView>
+        </SafeAreaProvider>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        // flexGrow: 1,
-        paddingHorizontal: 20,
-        paddingVertical: 40,
+        flex: 1,
+        padding: 20,
         backgroundColor: colors.background,
     },
     title: {
