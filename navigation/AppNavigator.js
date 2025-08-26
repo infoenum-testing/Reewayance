@@ -1,16 +1,13 @@
 // AppNavigator.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import CreateAccountScreen from '../screens/CreateAccountScreen';
 import HomeScreen from '../screens/HomeScreen';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
-import LoginScreen from '../screens/LoginScreen';
-import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
-import VarificationScreen from '../screens/VarificationCodeScreen';
-import ResetPasswordScreen from '../screens/ResetPasswordScreen';
-import colors from '../constants/colors';
+import SplashScreen from 'react-native-splash-screen';
 import { ROUTES } from '../helper/routes';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +24,10 @@ const AppNavigator = () => {
             <Stack.Screen name={ROUTES.PRODUCT_DETAIL} component={ProductDetailScreen} />
         </Stack.Navigator>
     );
+
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
 };
 
 export default AppNavigator;

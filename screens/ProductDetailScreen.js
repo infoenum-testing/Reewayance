@@ -46,6 +46,7 @@ const ProductDetails = () => {
                   onPress={() => setSelectedSize(size)}
                 >
                   <Text
+                    // eslint-disable-next-line react-native/no-inline-styles
                     style={{
                       color: selectedSize === size ? '#fff' : '#000',
                       fontWeight: 'bold',
