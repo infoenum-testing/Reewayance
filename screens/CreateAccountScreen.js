@@ -5,7 +5,7 @@ import { validateInput } from "../validation/validateInput";
 import AppButton from "../components/AppButton";
 import Google from "../assets/googleIcon.png";
 import Facebook from "../assets/facebookIcon.png";
-// import colors from "../constants/colors";  
+// import colors from "../constants/colors";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { ROUTES } from "../helper/routes";
 
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     socialIcon: {
         width: 20,
         height: 20,
-        marginRight: 8,           
+        marginRight: 8,
         resizeMode: "contain",
     }
 });

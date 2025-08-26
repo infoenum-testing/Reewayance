@@ -6,4 +6,6 @@ export const ROUTES = {
     FORGOT_PASSWORD: 'ForgotPasswordScreen',
     Varification_SCREEN: 'VerificationCodeScreen',
     RESET_PASSWORD: 'ResetPasswordScreen',
+    HOMESCREEN: 'HomeScreen',
+    PRODUCT_DETAIL: 'ProductDetailScreen',
 };

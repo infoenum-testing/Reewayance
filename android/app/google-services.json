@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "483952181054",
+    "firebase_url": "https://reewayance-default-rtdb.firebaseio.com",
+    "project_id": "reewayance",
+    "storage_bucket": "reewayance.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:483952181054:android:342a3fe683972a4637766f",
+        "android_client_info": {
+          "package_name": "com.reewayance"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCexmwglRcPq-qnXEjmLs_ZoXOlORnKPUM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
