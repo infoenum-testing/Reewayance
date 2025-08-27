@@ -6,7 +6,7 @@ import ProductDetailScreen from '../screens/ProductDetailScreen';
 import CartScreen from '../screens/CartScreen';
 import SearchScreen from '../screens/SearchScreen';
 import { ROUTES } from '../helper/routes';
-import { Text } from 'react-native';
+import { Text , Image } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
