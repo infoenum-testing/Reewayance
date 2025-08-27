@@ -40,8 +40,8 @@ const BottomTabNavigator = () => {
       />
 
       <Tab.Screen
-        name="HeSearch"
-        component={HomeScreen}
+        name= {ROUTES.SEARCH_SCREEN}
+        component={SearchScreen}
         options={{
           tabBarLabel: "Search",
           tabBarIcon: ({ focused }) => (

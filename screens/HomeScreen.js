@@ -75,7 +75,6 @@ const HomeScreen = ({ navigation }) => {
     return () => ref.off('value', onValueChange);
   }, [selectedCategory]);
 
-  // 🔍 Search function
   const handleSearch = text => {
     setSearchText(text);
     if (text.trim().length > 0) {
