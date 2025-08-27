@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
 import CartScreen from '../screens/CartScreen';
+import SearchScreen from '../screens/SearchScreen';
 import { ROUTES } from '../helper/routes';
 import { Text } from 'react-native';
 
@@ -21,6 +22,11 @@ const BottomTabNavigator = () => {
         name={ROUTES.HOMESCREEN}
         component={HomeScreen}
         options={{ tabBarLabel: 'HOME' }}
+      />
+      <Tab.Screen
+        name={ROUTES.SEARCH_SCREEN}
+        component={SearchScreen}
+        options={{ tabBarLabel: 'SEARCH' }}
       />
       <Tab.Screen
         name={ROUTES.PRODUCT_DETAIL}

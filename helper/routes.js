@@ -9,5 +9,6 @@ export const ROUTES = {
     HOMESCREEN: 'HomeScreen',
     PRODUCT_DETAIL: 'ProductDetailScreen',
     CARTSCREEN: 'CartScreen',
+    SEARCH_SCREEN: 'SearchScreen',
     TABS: "MainTabs",
 };
