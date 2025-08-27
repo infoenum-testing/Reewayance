@@ -1,20 +1,31 @@
+// helpers/validateInput.js
 export const validateInput = (type, value) => {
-    let isValid = false;
-    let errorMessage = "";
+  let isValid = false;
+  let errorMessage = "";
 
-    if (type === "name") {
-        isValid = /^[A-Za-z ]+$/.test(value?.trim() || "");
-        errorMessage = "Name must contain only letters";
-    } else if (type === "email") {
-        isValid = /\S+@\S+\.com$/.test(value?.trim() || "");
-        errorMessage = "Please enter a valid email (must include @ and .com)";
-    } else if (type === "password") {
-        isValid = value?.length >= 8;
-        errorMessage = "Password must be at least 8 characters";
-    } else {
-        isValid = value?.trim()?.length > 0;
-        errorMessage = "This field is required";
-    }
+  const trimmedValue = value?.trim() || "";
 
-    return { isValid, errorMessage };
+  // 🔹 Empty check (common for all)
+  if (!trimmedValue) {
+    return { isValid: false, errorMessage: "This field is required" };
+  }
+
+  if (type === "name") {
+    isValid = /^[A-Za-z ]+$/.test(trimmedValue);
+    errorMessage = isValid ? "" : "Name must contain only letters";
+  } else if (type === "email") {
+    // ✅ Accepts all valid domains, not just .com
+    isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedValue);
+    errorMessage = isValid ? "" : "Please enter a valid email address";
+  } else if (type === "password") {
+    // ✅ Stronger password rule: min 8 chars
+    isValid = trimmedValue.length >= 8;
+    errorMessage = isValid ? "" : "Password must be at least 8 characters";
+  } else {
+    // For other fields
+    isValid = trimmedValue.length > 0;
+    errorMessage = isValid ? "" : "This field is required";
+  }
+
+  return { isValid, errorMessage };
 };

@@ -16,27 +16,103 @@ const BottomTabNavigator = () => {
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: true,
+        tabBarActiveTintColor: "#000",
+        tabBarInactiveTintColor: "#999",
       }}
     >
       <Tab.Screen
         name={ROUTES.HOMESCREEN}
         component={HomeScreen}
-        options={{ tabBarLabel: 'HOME' }}
+        options={{
+          tabBarLabel: "HOME",
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require("../assets/tabImage/homeActiveImage.png")}
+              style={{
+                width: 24,
+                height: 24,
+                tintColor: focused ? "#000" : "#999",
+              }}
+              resizeMode="contain"
+            />
+          ),
+        }}
       />
+
       <Tab.Screen
-        name={ROUTES.SEARCH_SCREEN}
-        component={SearchScreen}
-        options={{ tabBarLabel: 'SEARCH' }}
+        name="HeSearch"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: "Search",
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require("../assets/tabImage/searchActiveImage.png")}
+              style={{
+                width: 24,
+                height: 24,
+                tintColor: focused ? "#000" : "#999",
+              }}
+              resizeMode="contain"
+            />
+          ),
+        }}
       />
+
       <Tab.Screen
-        name={ROUTES.PRODUCT_DETAIL}
-        component={ProductDetailScreen}
-        options={{ tabBarLabel: 'PRODUCT' }}
+        name="Saved"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: "Saved",
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require("../assets/tabImage/saveActiveImage.png")}
+              style={{
+                width: 24,
+                height: 24,
+                tintColor: focused ? "#000" : "#999",
+              }}
+              resizeMode="contain"
+            />
+          ),
+        }}
       />
+
       <Tab.Screen
         name={ROUTES.CARTSCREEN}
         component={CartScreen}
-        options={{ tabBarLabel: 'CART' }}
+        options={{
+          tabBarLabel: "CART",
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require("../assets/tabImage/cartActiveImage.png")}
+              style={{
+                width: 24,
+                height: 24,
+                tintColor: focused ? "#000" : "#999",
+              }}
+              resizeMode="contain"
+            />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Account"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: "Account",
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require("../assets/tabImage/accountActiveImage.png")}
+              style={{
+                width: 24,
+                height: 24,
+                tintColor: focused ? "#000" : "#999",
+              }}
+              resizeMode="contain"
+            />
+          ),
+        }}
       />
     </Tab.Navigator>
   );

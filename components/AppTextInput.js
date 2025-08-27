@@ -12,16 +12,17 @@ export default function AppTextInput({
     placeholder,
     secureTextEntry = false,
     value = "",
-    onChangeText = () => { },
+    onChangeText = () => {},
     type = "default",
+    forceValidation = false, // 🔹 new prop
 }) {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [touched, setTouched] = useState(false);
 
     const { isValid, errorMessage } = validateInput(type, value);
 
-    const showError = touched && !isValid;
-    const showSuccess = touched && isValid;
+    const shouldShowError = (touched || forceValidation) && !isValid;
+    const shouldShowSuccess = (touched || forceValidation) && isValid;
 
     return (
         <View style={styles.container}>
@@ -30,8 +31,8 @@ export default function AppTextInput({
             <View
                 style={[
                     styles.inputContainer,
-                    showError && { borderColor: "red" },
-                    showSuccess && { borderColor: "green" },
+                    shouldShowError && { borderColor: "red" },
+                    shouldShowSuccess && { borderColor: "green" },
                 ]}
             >
                 <TextInput
@@ -64,17 +65,17 @@ export default function AppTextInput({
                         </TouchableOpacity>
                     )}
 
-                    {type !== "password" && showError && (
+                    {type !== "password" && shouldShowError && (
                         <Image source={warningCircle} style={styles.icon} />
                     )}
 
-                    {type !== "password" && showSuccess && (
+                    {type !== "password" && shouldShowSuccess && (
                         <Image source={rightCheck} style={styles.icon} />
                     )}
                 </View>
             </View>
 
-            {showError && <Text style={styles.errorText}>{errorMessage}</Text>}
+            {shouldShowError && <Text style={styles.errorText}>{errorMessage}</Text>}
         </View>
     );
 }
