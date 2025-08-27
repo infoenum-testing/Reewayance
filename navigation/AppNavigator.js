@@ -29,15 +29,12 @@ const AppNavigator = () => {
             <Stack.Screen name={ROUTES.FORGOT_PASSWORD} component={ForgotPasswordScreen} />
             <Stack.Screen name={ROUTES.Varification_SCREEN} component={VarificationScreen} />
             <Stack.Screen name={ROUTES.RESET_PASSWORD} component={ResetPasswordScreen} />
+            {/* <Stack.Screen name={ROUTES.CARTSCREEN} component={CartScreen} /> */}
             {/* <Stack.Screen name={ROUTES.HOMESCREEN} component={HomeScreen} /> */}
             {/* <Stack.Screen name={ROUTES.PRODUCT_DETAIL} component={ProductDetailScreen} /> */}
             <Stack.Screen name="MainTabs" component={BottomTabNavigator} />
         </Stack.Navigator>
     );
-
-  useEffect(() => {
-    SplashScreen.hide();
-  }, []);
 };
 
 export default AppNavigator;

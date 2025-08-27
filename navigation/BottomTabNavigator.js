@@ -1,10 +1,11 @@
 // navigation/BottomTabNavigator.js
-import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "../screens/HomeScreen";
-import ProductDetailScreen from "../screens/ProductDetailScreen";
-import { ROUTES } from "../helper/routes";
-import { Text } from "react-native";  // replace with icons later if you want
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import HomeScreen from '../screens/HomeScreen';
+import ProductDetailScreen from '../screens/ProductDetailScreen';
+import CartScreen from '../screens/CartScreen';
+import { ROUTES } from '../helper/routes';
+import { Text } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -12,19 +13,24 @@ const BottomTabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerShown: false,  // hide header
-        tabBarShowLabel: true, // you can hide/show text
+        headerShown: false,
+        tabBarShowLabel: true,
       }}
     >
-      <Tab.Screen 
-        name={ROUTES.HOMESCREEN} 
-        component={HomeScreen} 
-        options={{ tabBarLabel: "Home" }}
+      <Tab.Screen
+        name={ROUTES.HOMESCREEN}
+        component={HomeScreen}
+        options={{ tabBarLabel: 'HOME' }}
       />
-      <Tab.Screen 
-        name={ROUTES.PRODUCT_DETAIL} 
-        component={ProductDetailScreen} 
-        options={{ tabBarLabel: "Products" }}
+      <Tab.Screen
+        name={ROUTES.PRODUCT_DETAIL}
+        component={ProductDetailScreen}
+        options={{ tabBarLabel: 'PRODUCT' }}
+      />
+      <Tab.Screen
+        name={ROUTES.CARTSCREEN}
+        component={CartScreen}
+        options={{ tabBarLabel: 'CART' }}
       />
     </Tab.Navigator>
   );
