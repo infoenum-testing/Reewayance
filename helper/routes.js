@@ -8,5 +8,6 @@ export const ROUTES = {
     RESET_PASSWORD: 'ResetPasswordScreen',
     HOMESCREEN: 'HomeScreen',
     PRODUCT_DETAIL: 'ProductDetailScreen',
+    CARTSCREEN: 'CartScreen',
     TABS: "MainTabs",
 };

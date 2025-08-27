@@ -1,18 +1,27 @@
 import React from "react";
 import { View, TextInput, Image, TouchableOpacity, StyleSheet } from "react-native";
 
-const SearchBar = ({ searchIcon, filterIcon }) => (
-  <View style={styles.searchRow}>
-    <View style={styles.searchContainer}>
-      <Image source={searchIcon} style={styles.searchIcon} />
-      <TextInput placeholder="Search for clothes..." style={styles.searchInput} />
-    </View>
+const SearchBar = ({ searchIcon, filterIcon, value, onChangeText }) => {
+  return (
+    <View style={styles.searchRow}>
 
-    <TouchableOpacity style={styles.filterButton}>
-      <Image source={filterIcon} style={styles.filterIcon} />
-    </TouchableOpacity>
-  </View>
-);
+      <View style={styles.searchContainer}>
+        <Image source={searchIcon} style={styles.searchIcon} />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search for clothes..."
+          placeholderTextColor="#999"
+          value={value}              
+          onChangeText={onChangeText} 
+        />
+      </View>
+
+      <TouchableOpacity style={styles.filterButton}>
+        <Image source={filterIcon} style={styles.filterIcon} />
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 export default SearchBar;
 
@@ -35,6 +44,11 @@ const styles = StyleSheet.create({
   },
   searchIcon: { width: 18, height: 18, tintColor: "#888", marginRight: 6 },
   searchInput: { flex: 1, fontSize: 14 },
-  filterButton: { backgroundColor: "black", borderRadius: 10, padding: 8, marginLeft: 10 },
+  filterButton: {
+    backgroundColor: "black",
+    borderRadius: 10,
+    padding: 8,
+    marginLeft: 10,
+  },
   filterIcon: { width: 25, height: 25, tintColor: "#fff" },
 });

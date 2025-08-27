@@ -19,7 +19,8 @@ export default function CreateAccountScreen({ navigation }) {
     };
 
     const handleLoginNavigation = () => {
-        navigation.pop(); // Go back to the previous screen (LoginScreen)
+        // navigation.pop(); // Go back to the previous screen (LoginScreen)
+         navigation.navigate("MainTabs")
     };
 
     const isFullNameValid = validateInput("name", fullName).isValid;
