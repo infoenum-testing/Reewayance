@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert } from "react-native";
 import AppTextInput from "../components/AppTextInput";
 import { validateInput } from "../validation/validateInput";
 import AppButton from "../components/AppButton";
@@ -8,23 +8,42 @@ import Facebook from "../assets/facebookIcon.png";
 // import colors from "../constants/colors";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { ROUTES } from "../helper/routes";
+import { AuthService } from "../services/authService";
+import { getErrorMessage } from "../helper/firebaseErrorMessages";
 
 export default function LoginScreen({ navigation }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [showValidation, setShowValidation] = useState(false);
 
-    const handleLogin = () => {
-        console.log("Logging in with:", { email, password });
-        navigation.navigate(ROUTES.TABS);
+    const handleLogin = async () => {
+        setShowValidation(true); // 🔹 force all inputs to validate
+        if (!isFormValid) {
+            Alert.alert("Validation Failed", "Please fill all fields correctly.");
+            return;
+        }
+
+        if (loading) return;
+        setLoading(true);
+
+        try {
+            const user = await AuthService.login(email, password);
+            navigation.replace(ROUTES.TABS);
+        } catch (error) {
+            Alert.alert("Failed", getErrorMessage(error.code));
+        } finally {
+            setLoading(false);
+        }
     };
 
-     const handleCreateAccountNavigation = () => {
-            navigation.navigate(ROUTES.CREATE_ACCOUNT);
-        };
+    const handleCreateAccountNavigation = () => {
+        navigation.navigate(ROUTES.CREATE_ACCOUNT);
+    };
 
-        const handleForgotPasswordNavigation = () => {
-            navigation.navigate(ROUTES.FORGOT_PASSWORD);
-        };
+    const handleForgotPasswordNavigation = () => {
+        navigation.navigate(ROUTES.FORGOT_PASSWORD);
+    };
 
     const isEmailValid = validateInput("email", email).isValid;
     const isPasswordValid = validateInput("password", password).isValid;
@@ -44,6 +63,7 @@ export default function LoginScreen({ navigation }) {
                         value={email}
                         onChangeText={setEmail}
                         type="email"
+                        forceValidation={showValidation}
                     />
                     <AppTextInput
                         label="Password"
@@ -52,6 +72,7 @@ export default function LoginScreen({ navigation }) {
                         value={password}
                         onChangeText={setPassword}
                         type="password"
+                        forceValidation={showValidation}
                     />
 
                     {/* Forgot Password */}
@@ -64,8 +85,8 @@ export default function LoginScreen({ navigation }) {
                     <AppButton
                         title="Login"
                         onPress={handleLogin}
-                        disabled={!isFormValid}
-                        color={isFormValid ? "#000" : "#999"}
+                        disabled={loading}
+                        color={"#000"}
                     />
 
                     {/* Divider */}
