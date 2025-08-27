@@ -1,3 +1,4 @@
+// screens/HomeScreen.js
 import React, { useState, useEffect } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
@@ -31,10 +32,30 @@ const HomeScreen = ({ navigation }) => {
     const onValueChange = ref.on("value", (snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.val();
-        const list = Object.keys(data).map((key) => ({
-          id: data[key].id || key,
-          ...data[key],
-        }));
+        let list = [];
+
+        // Case 1: All → merge all main + subcategories
+        if (selectedCategory === "All") {
+          Object.keys(data).forEach((mainCat) => {
+            const subcats = data[mainCat];
+            Object.keys(subcats).forEach((subcatKey) => {
+              const subcat = subcats[subcatKey];
+              Object.keys(subcat).forEach((productKey) => {
+                list.push({ id: productKey, ...subcat[productKey] });
+              });
+            });
+          });
+        }
+        // Case 2: Main category (Mens/Womens/Kids/Unisex)
+        else {
+          Object.keys(data).forEach((subcatKey) => {
+            const subcat = data[subcatKey];
+            Object.keys(subcat).forEach((productKey) => {
+              list.push({ id: productKey, ...subcat[productKey] });
+            });
+          });
+        }
+
         setProducts(list);
       } else {
         setProducts([]);
