@@ -15,7 +15,7 @@ export default function LoginScreen({ navigation }) {
 
     const handleLogin = () => {
         console.log("Logging in with:", { email, password });
-        navigation.navigate(ROUTES.HOMESCREEN);
+        navigation.navigate(ROUTES.TABS);
     };
 
      const handleCreateAccountNavigation = () => {
