@@ -104,7 +104,7 @@ const HomeScreen = ({ navigation }) => {
             {filteredProducts.length > 0 ? (
               <FlatList
                 data={filteredProducts}
-                keyExtractor={(item) => item.id?.toString()}
+                keyExtractor={(item , index ) => index.toString()}
                 renderItem={({ item }) => (
                   <TouchableOpacity
                     style={styles.dropdownItem}
@@ -131,7 +131,7 @@ const HomeScreen = ({ navigation }) => {
 
         <FlatList
           data={filteredProducts}
-          keyExtractor={(item, index) => item.id ?? `grid-${index}`}
+          keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <ProductCard
               product={item}

@@ -157,7 +157,7 @@ const ProductDetails = () => {
                 data={suggestedProducts}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
                   <SuggestedCard
                     product={item}
