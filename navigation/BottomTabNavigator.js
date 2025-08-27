@@ -1,10 +1,12 @@
 // navigation/BottomTabNavigator.js
-import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Image } from "react-native";
-import HomeScreen from "../screens/HomeScreen";
-import CartScreen from "../screens/CartScreen";
-import { ROUTES } from "../helper/routes";
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import HomeScreen from '../screens/HomeScreen';
+import ProductDetailScreen from '../screens/ProductDetailScreen';
+import CartScreen from '../screens/CartScreen';
+import SearchScreen from '../screens/SearchScreen';
+import { ROUTES } from '../helper/routes';
+import { Text , Image } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -38,8 +40,8 @@ const BottomTabNavigator = () => {
       />
 
       <Tab.Screen
-        name="HeSearch"
-        component={HomeScreen}
+        name= {ROUTES.SEARCH_SCREEN}
+        component={SearchScreen}
         options={{
           tabBarLabel: "Search",
           tabBarIcon: ({ focused }) => (
