@@ -1,11 +1,9 @@
 // screens/HomeScreen.js
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   FlatList,
   StyleSheet,
-  Text,
-  TouchableOpacity,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import database from "@react-native-firebase/database";
@@ -31,8 +29,9 @@ const CATEGORIES = ["All", "Mens", "Womens", "Kids", "Unisex"];
 const HomeScreen = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [products, setProducts] = useState([]);
-  const [searchText, setSearchText] = useState("");
 
+  
+  // Fetch products from Firebase
   useEffect(() => {
     const path = getCategoryPath(selectedCategory);
     const ref = database().ref(path);
@@ -71,66 +70,40 @@ const HomeScreen = ({ navigation }) => {
     return () => ref.off("value", handleSnapshot);
   }, [selectedCategory]);
 
-  const filteredProducts = useMemo(() => {
-    if (!searchText.trim()) return products;
-
-    return products.filter((item) =>
-      item.name.toLowerCase().includes(searchText.toLowerCase())
-    );
-  }, [searchText, products]);
-
+  // Product detail navigation
   const handleProductPress = useCallback(
-    (product) => navigation.navigate(ROUTES.PRODUCT_DETAIL, { 
-      product,
-      category: selectedCategory,
-     }),
+    (product) =>
+      navigation.navigate(ROUTES.PRODUCT_DETAIL, {
+        product,
+        category: selectedCategory,
+      }),
     [navigation, selectedCategory]
   );
 
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
+        {/* Header */}
         <Header title="Discover" rightIcon={Notification} />
 
+        {/* SearchBar → tap kare toh SearchScreen */}
         <SearchBar
           searchIcon={Search}
           filterIcon={Filter}
-          value={searchText}
-          onChangeText={setSearchText}
+          value={""}
+          onPress={() => navigation.navigate(ROUTES.SEARCH_SCREEN, { products })}
         />
 
-        {searchText.length > 0 && (
-          <View style={styles.dropdown}>
-            {filteredProducts.length > 0 ? (
-              <FlatList
-                data={filteredProducts}
-                keyExtractor={(item , index ) => index.toString()}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    style={styles.dropdownItem}
-                    onPress={() => {
-                      setSearchText("");
-                      handleProductPress(item);
-                    }}
-                  >
-                    <Text style={styles.dropdownText}>{item.name}</Text>
-                  </TouchableOpacity>
-                )}
-              />
-            ) : (
-              <Text style={styles.noResult}>No results found</Text>
-            )}
-          </View>
-        )}
-
+        {/* Category Tabs */}
         <CategoryList
           categories={CATEGORIES}
           selectedCategory={selectedCategory}
           onSelect={setSelectedCategory}
         />
 
+        {/* Products Grid */}
         <FlatList
-          data={filteredProducts}
+          data={products}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <ProductCard
@@ -152,6 +125,7 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff", paddingHorizontal: 16 },
+
   dropdown: {
     backgroundColor: "#fff",
     borderWidth: 1,
