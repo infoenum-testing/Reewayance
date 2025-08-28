@@ -8,6 +8,7 @@ const SearchBar = ({
   onChangeText,
   onFilterPress,
   placeholder = "Search for clothes...",
+  onPress,
 }) => {
   return (
     <View style={styles.searchRow}>
@@ -21,6 +22,7 @@ const SearchBar = ({
           onChangeText={onChangeText}
           returnKeyType="search"
           accessibilityLabel="Search input"
+          onFocus={onPress}
         />
       </View>
 
