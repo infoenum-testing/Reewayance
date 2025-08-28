@@ -16,6 +16,8 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import Notification from '../assets/images/vector.png';
 import BackIcon from '../assets/backButtonImage.png';
+import SideArrow from '../assets/images/sideArrow.png';
+import XMark from '../assets/images/xMark.png';
 
 const searchIcon = require('../assets/images/search.png');
 
@@ -132,7 +134,7 @@ const SearchScreen = () => {
                   <Text style={styles.recentItemText}>{item}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => removeRecentSearch(idx)}>
-                  <Text style={styles.removeX}>✗</Text>
+                  <Image source={XMark} style={styles.listIcon} />
                 </TouchableOpacity>
               </View>
             ))}
@@ -145,8 +147,8 @@ const SearchScreen = () => {
             <FlatList
               style={{ marginTop: 8 }}
               data={filteredProducts}
-              keyExtractor={(item, i) =>
-                item?.id ? item.id.toString() : i.toString()
+              keyExtractor={(item, index) =>
+                item?.id ? item.id.toString() : index.toString()
               }
               renderItem={({ item }) => (
                 <TouchableOpacity
@@ -168,7 +170,7 @@ const SearchScreen = () => {
                       )}
                     </View>
                   </View>
-                  <Text style={styles.gotoIcon}>↗</Text>
+                  <Image source={SideArrow} style={styles.listIcon} />
                 </TouchableOpacity>
               )}
             />
@@ -211,6 +213,12 @@ const styles = StyleSheet.create({
     height: 22,
     tintColor: 'black',
   },
+  listIcon: {
+    width: 20,
+    height: 20,
+    tintColor: 'gray',
+  },
+
   title: {
     flex: 1,
     textAlign: 'center',
