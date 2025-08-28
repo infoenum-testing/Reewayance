@@ -34,7 +34,7 @@ const SavedScreen = ({ navigation }) => {
             Object.entries(data).forEach(([categoryName, subcats]) => {
                 Object.entries(subcats).forEach(([subCategoryName, products]) => {
                     Object.entries(products).forEach(([id, product]) => {
-                        if (product.isFavourite) {
+                        if (product && product.isFavourite) {
                             list.push({
                                 id,
                                 ...product,
