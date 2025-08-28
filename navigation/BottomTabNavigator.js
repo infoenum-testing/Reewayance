@@ -5,6 +5,7 @@ import HomeScreen from '../screens/HomeScreen';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
 import CartScreen from '../screens/CartScreen';
 import SearchScreen from '../screens/SearchScreen';
+import SavedScreen from '../screens/SavedScreen';
 import { ROUTES } from '../helper/routes';
 import { Text , Image } from 'react-native';
 
@@ -59,8 +60,8 @@ const BottomTabNavigator = () => {
       />
 
       <Tab.Screen
-        name="Saved"
-        component={HomeScreen}
+        name= {ROUTES.SAVED_SCREEN}
+        component={SavedScreen}
         options={{
           tabBarLabel: "Saved",
           tabBarIcon: ({ focused }) => (

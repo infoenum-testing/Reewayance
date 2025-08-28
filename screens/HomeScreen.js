@@ -1,4 +1,3 @@
-// screens/HomeScreen.js
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
   View,
@@ -10,19 +9,16 @@ import {
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import database from "@react-native-firebase/database";
 
-// Components
 import Header from "../components/HomeHeader";
 import SearchBar from "../components/SearchBar";
 import CategoryList from "../components/CategoryList";
 import ProductCard from "../components/ProductCard";
 
-// Assets
 import Notification from "../assets/images/vector.png";
 import Filter from "../assets/images/filter.png";
 import Search from "../assets/images/search.png";
 import Heart from "../assets/images/heart.png";
 
-// Utils
 import { getCategoryPath } from "../utils/firebasePaths";
 import { ROUTES } from "../helper/routes";
 
@@ -47,20 +43,28 @@ const HomeScreen = ({ navigation }) => {
       const list = [];
 
       if (selectedCategory === "All") {
-        // Merge all subcategories
-        Object.values(data).forEach((subcats) => {
-          Object.values(subcats).forEach((subcat) => {
-            Object.entries(subcat).forEach(([id, product]) =>
-              list.push({ id, ...product })
-            );
+        Object.entries(data).forEach(([categoryName, subcats]) => {
+          Object.entries(subcats).forEach(([subCatName, products]) => {
+            Object.entries(products).forEach(([id, product]) => {
+              list.push({
+                id: `${categoryName}_${subCatName}_${id}`, // 🔹 unique ID
+                ...product,
+                category: categoryName,
+                subCategory: subCatName,
+              });
+            });
           });
         });
       } else {
-        // Selected category only
-        Object.values(data).forEach((subcat) => {
-          Object.entries(subcat).forEach(([id, product]) =>
-            list.push({ id, ...product })
-          );
+        Object.entries(data).forEach(([subCatName, products]) => {
+          Object.entries(products).forEach(([id, product]) => {
+            list.push({
+              id: `${selectedCategory}_${subCatName}_${id}`, // 🔹 unique ID
+              ...product,
+              category: selectedCategory,
+              subCategory: subCatName,
+            });
+          });
         });
       }
 
@@ -73,19 +77,38 @@ const HomeScreen = ({ navigation }) => {
 
   const filteredProducts = useMemo(() => {
     if (!searchText.trim()) return products;
-
     return products.filter((item) =>
       item.name.toLowerCase().includes(searchText.toLowerCase())
     );
   }, [searchText, products]);
 
   const handleProductPress = useCallback(
-    (product) => navigation.navigate(ROUTES.PRODUCT_DETAIL, { 
-      product,
-      category: selectedCategory,
-     }),
+    (product) =>
+      navigation.navigate(ROUTES.PRODUCT_DETAIL, {
+        product,
+        category: selectedCategory,
+      }),
     [navigation, selectedCategory]
   );
+
+const handleToggleFavourite = (product) => {
+  const productRef = database().ref(
+    `categories/${product.category}/${product.subCategory}/${product.id}`
+  );
+
+  productRef.set({
+    ...product,
+    isFavourite: !product.isFavourite,
+  });
+
+  setProducts((prevProducts) =>
+    prevProducts.map((item) =>
+      item.id === product.id
+        ? { ...item, isFavourite: !item.isFavourite }
+        : item
+    )
+  );
+};
 
   return (
     <SafeAreaProvider>
@@ -137,6 +160,7 @@ const HomeScreen = ({ navigation }) => {
               product={item}
               HeartIcon={Heart}
               onPress={() => handleProductPress(item)}
+              onToggleFavourite={handleToggleFavourite}
             />
           )}
           numColumns={2}

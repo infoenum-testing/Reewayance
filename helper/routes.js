@@ -10,5 +10,6 @@ export const ROUTES = {
     PRODUCT_DETAIL: 'ProductDetailScreen',
     CARTSCREEN: 'CartScreen',
     SEARCH_SCREEN: 'SearchScreen',
+    SAVED_SCREEN: 'SavedScreen',
     TABS: "MainTabs",
 };
