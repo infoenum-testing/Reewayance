@@ -148,7 +148,7 @@ const SearchScreen = () => {
               style={{ marginTop: 8 }}
               data={filteredProducts}
               keyExtractor={(item, index) =>
-                item?.id ? item.id.toString() : index.toString()
+                 index.toString()
               }
               renderItem={({ item }) => (
                 <TouchableOpacity

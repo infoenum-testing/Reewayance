@@ -22,7 +22,7 @@ const SearchBar = ({
           onChangeText={onChangeText}
           returnKeyType="search"
           accessibilityLabel="Search input"
-          onFocus={onPress}
+          onPress={onPress}
         />
       </View>
 
