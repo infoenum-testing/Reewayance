@@ -13,6 +13,7 @@ import database from "@react-native-firebase/database";
 import ProductCard from "../components/ProductCard";
 import Vector from "../assets/images/vector.png";
 import Heart from "../assets/images/heart.png";
+import HeartFill from "../assets/images/heartFill.png";
 import BackIcon from "../assets/backButtonImage.png";
 import { ROUTES } from "../helper/routes";
 
@@ -95,7 +96,7 @@ const SavedScreen = ({ navigation }) => {
                     renderItem={({ item }) => (
                         <ProductCard
                             product={item}
-                            HeartIcon={Heart}
+                            HeartIcon={item.isFavourite ? HeartFill : Heart}
                             onPress={() =>
                                 navigation.navigate(ROUTES.PRODUCT_DETAIL, { product: item })
                             }

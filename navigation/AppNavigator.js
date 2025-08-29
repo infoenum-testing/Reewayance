@@ -12,6 +12,7 @@ import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import SplashScreen from 'react-native-splash-screen';
 import { ROUTES } from '../helper/routes';
 import BottomTabNavigator from "./BottomTabNavigator";
+import MyOrdersScreen from '../screens/MyOrdersScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +33,7 @@ const AppNavigator = () => {
             {/* <Stack.Screen name={ROUTES.CARTSCREEN} component={CartScreen} /> */}
             {/* <Stack.Screen name={ROUTES.HOMESCREEN} component={HomeScreen} /> */}
             <Stack.Screen name={ROUTES.PRODUCT_DETAIL} component={ProductDetailScreen} />
+            <Stack.Screen name={ROUTES.MY_ORDERS} component={MyOrdersScreen} />
             <Stack.Screen name="MainTabs" component={BottomTabNavigator} />
         </Stack.Navigator>
     );

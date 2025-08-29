@@ -19,6 +19,7 @@ import Notification from "../assets/images/vector.png";
 import Filter from "../assets/images/filter.png";
 import Search from "../assets/images/search.png";
 import Heart from "../assets/images/heart.png";
+import HeartFill from "../assets/images/heartFill.png";
 
 import { getCategoryPath } from "../utils/firebasePaths";
 import { ROUTES } from "../helper/routes";
@@ -134,7 +135,7 @@ const handleToggleFavourite = (product) => {
           renderItem={({ item }) => (
             <ProductCard
               product={item}
-              HeartIcon={Heart}
+             HeartIcon={item.isFavourite ? HeartFill : Heart}
               onPress={() => handleProductPress(item)}
               onToggleFavourite={handleToggleFavourite}
             />
