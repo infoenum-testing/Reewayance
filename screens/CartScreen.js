@@ -22,6 +22,7 @@ import {
   decreaseQuantity,
   removeFromCart,
 } from '../src/redux/slices/cartSlice';
+import { ROUTES } from '../helper/routes';
 
 const CartScreen = () => {
   const navigation = useNavigation();
@@ -57,36 +58,36 @@ const CartScreen = () => {
         </View>
         <Text style={styles.itemSize}>Size {item.selectedSize}</Text>
         <View style={styles.cartTop}>
-        <Text style={styles.itemPrice}>${item.price}</Text>
-        <View style={styles.quantityContainer}>
-          <TouchableOpacity
-            onPress={() =>
-              dispatch(
-                decreaseQuantity({
-                  id: item.id,
-                  selectedSize: item.selectedSize,
-                }),
-              )
-            }
-            style={styles.qtyButton}
+          <Text style={styles.itemPrice}>${item.price}</Text>
+          <View style={styles.quantityContainer}>
+            <TouchableOpacity
+              onPress={() =>
+                dispatch(
+                  decreaseQuantity({
+                    id: item.id,
+                    selectedSize: item.selectedSize,
+                  }),
+                )
+              }
+              style={styles.qtyButton}
             >
-            <Text style={styles.qtyText}>-</Text>
-          </TouchableOpacity>
-          <Text style={styles.qtyNumber}>{item.quantity}</Text>
-          <TouchableOpacity
-            onPress={() =>
-              dispatch(
-                increaseQuantity({
-                  id: item.id,
-                  selectedSize: item.selectedSize,
-                }),
-              )
-            }
-            style={styles.qtyButton}
+              <Text style={styles.qtyText}>-</Text>
+            </TouchableOpacity>
+            <Text style={styles.qtyNumber}>{item.quantity}</Text>
+            <TouchableOpacity
+              onPress={() =>
+                dispatch(
+                  increaseQuantity({
+                    id: item.id,
+                    selectedSize: item.selectedSize,
+                  }),
+                )
+              }
+              style={styles.qtyButton}
             >
-            <Text style={styles.qtyText}>+</Text>
-          </TouchableOpacity>
-            </View>
+              <Text style={styles.qtyText}>+</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>
@@ -140,7 +141,10 @@ const CartScreen = () => {
                 <Text style={styles.totalText}>Total</Text>
                 <Text style={styles.totalText}>${total}</Text>
               </View>
-              <TouchableOpacity style={styles.checkOutButton}>
+              <TouchableOpacity
+                style={styles.checkOutButton}
+                onPress={() => navigation.navigate(ROUTES.NEWCARD_SCREEN)}
+              >
                 <Text style={styles.checkoutText}>Go To Checkout</Text>
                 <Image source={RightArrow} style={styles.deleteIcon} />
               </TouchableOpacity>
@@ -241,7 +245,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
   },
-  checkoutText: { fontSize: 16, fontWeight: 'bold', color: 'white', marginRight: 15 },
+  checkoutText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'white',
+    marginRight: 15,
+  },
 
   emptyContainer: {
     flex: 1,
