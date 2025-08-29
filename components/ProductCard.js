@@ -13,7 +13,6 @@ const ProductCard = ({ product, onPress, HeartIcon, onToggleFavourite }) => (
         source={HeartIcon}
         style={[
           styles.heartImage,
-          { tintColor: product.isFavourite ? "red" : "#888" },
         ]}
       />
     </TouchableOpacity>

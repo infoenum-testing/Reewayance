@@ -12,5 +12,7 @@ export const ROUTES = {
     SEARCH_SCREEN: 'SearchScreen',
     SAVED_SCREEN: 'SavedScreen',
     NEWCARD_SCREEN: 'NewCardScreen',
+    ACCOUNT_SCREEN: 'AccountScreen',
     TABS: "MainTabs",
+    MY_ORDERS: "MyOrdersScreen",
 };

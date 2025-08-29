@@ -6,6 +6,7 @@ import ProductDetailScreen from '../screens/ProductDetailScreen';
 import CartScreen from '../screens/CartScreen';
 import SearchScreen from '../screens/SearchScreen';
 import SavedScreen from '../screens/SavedScreen';
+import AccountScreen from '../screens/AccountScreen';
 import { ROUTES } from '../helper/routes';
 import { Text , Image } from 'react-native';
 
@@ -98,8 +99,8 @@ const BottomTabNavigator = () => {
       />
 
       <Tab.Screen
-        name="Account"
-        component={HomeScreen}
+        name={ROUTES.ACCOUNT_SCREEN}
+        component={AccountScreen}
         options={{
           tabBarLabel: "Account",
           tabBarIcon: ({ focused }) => (
