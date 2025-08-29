@@ -21,6 +21,10 @@ import BackIcon from "../assets/backButtonImage.png";
 // Utils
 import { getCategoryPath } from "../utils/firebasePaths";
 
+//redux
+import { useDispatch } from 'react-redux';
+import { addToCart } from "../src/redux/slices/cartSlice";
+
 const SIZES = ["S", "M", "L", "XL"];
 const COLORS = {
   black: "#000",
@@ -52,10 +56,25 @@ const ProductDetails = () => {
   const [suggestedProducts, setSuggestedProducts] = useState([]);
 
   const handleGoBack = useCallback(() => navigation.goBack(), [navigation]);
+  const dispatch = useDispatch();
 
-  const handleAddToCart = useCallback(() => {
-    console.log("Add to cart:", { ...product, selectedSize });
-  }, [product, selectedSize]);
+const handleAddToCart = useCallback(() => {
+  if (!selectedSize) {
+    alert("Please select size");
+    return;
+  }
+  dispatch(
+    addToCart({
+      id: product.id,         // 🔹 unique ID (same as HomeScreen)
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      selectedSize,
+    })
+  );
+  alert("Added to cart");
+}, [dispatch, product, selectedSize]);
+
 
   // 🔹 Fetch suggested products
   useEffect(() => {
