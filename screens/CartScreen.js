@@ -15,7 +15,6 @@ import Trash from '../assets/images/trash.png';
 import RightArrow from '../assets/images/arrowRight.png';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import { useSelector, useDispatch } from 'react-redux';
 import {
   increaseQuantity,
