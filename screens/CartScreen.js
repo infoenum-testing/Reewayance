@@ -1,6 +1,6 @@
 // CartScreen.js
 
-import React from 'react';
+import React , { useCallback } from 'react';
 import {
   View,
   Text,
@@ -112,7 +112,7 @@ const CartScreen = () => {
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Image
-              source={require('../assets/images/emptyCart.png')} // 🔹 अपना empty cart icon
+              source={require('../assets/images/emptyCart.png')} 
               style={styles.emptyImage}
             />
             <Text style={styles.emptyTitle}>Your Cart Is Empty!</Text>
@@ -142,7 +142,7 @@ const CartScreen = () => {
               </View>
               <TouchableOpacity
                 style={styles.checkOutButton}
-                onPress={() => navigation.navigate(ROUTES.NEWCARD_SCREEN)}
+                onPress={() => navigation.navigate(ROUTES.CHECKOUT_SCREEN)}
               >
                 <Text style={styles.checkoutText}>Go To Checkout</Text>
                 <Image source={RightArrow} style={styles.deleteIcon} />

@@ -33,6 +33,8 @@ const COLORS = {
   orange: "#f97316",
 };
 
+console.log("Product");
+
 // 🔹 Suggested Product Card
 const SuggestedCard = ({ product, onPress }) => (
   <TouchableOpacity style={styles.suggestedCard} onPress={onPress}>

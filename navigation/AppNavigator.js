@@ -7,13 +7,14 @@ import CreateAccountScreen from "../screens/CreateAccountScreen";
 import ProductDetailScreen from "../screens/ProductDetailScreen";
 import LoginScreen from "../screens/LoginScreen";
 import NewCardScreen from "../screens/NewCardScreen";
-import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
-import VarificationScreen from "../screens/VarificationCodeScreen";
-import ResetPasswordScreen from "../screens/ResetPasswordScreen";
-import SplashScreen from "react-native-splash-screen";
-import { ROUTES } from "../helper/routes";
+import CheckoutScreen from '../screens/CheckoutScreen';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
+import VarificationScreen from '../screens/VarificationCodeScreen';
+import ResetPasswordScreen from '../screens/ResetPasswordScreen';
+import SplashScreen from 'react-native-splash-screen';
+import { ROUTES } from '../helper/routes';
 import BottomTabNavigator from "./BottomTabNavigator";
-import MyOrdersScreen from "../screens/MyOrdersScreen";
+import MyOrdersScreen from '../screens/MyOrdersScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,6 +39,7 @@ const AppNavigator = () => {
           <Stack.Screen name={ROUTES.FORGOT_PASSWORD} component={ForgotPasswordScreen} />
           <Stack.Screen name={ROUTES.Varification_SCREEN} component={VarificationScreen} />
           <Stack.Screen name={ROUTES.RESET_PASSWORD} component={ResetPasswordScreen} />
+          <Stack.Screen name={ROUTES.CHECKOUT_SCREEN} component={CheckoutScreen} />
         </>
       )}
 

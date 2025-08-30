@@ -1,4 +1,5 @@
-import React, { memo, useState } from "react";
+// screens/AccountScreen.js
+import React, { memo } from "react";
 import {
   View,
   Text,
@@ -90,10 +91,12 @@ const AccountScreen = ({ navigation }) => {
         if (item.isLogout) {
           setModalVisible(true);
         } else if (item.title === "My Orders") {
-          navigation.navigate(ROUTES.MY_ORDERS);
-        } else {
-          console.log("Navigate to:", item.title);
-        }
+        navigation.navigate(ROUTES.MY_ORDERS);
+      } else if (item.title === "Payment Methods") {
+        navigation.navigate(ROUTES.NEWCARD_SCREEN);
+      } else {
+        console.log("Navigate to:", item.title);
+      }
       }}
     />
   );
@@ -110,7 +113,7 @@ const AccountScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
+
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image source={Icons.back} style={styles.headerIcon} />
@@ -121,7 +124,6 @@ const AccountScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      {/* List */}
       <SectionList
         sections={ACCOUNT_SECTIONS}
         keyExtractor={(item, index) => item.title + index}
@@ -179,8 +181,16 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
-  headerTitle: { fontSize: 18, fontWeight: "bold", color: "#000" },
-  headerIcon: { width: 22, height: 22, tintColor: "#000" },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#000",
+  },
+  headerIcon: {
+    width: 22,
+    height: 22,
+    tintColor: "#000",
+  },
   sectionTitle: {
     fontSize: 13,
     fontWeight: "600",
@@ -205,7 +215,10 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 1,
   },
-  itemLeft: { flexDirection: "row", alignItems: "center" },
+  itemLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   icon: {
     width: 22,
     height: 22,

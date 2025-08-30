@@ -15,4 +15,5 @@ export const ROUTES = {
     ACCOUNT_SCREEN: 'AccountScreen',
     TABS: "MainTabs",
     MY_ORDERS: "MyOrdersScreen",
+    CHECKOUT_SCREEN: "CheckoutScreen",
 };
