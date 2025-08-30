@@ -85,6 +85,8 @@ const AccountScreen = ({ navigation }) => {
           // TODO: handle logout
         } else if (item.title === "My Orders") {
         navigation.navigate(ROUTES.MY_ORDERS);
+      } else if (item.title === "Payment Methods") {
+        navigation.navigate(ROUTES.NEWCARD_SCREEN);
       } else {
         console.log("Navigate to:", item.title);
       }

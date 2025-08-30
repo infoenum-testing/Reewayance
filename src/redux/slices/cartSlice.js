@@ -12,15 +12,12 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const item = action.payload;
-      // पहले चेक करो कि ये item size के साथ पहले से है या नहीं
       const existingIndex = state.items.findIndex(
         i => i.id === item.id && i.selectedSize === item.selectedSize
       );
       if (existingIndex >= 0) {
-        // item है, quantity बढ़ाओ
         state.items[existingIndex].quantity += 1;
       } else {
-        // नया item add करो quantity=1 के साथ
         state.items.push({ ...item, quantity: 1 });
       }
     },

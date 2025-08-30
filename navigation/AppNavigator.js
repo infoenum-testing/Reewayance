@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import ProductDetailScreen from '../screens/ProductDetailScreen';
 import LoginScreen from '../screens/LoginScreen';
 import NewCardScreen from "../screens/NewCardScreen";
+import CheckoutScreen from '../screens/CheckoutScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import VarificationScreen from '../screens/VarificationCodeScreen';
 import ResetPasswordScreen from '../screens/ResetPasswordScreen';
@@ -32,6 +33,7 @@ const AppNavigator = () => {
             <Stack.Screen name={ROUTES.Varification_SCREEN} component={VarificationScreen} />
             <Stack.Screen name={ROUTES.RESET_PASSWORD} component={ResetPasswordScreen} />
             <Stack.Screen name={ROUTES.NEWCARD_SCREEN} component={NewCardScreen} />
+            <Stack.Screen name={ROUTES.CHECKOUT_SCREEN} component={CheckoutScreen} />
             {/* <Stack.Screen name={ROUTES.CARTSCREEN} component={CartScreen} /> */}
             {/* <Stack.Screen name={ROUTES.HOMESCREEN} component={HomeScreen} /> */}
             <Stack.Screen name={ROUTES.PRODUCT_DETAIL} component={ProductDetailScreen} />
