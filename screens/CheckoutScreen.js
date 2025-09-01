@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
+  Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -16,23 +17,27 @@ import NotificationIcon from '../assets/images/vector.png';
 import Location from '../assets/images/location.png';
 import cash from '../assets/images/cash.png';
 import apple from '../assets/images/applePay.png';
-import paymentMethods from "../assets/accountImages/cardImage.png";
-import VisaIcon from "../assets/images/visa.png";
-import EditIcon from "../assets/images/edit.png";
+import paymentMethods from '../assets/accountImages/cardImage.png';
+import VisaIcon from '../assets/images/visa.png';
+import EditIcon from '../assets/images/edit.png';
+import AppButton from '../components/AppButton';
 
 const CheckoutScreen = () => {
-
+  const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
   const cartItems = useSelector(state => state.cart.items);
 
-    const subtotal = cartItems.reduce(
+  const subtotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0,
   );
   const shipping = cartItems.length > 0 ? 80 : 0;
   const total = subtotal + shipping;
 
-  
+  const handleDone = () => {
+    setModalVisible(false);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
@@ -52,10 +57,10 @@ const CheckoutScreen = () => {
         </View>
         <View style={styles.row}>
           <Image source={Location} style={styles.iconSmall} />
-          <Text style={styles.bold}>Home</Text>
+          <Text style={styles.bold}>Office</Text>
         </View>
         <Text style={styles.subText}>
-          925 S Chugach St #APT 10, Alaska 99645
+          406 , infoenum software system , appolo squere , indore
         </Text>
       </View>
 
@@ -86,44 +91,71 @@ const CheckoutScreen = () => {
       </View>
 
       {/* Order Summary */}
-      {cartItems.length > 0 && ( 
+      {cartItems.length > 0 && (
         <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Order Summary</Text>
-        <View style={styles.rowBetween}>
-          <Text style={styles.subText}>Sub-total</Text>
-          <Text style={styles.subText}>${subtotal}</Text>
-        </View>
-        <View style={styles.rowBetween}>
-          <Text style={styles.subText}>VAT (%)</Text>
-          <Text style={styles.subText}>$0.00</Text>
-        </View>
-        <View style={styles.rowBetween}>
-          <Text style={styles.subText}>Shipping fee</Text>
-          <Text style={styles.subText}>${shipping}</Text>
-        </View>
-        <View style={styles.rowBetween}>
-          <Text style={styles.totalText}>Total</Text>
-          <Text style={styles.totalText}>${total}</Text>
-        </View>
+          <Text style={styles.sectionTitle}>Order Summary</Text>
+          <View style={styles.rowBetween}>
+            <Text style={styles.subText}>Sub-total</Text>
+            <Text style={styles.subText}>${subtotal}</Text>
+          </View>
+          <View style={styles.rowBetween}>
+            <Text style={styles.subText}>VAT (%)</Text>
+            <Text style={styles.subText}>$0.00</Text>
+          </View>
+          <View style={styles.rowBetween}>
+            <Text style={styles.subText}>Shipping fee</Text>
+            <Text style={styles.subText}>${shipping}</Text>
+          </View>
+          <View style={styles.rowBetween}>
+            <Text style={styles.totalText}>Total</Text>
+            <Text style={styles.totalText}>${total}</Text>
+          </View>
 
-        {/* Promo Code */}
-        <View style={styles.promoRow}>
-          <TextInput
-            placeholder="Enter promo code"
-            style={styles.promoInput}
-            placeholderTextColor="#999"
-          />
-          <TouchableOpacity style={styles.addButton}>
-            <Text style={styles.addButtonText}>Add</Text>
-          </TouchableOpacity>
+          {/* Promo Code */}
+          <View style={styles.promoRow}>
+            <TextInput
+              placeholder="Enter promo code"
+              style={styles.promoInput}
+              placeholderTextColor="#999"
+            />
+            <TouchableOpacity style={styles.addButton}>
+              <Text style={styles.addButtonText}>Add</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-      )
-    }
+      )}
       {/* Place Order Button */}
-      <TouchableOpacity style={styles.placeOrderButton}>
+      <TouchableOpacity
+        style={styles.placeOrderButton}
+        onPress={() => setModalVisible(true)}
+      >
         <Text style={styles.placeOrderText}>Place Order</Text>
       </TouchableOpacity>
+
+      <Modal
+        transparent
+        animationType="fade"
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Image
+              source={require('../assets/images/ckeck.png')}
+              style={styles.modalImage}
+            />
+            <Text style={styles.modalTitle}>Congratulations!</Text>
+            <Text style={styles.modalTitle}>
+              Your order has been placed.
+            </Text>
+
+            <View style={{ width: '100%', marginTop: 10 }}>
+              <AppButton title="Done" onPress={handleDone} color="black" />
+              <View style={{ height: 10 }} />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -151,19 +183,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 6,
   },
-  sectionTitle: { fontSize: 15, fontWeight: '600' },
+  sectionTitle: { fontSize: 15, fontWeight: '600', marginTop: 5 },
   link: { fontSize: 14, color: '#000', textDecorationLine: 'underline' },
 
   row: { flexDirection: 'row', alignItems: 'center', marginTop: 4 },
   rowBetween: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 4,
+    marginVertical: 10,
   },
   bold: { fontSize: 14, fontWeight: 'bold', marginLeft: 6 },
-  subText: { fontSize: 13, color: '#555' },
+  subText: { fontSize: 13, color: '#555' , marginTop: 5 },
 
-  iconSmall: { width: 14, height: 14 },
+  iconSmall: { width: 14, height: 14, resizeMode: "contain",},
   totalText: { fontSize: 15, fontWeight: 'bold' },
 
   paymentButton: {
@@ -227,6 +259,41 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   placeOrderText: { color: '#fff', fontSize: 15, fontWeight: '600' },
+
+    // 🔹 Modal Styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 24,
+    width: "100%",
+    alignItems: "center",
+  },
+  modalImage: {
+    width: 70,
+    height: 70,
+    marginBottom: 16,
+    resizeMode: "contain",
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "700",
+    marginBottom: 8,
+    color: "#000",
+    textAlign: "center",
+  },
+  modalSubtitle: {
+    fontSize: 14,
+    color: "#666",
+    marginBottom: 24,
+    textAlign: "center",
+  },
 });
 
 export default CheckoutScreen;

@@ -41,7 +41,7 @@ const AppNavigator = () => {
           <Stack.Screen name={ROUTES.FORGOT_PASSWORD} component={ForgotPasswordScreen} />
           <Stack.Screen name={ROUTES.Varification_SCREEN} component={VarificationScreen} />
           <Stack.Screen name={ROUTES.RESET_PASSWORD} component={ResetPasswordScreen} />
-          
+
         </>
       )}
 
