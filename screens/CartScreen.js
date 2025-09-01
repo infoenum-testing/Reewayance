@@ -126,7 +126,7 @@ const CartScreen = () => {
             <View style={styles.summary}>
               <View style={styles.summaryRow}>
                 <Text style={styles.summaryText}>Sub-total</Text>
-                <Text style={styles.summaryText}>${subtotal}</Text>
+                <Text style={styles.summaryText}>${subtotal?.toFixed(2)}</Text>
               </View>
               <View style={styles.summaryRow}>
                 <Text style={styles.summaryText}>VAT (%)</Text>
@@ -138,7 +138,7 @@ const CartScreen = () => {
               </View>
               <View style={styles.summaryRow}>
                 <Text style={styles.totalText}>Total</Text>
-                <Text style={styles.totalText}>${total}</Text>
+                <Text style={styles.totalText}>${total?.toFixed(2)}</Text>
               </View>
               <TouchableOpacity
                 style={styles.checkOutButton}

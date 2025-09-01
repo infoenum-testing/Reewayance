@@ -63,7 +63,7 @@ const CheckoutScreen = () => {
           <Text style={styles.bold}>Office</Text>
         </View>
         <Text style={styles.subText}>
-          406 , infoenum software system , appolo squere , indore
+          406 , infoenum software system , apollo square , indore
         </Text>
       </View>
 
@@ -144,7 +144,7 @@ const CheckoutScreen = () => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Image
-              source={require('../assets/images/ckeck.png')}
+              source={require('../assets/images/check.png')}
               style={styles.modalImage}
             />
             <Text style={styles.modalTitle}>Congratulations!</Text>
