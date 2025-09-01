@@ -7,8 +7,9 @@ import {
   TouchableOpacity,
   Linking,
   Image,
+  ScrollView,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 
 const Icons = {
   back: require("../assets/backButtonImage.png"),
@@ -41,36 +42,49 @@ const HelpCenterScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      {/* 🔹 Content */}
-      <View style={styles.content}>
+      <ScrollView style={styles.content}>
         <Text style={styles.title}>Need Help?</Text>
         <Text style={styles.subtitle}>
-          We’re here to help. Reach out to our support team any time using the
-          options below.
+          We’re here to help! Choose how you’d like to connect with us below.
         </Text>
 
         {/* 🔹 Support Options */}
         <TouchableOpacity style={styles.card} onPress={handleEmailSupport}>
-          <Text style={styles.cardIcon}>📧</Text>
-          <Text style={styles.cardText}>Email Support</Text>
+          <View style={[styles.iconCircle, { backgroundColor: "#E0F7FA" }]}>
+            <Text style={styles.cardEmoji}>📧</Text>
+          </View>
+          <View>
+            <Text style={styles.cardTitle}>Email Support</Text>
+            <Text style={styles.cardSubtitle}>Get help via email</Text>
+          </View>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.card} onPress={handleCallSupport}>
-          <Text style={styles.cardIcon}>📞</Text>
-          <Text style={styles.cardText}>Call Us</Text>
+          <View style={[styles.iconCircle, { backgroundColor: "#FFF3E0" }]}>
+            <Text style={styles.cardEmoji}>📞</Text>
+          </View>
+          <View>
+            <Text style={styles.cardTitle}>Call Us</Text>
+            <Text style={styles.cardSubtitle}>Speak directly to our team</Text>
+          </View>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.card} onPress={handleChatSupport}>
-          <Text style={styles.cardIcon}>💬</Text>
-          <Text style={styles.cardText}>Live Chat</Text>
+          <View style={[styles.iconCircle, { backgroundColor: "#E8F5E9" }]}>
+            <Text style={styles.cardEmoji}>💬</Text>
+          </View>
+          <View>
+            <Text style={styles.cardTitle}>Live Chat</Text>
+            <Text style={styles.cardSubtitle}>Instant support via chat</Text>
+          </View>
         </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+      </ScrollView>
+     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f7f7f7" },
+  container: { flex: 1, backgroundColor: "#f9f9f9" },
 
   // 🔹 Header
   header: {
@@ -88,13 +102,20 @@ const styles = StyleSheet.create({
   headerIcon: { width: 22, height: 22, tintColor: "#000" },
 
   // 🔹 Content
-  content: { flex: 1, alignItems: "center", padding: 20 },
-  title: { fontSize: 22, fontWeight: "700", marginBottom: 10, color: "#000" },
+  content: { flex: 1, padding: 20 },
+  title: {
+    fontSize: 24,
+    fontWeight: "700",
+    marginBottom: 8,
+    color: "#000",
+    textAlign: "center",
+  },
   subtitle: {
-    fontSize: 16,
+    fontSize: 15,
     color: "#666",
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: 24,
+    paddingHorizontal: 12,
   },
 
   // 🔹 Cards
@@ -103,16 +124,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#fff",
     padding: 16,
-    width: "100%",
-    borderRadius: 12,
+    borderRadius: 14,
     marginVertical: 8,
     shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 1,
+    shadowOpacity: 0.07,
+    shadowRadius: 5,
+    elevation: 2,
   },
-  cardIcon: { fontSize: 20, marginRight: 12 },
-  cardText: { fontSize: 16, fontWeight: "600", color: "#000" },
+  iconCircle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 14,
+  },
+  cardEmoji: { fontSize: 22 },
+  cardTitle: { fontSize: 16, fontWeight: "600", color: "#000" },
+  cardSubtitle: { fontSize: 13, color: "#777", marginTop: 2 },
 });
 
 export default HelpCenterScreen;
