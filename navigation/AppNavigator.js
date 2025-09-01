@@ -1,25 +1,27 @@
 // navigation/AppNavigator.js
-import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import OnboardingScreen from '../screens/OnboardingScreen';
-import CreateAccountScreen from '../screens/CreateAccountScreen';
-import ProductDetailScreen from '../screens/ProductDetailScreen';
-import LoginScreen from '../screens/LoginScreen';
-import NewCardScreen from '../screens/NewCardScreen';
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import OnboardingScreen from "../screens/OnboardingScreen";
+import CreateAccountScreen from "../screens/CreateAccountScreen";
+import ProductDetailScreen from "../screens/ProductDetailScreen";
+import LoginScreen from "../screens/LoginScreen";
+import NewCardScreen from "../screens/NewCardScreen";
 import CheckoutScreen from '../screens/CheckoutScreen';
 import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import VarificationScreen from '../screens/VarificationCodeScreen';
 import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import SplashScreen from 'react-native-splash-screen';
 import { ROUTES } from '../helper/routes';
-import BottomTabNavigator from './BottomTabNavigator';
+import BottomTabNavigator from "./BottomTabNavigator";
 import MyOrdersScreen from '../screens/MyOrdersScreen';
+import FAQScreen from '../screens/FAQScreen';
+import HelpCenterScreen from '../screens/HelpCenterScreen';
 
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
-  const { user } = useSelector(state => state.auth); // persisted user
+  const { user } = useSelector((state) => state.auth); // persisted user
 
   useEffect(() => {
     SplashScreen.hide();
@@ -34,34 +36,22 @@ const AppNavigator = () => {
         // 🔹 Otherwise show onboarding/login flow
         <>
           <Stack.Screen name={ROUTES.ONBOARDING} component={OnboardingScreen} />
-          <Stack.Screen
-            name={ROUTES.CREATE_ACCOUNT}
-            component={CreateAccountScreen}
-          />
+          <Stack.Screen name={ROUTES.CREATE_ACCOUNT} component={CreateAccountScreen} />
           <Stack.Screen name={ROUTES.Login_SCREEN} component={LoginScreen} />
-          <Stack.Screen
-            name={ROUTES.FORGOT_PASSWORD}
-            component={ForgotPasswordScreen}
-          />
-          <Stack.Screen
-            name={ROUTES.Varification_SCREEN}
-            component={VarificationScreen}
-          />
-          <Stack.Screen
-            name={ROUTES.RESET_PASSWORD}
-            component={ResetPasswordScreen}
-          />
+          <Stack.Screen name={ROUTES.FORGOT_PASSWORD} component={ForgotPasswordScreen} />
+          <Stack.Screen name={ROUTES.Varification_SCREEN} component={VarificationScreen} />
+          <Stack.Screen name={ROUTES.RESET_PASSWORD} component={ResetPasswordScreen} />
+
         </>
       )}
 
       {/* 🔹 Always available (both logged in & not logged in) */}
       <Stack.Screen name={ROUTES.NEWCARD_SCREEN} component={NewCardScreen} />
-      <Stack.Screen name={ROUTES.CHECKOUT_SCREEN} component={CheckoutScreen} />
-      <Stack.Screen
-        name={ROUTES.PRODUCT_DETAIL}
-        component={ProductDetailScreen}
-      />
+      <Stack.Screen name={ROUTES.PRODUCT_DETAIL} component={ProductDetailScreen} />
       <Stack.Screen name={ROUTES.MY_ORDERS} component={MyOrdersScreen} />
+      <Stack.Screen name={ROUTES.FAQ_Screen} component={FAQScreen} />
+      <Stack.Screen name={ROUTES.Help_Center_Screen} component={HelpCenterScreen} />
+      <Stack.Screen name={ROUTES.CHECKOUT_SCREEN} component={CheckoutScreen} />
     </Stack.Navigator>
   );
 };

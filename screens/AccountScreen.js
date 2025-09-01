@@ -90,12 +90,16 @@ const AccountScreen = ({ navigation }) => {
         if (item.isLogout) {
           setModalVisible(true);
         } else if (item.title === "My Orders") {
-        navigation.navigate(ROUTES.MY_ORDERS);
-      } else if (item.title === "Payment Methods") {
+          navigation.navigate(ROUTES.MY_ORDERS);
+        } else if (item.title === "Payment Methods") {
         navigation.navigate(ROUTES.NEWCARD_SCREEN);
-      } else {
-        console.log("Navigate to:", item.title);
-      }
+      } else if (item.title === "FAQs") {
+          navigation.navigate(ROUTES.FAQ_Screen);
+        } else if (item.title === "Help Center") {
+          navigation.navigate(ROUTES.Help_Center_Screen);
+        } else {
+          console.log("Navigate to:", item.title);
+        }
       }}
     />
   );

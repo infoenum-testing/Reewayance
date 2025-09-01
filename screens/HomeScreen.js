@@ -34,7 +34,8 @@ const HomeScreen = ({ navigation }) => {
 
 
   // Fetch products from Firebase
- useEffect(() => {
+// Fetch products from Firebase
+useEffect(() => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
@@ -54,7 +55,7 @@ const HomeScreen = ({ navigation }) => {
           Object.entries(subcats).forEach(([subCatName, products]) => {
             Object.entries(products).forEach(([id, product]) => {
               list.push({
-                id: `${categoryName}_${subCatName}_${id}`,
+                id: `${categoryName}_${subCatName}_${id}`, // 🔹 unique ID
                 ...product,
                 category: categoryName,
                 subCategory: subCatName,
@@ -75,7 +76,7 @@ const HomeScreen = ({ navigation }) => {
         });
       }
 
-      setProducts(list);
+      setProducts(list); // ✅ this was inside try, missing closing brace before
     } catch (error) {
       console.error("🔥 Firebase fetch error:", error);
     } finally {
@@ -85,7 +86,6 @@ const HomeScreen = ({ navigation }) => {
 
   fetchProducts();
 }, [selectedCategory]);
-
 
   // Product detail navigation
   const handleProductPress = useCallback(

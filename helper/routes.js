@@ -16,4 +16,6 @@ export const ROUTES = {
     TABS: "MainTabs",
     MY_ORDERS: "MyOrdersScreen",
     CHECKOUT_SCREEN: "CheckoutScreen",
+    FAQ_Screen: "FAQScreen",
+    Help_Center_Screen: "HelpCenterScreen",
 };
