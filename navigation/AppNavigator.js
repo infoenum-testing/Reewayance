@@ -15,6 +15,8 @@ import SplashScreen from 'react-native-splash-screen';
 import { ROUTES } from '../helper/routes';
 import BottomTabNavigator from "./BottomTabNavigator";
 import MyOrdersScreen from '../screens/MyOrdersScreen';
+import FAQScreen from '../screens/FAQScreen';
+import HelpCenterScreen from '../screens/HelpCenterScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,7 +41,7 @@ const AppNavigator = () => {
           <Stack.Screen name={ROUTES.FORGOT_PASSWORD} component={ForgotPasswordScreen} />
           <Stack.Screen name={ROUTES.Varification_SCREEN} component={VarificationScreen} />
           <Stack.Screen name={ROUTES.RESET_PASSWORD} component={ResetPasswordScreen} />
-          <Stack.Screen name={ROUTES.CHECKOUT_SCREEN} component={CheckoutScreen} />
+          
         </>
       )}
 
@@ -47,6 +49,9 @@ const AppNavigator = () => {
       <Stack.Screen name={ROUTES.NEWCARD_SCREEN} component={NewCardScreen} />
       <Stack.Screen name={ROUTES.PRODUCT_DETAIL} component={ProductDetailScreen} />
       <Stack.Screen name={ROUTES.MY_ORDERS} component={MyOrdersScreen} />
+      <Stack.Screen name={ROUTES.FAQ_Screen} component={FAQScreen} />
+      <Stack.Screen name={ROUTES.Help_Center_Screen} component={HelpCenterScreen} />
+      <Stack.Screen name={ROUTES.CHECKOUT_SCREEN} component={CheckoutScreen} />
     </Stack.Navigator>
   );
 };

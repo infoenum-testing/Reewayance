@@ -49,7 +49,7 @@ const HomeScreen = ({ navigation }) => {
           Object.entries(subcats).forEach(([subCatName, products]) => {
             Object.entries(products).forEach(([id, product]) => {
               list.push({
-                id: `${categoryName}_${subCatName}_${id}`, // 🔹 unique ID
+                id: `${categoryName}_${subCatName}_${id}`, 
                 ...product,
                 category: categoryName,
                 subCategory: subCatName,
@@ -61,7 +61,7 @@ const HomeScreen = ({ navigation }) => {
         Object.entries(data).forEach(([subCatName, products]) => {
           Object.entries(products).forEach(([id, product]) => {
             list.push({
-              id: `${selectedCategory}_${subCatName}_${id}`, // 🔹 unique ID
+              id: `${selectedCategory}_${subCatName}_${id}`,
               ...product,
               category: selectedCategory,
               subCategory: subCatName,
