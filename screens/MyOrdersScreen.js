@@ -91,36 +91,36 @@ const MyOrdersScreen = ({ navigation }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const snapshot = await database().ref("categories").once("value");
-        if (!snapshot.exists()) return;
+  const fetchProducts = async () => {
+    try {
+      const snapshot = await database().ref("categories").once("value");
+      if (!snapshot.exists()) return;
 
-        const data = snapshot.val();
-        const allProducts = [];
+      const data = snapshot.val();
+      const allProducts = [];
 
-        Object.entries(data).forEach(([category, subCategories]) => {
-          Object.entries(subCategories || {}).forEach(([subCategory, items]) => {
-            Object.entries(items || {}).forEach(([id, product]) => {
-              allProducts.push({
-                id: `${category}_${subCategory}_${id}`,
-                ...product,
-                category,
-                subCategory,
-              });
+      Object.entries(data).forEach(([category, subCategories]) => {
+        Object.entries(subCategories || {}).forEach(([subCategory, items]) => {
+          Object.entries(items || {}).forEach(([id, product]) => {
+            allProducts.push({
+              id: `${category}_${subCategory}_${id}`,
+              ...product,
+              category,
+              subCategory,
             });
           });
         });
+      });
 
-        setProducts(allProducts);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      setProducts(allProducts);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchProducts();
   }, []);
 

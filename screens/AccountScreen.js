@@ -241,7 +241,6 @@ const styles = StyleSheet.create({
     height: 70,
     marginBottom: 16,
     resizeMode: "contain",
-    tintColor: "red",
   },
   modalTitle: {
     fontSize: 20,

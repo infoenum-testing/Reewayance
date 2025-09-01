@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import database from '@react-native-firebase/database';
@@ -29,13 +30,17 @@ const CATEGORIES = ['All', 'Mens', 'Womens', 'Kids', 'Unisex'];
 const HomeScreen = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
 
   // Fetch products from Firebase
-  useEffect(() => {
-    const path = getCategoryPath(selectedCategory);
-    const ref = database().ref(path);
+ useEffect(() => {
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const path = getCategoryPath(selectedCategory);
+      const snapshot = await database().ref(path).once('value');
 
-    const handleSnapshot = snapshot => {
       if (!snapshot.exists()) {
         setProducts([]);
         return;
@@ -49,7 +54,7 @@ const HomeScreen = ({ navigation }) => {
           Object.entries(subcats).forEach(([subCatName, products]) => {
             Object.entries(products).forEach(([id, product]) => {
               list.push({
-                id: `${categoryName}_${subCatName}_${id}`, // 🔹 unique ID
+                id: `${categoryName}_${subCatName}_${id}`,
                 ...product,
                 category: categoryName,
                 subCategory: subCatName,
@@ -61,7 +66,7 @@ const HomeScreen = ({ navigation }) => {
         Object.entries(data).forEach(([subCatName, products]) => {
           Object.entries(products).forEach(([id, product]) => {
             list.push({
-              id: `${selectedCategory}_${subCatName}_${id}`, // 🔹 unique ID
+              id: `${selectedCategory}_${subCatName}_${id}`,
               ...product,
               category: selectedCategory,
               subCategory: subCatName,
@@ -71,11 +76,16 @@ const HomeScreen = ({ navigation }) => {
       }
 
       setProducts(list);
-    };
+    } catch (error) {
+      console.error("🔥 Firebase fetch error:", error);
+    } finally {
+      setLoading(false); // ye hamesha chalega
+    }
+  };
 
-    ref.on('value', handleSnapshot);
-    return () => ref.off('value', handleSnapshot);
-  }, [selectedCategory]);
+  fetchProducts();
+}, [selectedCategory]);
+
 
   // Product detail navigation
   const handleProductPress = useCallback(
@@ -144,6 +154,11 @@ const HomeScreen = ({ navigation }) => {
         />
 
         {/* Products Grid */}
+        {loading ? (
+          <View style={styles.loaderWrapper}>
+            <ActivityIndicator size="large" color="#000" />
+          </View>
+        ) : (
         <FlatList
           data={products}
           keyExtractor={(item, index) => index.toString()}
@@ -155,6 +170,7 @@ const HomeScreen = ({ navigation }) => {
           columnWrapperStyle={{ justifyContent: 'space-between' }}
           contentContainerStyle={{ paddingBottom: 80 }}
         />
+        )}
       </SafeAreaView>
     </SafeAreaProvider>
   );
