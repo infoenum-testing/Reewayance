@@ -34,14 +34,14 @@ const HomeScreen = ({ navigation }) => {
 
 
   // Fetch products from Firebase
- useEffect(() => {
+// Fetch products from Firebase
+useEffect(() => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
       const path = getCategoryPath(selectedCategory);
       const snapshot = await database().ref(path).once('value');
 
-    const handleSnapshot = snapshot => {
       if (!snapshot.exists()) {
         setProducts([]);
         return;
@@ -76,7 +76,7 @@ const HomeScreen = ({ navigation }) => {
         });
       }
 
-      setProducts(list);
+      setProducts(list); // ✅ this was inside try, missing closing brace before
     } catch (error) {
       console.error("🔥 Firebase fetch error:", error);
     } finally {
@@ -86,7 +86,6 @@ const HomeScreen = ({ navigation }) => {
 
   fetchProducts();
 }, [selectedCategory]);
-
 
   // Product detail navigation
   const handleProductPress = useCallback(
