@@ -21,7 +21,7 @@ import paymentMethods from '../assets/accountImages/cardImage.png';
 import VisaIcon from '../assets/images/visa.png';
 import EditIcon from '../assets/images/edit.png';
 import AppButton from '../components/AppButton';
-import { clearCart, removeFromCart } from '../src/redux/slices/cartSlice';
+import { clearCart } from '../src/redux/slices/cartSlice';
 
 const CheckoutScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);

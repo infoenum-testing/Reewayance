@@ -15,6 +15,7 @@ import SplashScreen from 'react-native-splash-screen';
 import { ROUTES } from '../helper/routes';
 import BottomTabNavigator from "./BottomTabNavigator";
 import MyOrdersScreen from '../screens/MyOrdersScreen';
+import AddressScreen from '../screens/AddressScreen';
 import FAQScreen from '../screens/FAQScreen';
 import HelpCenterScreen from '../screens/HelpCenterScreen';
 
@@ -50,6 +51,7 @@ const AppNavigator = () => {
       <Stack.Screen name={ROUTES.PRODUCT_DETAIL} component={ProductDetailScreen} />
       <Stack.Screen name={ROUTES.MY_ORDERS} component={MyOrdersScreen} />
       <Stack.Screen name={ROUTES.FAQ_Screen} component={FAQScreen} />
+      <Stack.Screen name={ROUTES.ADDRESS_SCREEN} component={AddressScreen} />
       <Stack.Screen name={ROUTES.Help_Center_Screen} component={HelpCenterScreen} />
       <Stack.Screen name={ROUTES.CHECKOUT_SCREEN} component={CheckoutScreen} />
     </Stack.Navigator>
