@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useState } from 'react';
 import {
   View,
   Text,
@@ -7,54 +7,54 @@ import {
   Image,
   TouchableOpacity,
   Modal,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { ROUTES } from "../helper/routes";
-import AppButton from "../components/AppButton"; // ✅ make sure you already have this
-import { useDispatch } from "react-redux";
-import { logout, logoutUser } from "../src/redux/slices/authSlice"; // ✅ add your logout action
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ROUTES } from '../helper/routes';
+import AppButton from '../components/AppButton'; // ✅ make sure you already have this
+import { useDispatch } from 'react-redux';
+import { logout, logoutUser } from '../src/redux/slices/authSlice'; // ✅ add your logout action
 
 const Icons = {
-  back: require("../assets/backButtonImage.png"),
-  vector: require("../assets/images/vector.png"),
-  chevronRight: require("../assets/accountImages/chevronRight.png"),
+  back: require('../assets/backButtonImage.png'),
+  vector: require('../assets/images/vector.png'),
+  chevronRight: require('../assets/accountImages/chevronRight.png'),
 };
 
 const AccountImages = {
-  myOrders: require("../assets/accountImages/myOrderImage.png"),
-  myDetails: require("../assets/accountImages/myDetailImage.png"),
-  addressBook: require("../assets/accountImages/addressImage.png"),
-  paymentMethods: require("../assets/accountImages/cardImage.png"),
-  notifications: require("../assets/images/vector.png"),
-  faq: require("../assets/accountImages/faqImage.png"),
-  helpCenter: require("../assets/accountImages/helpCenterImage.png"),
-  logout: require("../assets/accountImages/logoutImage.png"),
+  myOrders: require('../assets/accountImages/myOrderImage.png'),
+  myDetails: require('../assets/accountImages/myDetailImage.png'),
+  addressBook: require('../assets/accountImages/addressImage.png'),
+  paymentMethods: require('../assets/accountImages/cardImage.png'),
+  notifications: require('../assets/images/vector.png'),
+  faq: require('../assets/accountImages/faqImage.png'),
+  helpCenter: require('../assets/accountImages/helpCenterImage.png'),
+  logout: require('../assets/accountImages/logoutImage.png'),
 };
 
 const ACCOUNT_SECTIONS = [
   {
-    title: "Main",
-    data: [{ title: "My Orders", icon: AccountImages.myOrders }],
+    title: 'Main',
+    data: [{ title: 'My Orders', icon: AccountImages.myOrders }],
   },
   {
-    title: "Profile",
+    title: 'Profile',
     data: [
-      { title: "My Details", icon: AccountImages.myDetails },
-      { title: "Address Book", icon: AccountImages.addressBook },
-      { title: "Payment Methods", icon: AccountImages.paymentMethods },
-      { title: "Notifications", icon: AccountImages.notifications },
+      { title: 'My Details', icon: AccountImages.myDetails },
+      { title: 'Address Book', icon: AccountImages.addressBook },
+      { title: 'Payment Methods', icon: AccountImages.paymentMethods },
+      { title: 'Notifications', icon: AccountImages.notifications },
     ],
   },
   {
-    title: "Support",
+    title: 'Support',
     data: [
-      { title: "FAQs", icon: AccountImages.faq },
-      { title: "Help Center", icon: AccountImages.helpCenter },
+      { title: 'FAQs', icon: AccountImages.faq },
+      { title: 'Help Center', icon: AccountImages.helpCenter },
     ],
   },
   {
-    title: "Logout",
-    data: [{ title: "Logout", icon: AccountImages.logout, isLogout: true }],
+    title: 'Logout',
+    data: [{ title: 'Logout', icon: AccountImages.logout, isLogout: true }],
   },
 ];
 
@@ -89,18 +89,20 @@ const AccountScreen = ({ navigation }) => {
       onPress={() => {
         if (item.isLogout) {
           setModalVisible(true);
-        } else if (item.title === "My Orders") {
+        } else if (item.title === 'My Orders') {
           navigation.navigate(ROUTES.MY_ORDERS);
-        } else if (item.title === "Payment Methods") {
-        navigation.navigate(ROUTES.NEWCARD_SCREEN);
-      } else if (item.title === "FAQs") {
+        } else if (item.title === 'Address Book') {
+          navigation.navigate(ROUTES.ADDRESS_SCREEN);
+        } else if (item.title === 'Payment Methods') {
+          navigation.navigate(ROUTES.NEWCARD_SCREEN);
+        } else if (item.title === 'FAQs') {
           navigation.navigate(ROUTES.FAQ_Screen);
-        } else if (item.title === "Help Center") {
+        } else if (item.title === 'Help Center') {
           navigation.navigate(ROUTES.Help_Center_Screen);
         } else if (item.title === "My Details") {
           navigation.navigate(ROUTES.My_Details_Screen);
         } else {
-          console.log("Navigate to:", item.title);
+          console.log('Navigate to:', item.title);
         }
       }}
     />
@@ -150,12 +152,14 @@ const AccountScreen = ({ navigation }) => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Image
-              source={require("../assets/accountImages/logoutConfirmImage.png")}
+              source={require('../assets/accountImages/logoutConfirmImage.png')}
               style={styles.modalImage}
             />
-            <Text style={styles.modalTitle}>Are you sure you want to logout?</Text>
+            <Text style={styles.modalTitle}>
+              Are you sure you want to logout?
+            </Text>
 
-            <View style={{ width: "100%", marginTop: 10 }}>
+            <View style={{ width: '100%', marginTop: 10 }}>
               <AppButton
                 title="Yes, Logout"
                 onPress={handleLogout}
@@ -175,91 +179,91 @@ const AccountScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f7f7f7" },
+  container: { flex: 1, backgroundColor: '#f7f7f7' },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 2,
   },
-  headerTitle: { fontSize: 18, fontWeight: "bold", color: "#000" },
-  headerIcon: { width: 22, height: 22, tintColor: "#000" },
+  headerTitle: { fontSize: 18, fontWeight: 'bold', color: '#000' },
+  headerIcon: { width: 22, height: 22, tintColor: '#000' },
   sectionTitle: {
     fontSize: 13,
-    fontWeight: "600",
-    color: "#999",
+    fontWeight: '600',
+    color: '#999',
     marginTop: 20,
     marginBottom: 8,
     marginLeft: 16,
     letterSpacing: 0.5,
   },
   item: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#fff",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#fff',
     paddingVertical: 14,
     paddingHorizontal: 16,
     marginHorizontal: 12,
     marginVertical: 4,
     borderRadius: 10,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOpacity: 0.05,
     shadowRadius: 3,
     elevation: 1,
   },
-  itemLeft: { flexDirection: "row", alignItems: "center" },
+  itemLeft: { flexDirection: 'row', alignItems: 'center' },
   icon: {
     width: 22,
     height: 22,
     marginRight: 14,
-    resizeMode: "contain",
-    tintColor: "#444",
+    resizeMode: 'contain',
+    tintColor: '#444',
   },
-  chevron: { width: 15, height: 15, resizeMode: "contain", tintColor: "#444" },
+  chevron: { width: 15, height: 15, resizeMode: 'contain', tintColor: '#444' },
   separator: { height: 0 },
-  logoutItem: { borderWidth: 1, borderColor: "#eee" },
-  logoutText: { color: "red", fontWeight: "600" },
-  logoutIcon: { tintColor: "red" },
+  logoutItem: { borderWidth: 1, borderColor: '#eee' },
+  logoutText: { color: 'red', fontWeight: '600' },
+  logoutIcon: { tintColor: 'red' },
 
   // 🔹 Modal Styles
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 20,
   },
   modalContent: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 16,
     padding: 24,
-    width: "100%",
-    alignItems: "center",
+    width: '100%',
+    alignItems: 'center',
   },
   modalImage: {
     width: 70,
     height: 70,
     marginBottom: 16,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 8,
-    color: "#000",
-    textAlign: "center",
+    color: '#000',
+    textAlign: 'center',
   },
   modalSubtitle: {
     fontSize: 14,
-    color: "#666",
+    color: '#666',
     marginBottom: 24,
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
 

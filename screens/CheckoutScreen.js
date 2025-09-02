@@ -21,11 +21,13 @@ import paymentMethods from '../assets/accountImages/cardImage.png';
 import VisaIcon from '../assets/images/visa.png';
 import EditIcon from '../assets/images/edit.png';
 import AppButton from '../components/AppButton';
+import { clearCart } from '../src/redux/slices/cartSlice';
 
 const CheckoutScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
   const cartItems = useSelector(state => state.cart.items);
+  const dispatch = useDispatch();
 
   const subtotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -36,6 +38,7 @@ const CheckoutScreen = () => {
 
   const handleDone = () => {
     setModalVisible(false);
+    dispatch(clearCart());
   };
 
   return (
@@ -60,7 +63,7 @@ const CheckoutScreen = () => {
           <Text style={styles.bold}>Office</Text>
         </View>
         <Text style={styles.subText}>
-          406 , infoenum software system , appolo squere , indore
+          406 , infoenum software system , apollo square , indore
         </Text>
       </View>
 
@@ -141,13 +144,11 @@ const CheckoutScreen = () => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Image
-              source={require('../assets/images/ckeck.png')}
+              source={require('../assets/images/check.png')}
               style={styles.modalImage}
             />
             <Text style={styles.modalTitle}>Congratulations!</Text>
-            <Text style={styles.modalTitle}>
-              Your order has been placed.
-            </Text>
+            <Text style={styles.modalTitle}>Your order has been placed.</Text>
 
             <View style={{ width: '100%', marginTop: 10 }}>
               <AppButton title="Done" onPress={handleDone} color="black" />
@@ -193,9 +194,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   bold: { fontSize: 14, fontWeight: 'bold', marginLeft: 6 },
-  subText: { fontSize: 13, color: '#555' , marginTop: 5 },
+  subText: { fontSize: 13, color: '#555', marginTop: 5 },
 
-  iconSmall: { width: 14, height: 14, resizeMode: "contain",},
+  iconSmall: { width: 14, height: 14, resizeMode: 'contain' },
   totalText: { fontSize: 15, fontWeight: 'bold' },
 
   paymentButton: {
@@ -260,39 +261,39 @@ const styles = StyleSheet.create({
   },
   placeOrderText: { color: '#fff', fontSize: 15, fontWeight: '600' },
 
-    // 🔹 Modal Styles
+  // 🔹 Modal Styles
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 20,
   },
   modalContent: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 16,
     padding: 24,
-    width: "100%",
-    alignItems: "center",
+    width: '100%',
+    alignItems: 'center',
   },
   modalImage: {
     width: 70,
     height: 70,
     marginBottom: 16,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 8,
-    color: "#000",
-    textAlign: "center",
+    color: '#000',
+    textAlign: 'center',
   },
   modalSubtitle: {
     fontSize: 14,
-    color: "#666",
+    color: '#666',
     marginBottom: 24,
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
 
