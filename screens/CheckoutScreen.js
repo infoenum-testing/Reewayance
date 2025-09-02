@@ -261,17 +261,8 @@ const styles = StyleSheet.create({
   },
   placeOrderText: { color: '#fff', fontSize: 15, fontWeight: '600' },
 
-  // 🔹 Modal Styles
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
+  modalWrap: {
+    flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', alignItems: 'center', justifyContent: 'center',
     padding: 24,
     width: '100%',
     alignItems: 'center',
