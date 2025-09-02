@@ -1,16 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  TextInput,
-  Modal,
+  View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector, useDispatch } from 'react-redux';
+import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
 
 import Arrow from '../assets/backButtonImage.png';
 import NotificationIcon from '../assets/images/vector.png';
@@ -21,24 +16,53 @@ import paymentMethods from '../assets/accountImages/cardImage.png';
 import VisaIcon from '../assets/images/visa.png';
 import EditIcon from '../assets/images/edit.png';
 import AppButton from '../components/AppButton';
-import { clearCart } from '../src/redux/slices/cartSlice';
 
 const CheckoutScreen = () => {
-  const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
-  const cartItems = useSelector(state => state.cart.items);
-  const dispatch = useDispatch();
+  const userId = auth().currentUser?.uid;
 
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0,
-  );
+  const [cartItems, setCartItems] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    if (!userId) return;
+    const ref = database().ref(`users/${userId}/cart`);
+    const cb = snap => {
+      if (snap.exists()) setCartItems(Object.values(snap.val()));
+      else setCartItems([]);
+    };
+    ref.on('value', cb);
+    return () => ref.off('value', cb);
+  }, [userId]);
+
+  const subtotal = useMemo(() => cartItems.reduce((s, it) => s + (it.price * it.quantity), 0), [cartItems]);
   const shipping = cartItems.length > 0 ? 80 : 0;
   const total = subtotal + shipping;
 
-  const handleDone = () => {
+  const placeOrder = async () => {
+    if (!userId || cartItems.length === 0) return;
+
+    const cartRef = database().ref(`users/${userId}/cart`);
+    const orderRef = database().ref(`users/${userId}/orders`).push();
+    const snap = await cartRef.once('value');
+    if (!snap.exists()) return;
+
+    await orderRef.set({
+      items: snap.val(),
+      total,
+      address: '406 , infoenum software system , apollo square , indore',
+      paymentMethod: 'Cash',
+      status: 'placed',
+      createdAt: new Date().toISOString(),
+    });
+
+    await cartRef.remove();
+    setModalVisible(true)
+  };
+
+  const closeModal = () => {
     setModalVisible(false);
-    dispatch(clearCart());
+    navigation.goBack();
   };
 
   return (
@@ -99,7 +123,7 @@ const CheckoutScreen = () => {
           <Text style={styles.sectionTitle}>Order Summary</Text>
           <View style={styles.rowBetween}>
             <Text style={styles.subText}>Sub-total</Text>
-            <Text style={styles.subText}>${subtotal}</Text>
+            <Text style={styles.subText}>${subtotal.toFixed(2)}</Text>
           </View>
           <View style={styles.rowBetween}>
             <Text style={styles.subText}>VAT (%)</Text>
@@ -111,10 +135,9 @@ const CheckoutScreen = () => {
           </View>
           <View style={styles.rowBetween}>
             <Text style={styles.totalText}>Total</Text>
-            <Text style={styles.totalText}>${total}</Text>
+            <Text style={styles.totalText}>${total.toFixed(2)}</Text>
           </View>
 
-          {/* Promo Code */}
           <View style={styles.promoRow}>
             <TextInput
               placeholder="Enter promo code"
@@ -127,11 +150,8 @@ const CheckoutScreen = () => {
           </View>
         </View>
       )}
-      {/* Place Order Button */}
-      <TouchableOpacity
-        style={styles.placeOrderButton}
-        onPress={() => setModalVisible(true)}
-      >
+
+      <TouchableOpacity style={styles.placeOrderButton} onPress={placeOrder}>
         <Text style={styles.placeOrderText}>Place Order</Text>
       </TouchableOpacity>
 
@@ -151,7 +171,7 @@ const CheckoutScreen = () => {
             <Text style={styles.modalTitle}>Your order has been placed.</Text>
 
             <View style={{ width: '100%', marginTop: 10 }}>
-              <AppButton title="Done" onPress={handleDone} color="black" />
+              <AppButton title="Done" onPress={closeModal} color="black" />
               <View style={{ height: 10 }} />
             </View>
           </View>
@@ -261,8 +281,17 @@ const styles = StyleSheet.create({
   },
   placeOrderText: { color: '#fff', fontSize: 15, fontWeight: '600' },
 
-  modalWrap: {
-    flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', alignItems: 'center', justifyContent: 'center',
+  // 🔹 Modal Styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
     padding: 24,
     width: '100%',
     alignItems: 'center',
