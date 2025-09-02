@@ -34,7 +34,9 @@ const ProductDetailScreen = () => {
   // toggle favourite – same pattern as HomeScreen
   const toggleFavourite = useCallback(async () => {
     const ref = database().ref(
-      `categories/${product.category || category}/${product.subCategory}/${product.id}`,
+      `categories/${product.category || category}/${product.subCategory}/${
+        product.id
+      }`,
     );
     await ref.set({ ...product, isFavourite: !isFavourite });
     setIsFavourite(v => !v);
@@ -111,7 +113,10 @@ const ProductDetailScreen = () => {
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Details</Text>
         <TouchableOpacity onPress={toggleFavourite}>
-          <Image source={isFavourite ? HeartFill : Heart} style={styles.headerIcon} />
+          <Image
+            source={isFavourite ? HeartFill : Heart}
+            style={styles.headerIcon}
+          />
         </TouchableOpacity>
       </View>
 
@@ -121,7 +126,9 @@ const ProductDetailScreen = () => {
         <View style={styles.sectionPad}>
           <Text style={styles.name}>{product.name}</Text>
           <Text style={styles.rating}>{ratingText}</Text>
-          <Text style={styles.desc}>{product.description || 'No description available.'}</Text>
+          <Text style={styles.desc}>
+            {product.description || 'No description available.'}
+          </Text>
 
           <Text style={styles.sectionTitle}>Choose size</Text>
           <View style={styles.sizeRow}>
@@ -133,7 +140,9 @@ const ProductDetailScreen = () => {
                   onPress={() => setSelectedSize(size)}
                   style={[styles.sizeBtn, active && styles.sizeBtnActive]}
                 >
-                  <Text style={[styles.sizeText, active && { color: '#fff' }]}>{size}</Text>
+                  <Text style={[styles.sizeText, active && { color: '#fff' }]}>
+                    {size}
+                  </Text>
                 </TouchableOpacity>
               );
             })}
@@ -142,19 +151,31 @@ const ProductDetailScreen = () => {
 
         {suggested.length > 0 && (
           <View style={{ marginTop: 20 }}>
-            <Text style={[styles.sectionTitle, { marginLeft: 16 }]}>You may also like</Text>
+            <Text style={[styles.sectionTitle, { marginLeft: 16 }]}>
+              You may also like
+            </Text>
             <FlatList
               data={suggested}
               horizontal
               showsHorizontalScrollIndicator={false}
-              keyExtractor={(it) => it.id}
+              keyExtractor={it => it.id}
               renderItem={({ item }) => (
                 <TouchableOpacity
-                  onPress={() => navigation.push('ProductDetailScreen', { product: item, category })}
+                  onPress={() =>
+                    navigation.push('ProductDetailScreen', {
+                      product: item,
+                      category,
+                    })
+                  }
                   style={styles.suggestCard}
                 >
-                  <Image source={{ uri: item.image }} style={styles.suggestImg} />
-                  <Text numberOfLines={1} style={styles.suggestName}>{item.name}</Text>
+                  <Image
+                    source={{ uri: item.image }}
+                    style={styles.suggestImg}
+                  />
+                  <Text numberOfLines={1} style={styles.suggestName}>
+                    {item.name}
+                  </Text>
                   <Text style={styles.suggestPrice}>${item.price}</Text>
                 </TouchableOpacity>
               )}
@@ -164,7 +185,6 @@ const ProductDetailScreen = () => {
           </View>
         )}
       </ScrollView>
-
 
       <View style={styles.bottomRow}>
         <Text style={styles.price}>${product.price}</Text>
@@ -181,33 +201,68 @@ export default ProductDetailScreen;
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
   header: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    paddingHorizontal: 16, paddingVertical: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
   headerIcon: { width: 22, height: 22, tintColor: '#000' },
   headerTitle: { fontSize: 18, fontWeight: 'bold' },
-  image: { width: '100%', height: 320, resizeMode: 'contain', backgroundColor: '#f9f9f9' },
+  image: {
+    width: '100%',
+    height: 320,
+    resizeMode: 'contain',
+    backgroundColor: '#f9f9f9',
+  },
   sectionPad: { paddingHorizontal: 16, marginTop: 16 },
   name: { fontSize: 22, fontWeight: 'bold', marginBottom: 6 },
   rating: { fontSize: 14, color: '#f97316', marginBottom: 12 },
   desc: { fontSize: 14, color: '#666', lineHeight: 20, marginBottom: 16 },
   sectionTitle: { fontSize: 16, fontWeight: 'bold', marginBottom: 8 },
   sizeRow: { flexDirection: 'row', marginBottom: 8 },
-  sizeBtn: { borderWidth: 1, borderColor: '#aaa', borderRadius: 6, paddingHorizontal: 16, paddingVertical: 8, marginRight: 10 },
+  sizeBtn: {
+    borderWidth: 1,
+    borderColor: '#aaa',
+    borderRadius: 6,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginRight: 10,
+  },
   sizeBtnActive: { backgroundColor: '#000', borderColor: '#000' },
   sizeText: { fontWeight: '700', color: '#000' },
   bottomRow: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    padding: 16, borderTopWidth: 1, borderTopColor: '#eee',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
   },
   price: { fontSize: 20, fontWeight: 'bold' },
-  cartBtn: { backgroundColor: '#000', paddingVertical: 12, paddingHorizontal: 28, borderRadius: 8 },
+  cartBtn: {
+    backgroundColor: '#000',
+    paddingVertical: 12,
+    paddingHorizontal: 28,
+    borderRadius: 8,
+  },
   cartText: { color: '#fff', fontWeight: 'bold' },
   suggestCard: {
-    width: 120, backgroundColor: '#fff', borderRadius: 10, padding: 8,
-    shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 4, elevation: 3,
+    width: 120,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  suggestImg: { width: '100%', height: 100, borderRadius: 8, resizeMode: 'contain' },
+  suggestImg: {
+    width: '100%',
+    height: 100,
+    borderRadius: 8,
+    resizeMode: 'contain',
+  },
   suggestName: { fontSize: 12, fontWeight: '500', marginTop: 6, color: '#333' },
   suggestPrice: { fontSize: 13, fontWeight: 'bold', marginTop: 2 },
 });

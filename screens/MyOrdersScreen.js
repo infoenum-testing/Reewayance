@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import database from "@react-native-firebase/database";
+import auth from "@react-native-firebase/auth";
 
 const TABS = {
   ONGOING: "Ongoing",
@@ -51,87 +52,83 @@ const TabSwitcher = ({ selectedTab, onTabChange }) => (
   </View>
 );
 
-// 🔹 Order Card Component
-const OrderCard = ({ item, isOngoing }) => (
-  <View style={styles.card}>
-    <Image source={{ uri: item.image }} style={styles.productImage} />
+const OrderCard = ({ order, isOngoing }) => {
+  const firstItem = Object.values(order.items)[0]; // ek order me multiple ho sakte hain
+  return (
+    <View style={styles.card}>
+      <Image
+        source={{ uri: firstItem.image }}
+        style={styles.productImage}
+      />
 
-    <View style={{ flex: 1 }}>
-      <Text style={styles.productName}>{item.name}</Text>
-      <Text style={styles.productSize}>Size {item.size || "M"}</Text>
-      <Text style={styles.price}>${item.price}</Text>
-    </View>
+      <View style={{ flex: 1 }}>
+        <Text style={styles.productName}>{firstItem.name}</Text>
+        <Text style={styles.productSize}>
+          {Object.keys(order.items).length} item(s)
+        </Text>
+        <Text style={styles.price}>${order.total}</Text>
+      </View>
 
-    <View style={styles.rightSection}>
-      {isOngoing ? (
-        <>
-          <Text style={styles.status}>In Transit</Text>
-          <TouchableOpacity style={styles.trackButton}>
-            <Text style={styles.trackText}>Track Order</Text>
-          </TouchableOpacity>
-        </>
-      ) : (
-        <>
-          <Text style={styles.completedStatus}>Completed</Text>
-          {item.rating ? (
-            <Text style={styles.ratingText}>⭐ {item.rating}/5</Text>
-          ) : (
+      <View style={styles.rightSection}>
+        {isOngoing ? (
+          <>
+            <Text style={styles.status}>{order.status || "Placed"}</Text>
+            <TouchableOpacity style={styles.trackButton}>
+              <Text style={styles.trackText}>Track Order</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <>
+            <Text style={styles.completedStatus}>Completed</Text>
             <TouchableOpacity style={styles.reviewButton}>
               <Text style={styles.reviewText}>Leave Review</Text>
             </TouchableOpacity>
-          )}
-        </>
-      )}
+          </>
+        )}
+      </View>
     </View>
-  </View>
-);
+  );
+};
 
 const MyOrdersScreen = ({ navigation }) => {
   const [selectedTab, setSelectedTab] = useState(TABS.ONGOING);
-  const [products, setProducts] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const fetchProducts = async () => {
-    try {
-      const snapshot = await database().ref("categories").once("value");
-      if (!snapshot.exists()) return;
-
-      const data = snapshot.val();
-      const allProducts = [];
-
-      Object.entries(data).forEach(([category, subCategories]) => {
-        Object.entries(subCategories || {}).forEach(([subCategory, items]) => {
-          Object.entries(items || {}).forEach(([id, product]) => {
-            allProducts.push({
-              id: `${category}_${subCategory}_${id}`,
-              ...product,
-              category,
-              subCategory,
-            });
-          });
-        });
-      });
-
-      setProducts(allProducts);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const userId = auth().currentUser?.uid;
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    if (!userId) return;
+    const ref = database().ref(`users/${userId}/orders`);
 
-  const filteredProducts = useMemo(() => {
-    if (selectedTab === TABS.ONGOING) return products.slice(0, 8);
-    return [...products].sort(() => 0.5 - Math.random()).slice(0, 5);
-  }, [selectedTab, products]);
+    const listener = ref.on("value", (snapshot) => {
+      if (!snapshot.exists()) {
+        setOrders([]);
+        setLoading(false);
+        return;
+      }
+      const data = snapshot.val();
+      const list = Object.entries(data).map(([id, order]) => ({
+        id,
+        ...order,
+      }));
+      setOrders(list.reverse()); // latest on top
+      setLoading(false);
+    });
+
+    return () => ref.off("value", listener);
+  }, [userId]);
+
+  const filteredOrders = useMemo(() => {
+    if (selectedTab === TABS.ONGOING) {
+      return orders.filter((o) => o.status !== "completed");
+    } else {
+      return orders.filter((o) => o.status === "completed");
+    }
+  }, [selectedTab, orders]);
 
   const renderItem = useCallback(
     ({ item }) => (
-      <OrderCard item={item} isOngoing={selectedTab === TABS.ONGOING} />
+      <OrderCard order={item} isOngoing={selectedTab === TABS.ONGOING} />
     ),
     [selectedTab]
   );
@@ -145,12 +142,17 @@ const MyOrdersScreen = ({ navigation }) => {
         <ActivityIndicator size="large" color="#000" style={{ marginTop: 20 }} />
       ) : (
         <FlatList
-          data={filteredProducts}
+          data={filteredOrders}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingBottom: 40 }}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
+          ListEmptyComponent={
+            <Text style={{ textAlign: "center", marginTop: 30, color: "gray" }}>
+              No {selectedTab} Orders
+            </Text>
+          }
         />
       )}
     </SafeAreaView>
@@ -159,7 +161,6 @@ const MyOrdersScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff" },
-
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -170,7 +171,6 @@ const styles = StyleSheet.create({
   },
   headerTitle: { fontSize: 18, fontWeight: "bold", color: "#000" },
   headerIcon: { width: 22, height: 22, tintColor: "#000" },
-
   tabContainer: {
     flexDirection: "row",
     margin: 16,
@@ -182,7 +182,6 @@ const styles = StyleSheet.create({
   tabText: { fontSize: 14, color: "#555" },
   activeTab: { backgroundColor: "#000", elevation: 2 },
   activeTabText: { color: "#fff", fontWeight: "600" },
-
   card: {
     flexDirection: "row",
     alignItems: "center",
@@ -192,18 +191,11 @@ const styles = StyleSheet.create({
     padding: 14,
     borderRadius: 12,
     elevation: 3,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
   },
-
   productImage: { width: 60, height: 60, marginRight: 12, borderRadius: 8 },
   productName: { fontSize: 15, fontWeight: "600", color: "#000" },
-  productSize: { fontSize: 13, color: "#777", marginVertical: 2, marginBottom: 10 },
+  productSize: { fontSize: 13, color: "#777", marginVertical: 2 },
   price: { fontSize: 14, fontWeight: "bold", color: "#000" },
-
-
   rightSection: { alignItems: "flex-end" },
   status: {
     fontSize: 12,
@@ -239,12 +231,6 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
   },
   reviewText: { color: "#000", fontSize: 12, fontWeight: "600" },
-  ratingText: {
-    fontSize: 13,
-    fontWeight: "600",
-    color: "#333",
-    marginTop: 4,
-  },
 });
 
 export default MyOrdersScreen;
