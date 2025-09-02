@@ -53,7 +53,7 @@ const TabSwitcher = ({ selectedTab, onTabChange }) => (
 );
 
 const OrderCard = ({ order, isOngoing }) => {
-  const firstItem = Object.values(order.items)[0]; // ek order me multiple ho sakte hain
+  const firstItem = Object.values(order.items)[0];
   return (
     <View style={styles.card}>
       <Image
@@ -122,7 +122,8 @@ const MyOrdersScreen = ({ navigation }) => {
     if (selectedTab === TABS.ONGOING) {
       return orders.filter((o) => o.status !== "completed");
     } else {
-      return orders.filter((o) => o.status === "completed");
+      // ✅ Completed tab me random 10 orders
+      return [...orders].sort(() => 0.5 - Math.random()).slice(0, 10);
     }
   }, [selectedTab, orders]);
 
