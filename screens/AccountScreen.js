@@ -97,6 +97,8 @@ const AccountScreen = ({ navigation }) => {
           navigation.navigate(ROUTES.FAQ_Screen);
         } else if (item.title === "Help Center") {
           navigation.navigate(ROUTES.Help_Center_Screen);
+        } else if (item.title === "My Details") {
+          navigation.navigate(ROUTES.My_Details_Screen);
         } else {
           console.log("Navigate to:", item.title);
         }

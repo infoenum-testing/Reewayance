@@ -18,4 +18,5 @@ export const ROUTES = {
     CHECKOUT_SCREEN: "CheckoutScreen",
     FAQ_Screen: "FAQScreen",
     Help_Center_Screen: "HelpCenterScreen",
+    My_Details_Screen: "MyDetailsScreen",
 };

@@ -17,6 +17,7 @@ import BottomTabNavigator from "./BottomTabNavigator";
 import MyOrdersScreen from '../screens/MyOrdersScreen';
 import FAQScreen from '../screens/FAQScreen';
 import HelpCenterScreen from '../screens/HelpCenterScreen';
+import MyDetailsScreen from '../screens/MyDetailsScreen'; 
 
 const Stack = createNativeStackNavigator();
 
@@ -52,6 +53,7 @@ const AppNavigator = () => {
       <Stack.Screen name={ROUTES.FAQ_Screen} component={FAQScreen} />
       <Stack.Screen name={ROUTES.Help_Center_Screen} component={HelpCenterScreen} />
       <Stack.Screen name={ROUTES.CHECKOUT_SCREEN} component={CheckoutScreen} />
+      <Stack.Screen name={ROUTES.My_Details_Screen} component={MyDetailsScreen} />
     </Stack.Navigator>
   );
 };
