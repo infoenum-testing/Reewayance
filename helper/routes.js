@@ -20,4 +20,6 @@ export const ROUTES = {
     Help_Center_Screen: "HelpCenterScreen",
     ADDRESS_SCREEN: "AddressScreen",
     My_Details_Screen: "MyDetailsScreen",
+    Notification_Screen: "NotificationsScreen",
+    
 };

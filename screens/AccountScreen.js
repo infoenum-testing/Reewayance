@@ -126,7 +126,7 @@ const AccountScreen = ({ navigation }) => {
           <Image source={Icons.back} style={styles.headerIcon} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Account</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate(ROUTES.Notification_Screen)}>
           <Image source={Icons.vector} style={styles.headerIcon} />
         </TouchableOpacity>
       </View>

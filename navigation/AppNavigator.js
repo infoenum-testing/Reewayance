@@ -19,6 +19,7 @@ import AddressScreen from '../screens/AddressScreen';
 import FAQScreen from '../screens/FAQScreen';
 import HelpCenterScreen from '../screens/HelpCenterScreen';
 import MyDetailsScreen from '../screens/MyDetailsScreen'; 
+import NotificationsScreen from '../screens/NotificationsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -50,6 +51,7 @@ const AppNavigator = () => {
       {/* 🔹 Always available (both logged in & not logged in) */}
       <Stack.Screen name={ROUTES.NEWCARD_SCREEN} component={NewCardScreen} />
       <Stack.Screen name={ROUTES.PRODUCT_DETAIL} component={ProductDetailScreen} />
+      <Stack.Screen name={ROUTES.Notification_Screen} component={NotificationsScreen} />
       <Stack.Screen name={ROUTES.MY_ORDERS} component={MyOrdersScreen} />
       <Stack.Screen name={ROUTES.FAQ_Screen} component={FAQScreen} />
       <Stack.Screen name={ROUTES.ADDRESS_SCREEN} component={AddressScreen} />
