@@ -239,15 +239,21 @@ const NewCardScreen = ({ navigation }) => {
 
 // ----------- Styles ------------ //
 const styles = StyleSheet.create({
-  mainContainer: { flex: 1, backgroundColor: '#fff' },
+  mainContainer: { flex: 1, backgroundColor: "#fff" },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingHorizontal: 20,
+    paddingTop: 10,
+  },
 
   // Card Preview
   cardPreview: {
-    backgroundColor: '#5d5d6fff',
+    backgroundColor: "#5d5d6fff",
     borderRadius: 16,
     padding: 20,
     marginVertical: 20,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOpacity: 0.2,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 4 },
@@ -256,48 +262,48 @@ const styles = StyleSheet.create({
   cardBrand: {
     width: 50,
     height: 30,
-    resizeMode: 'contain',
-    alignSelf: 'flex-end',
+    resizeMode: "contain",
+    alignSelf: "flex-end",
   },
   previewNumber: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 20,
     letterSpacing: 2,
     marginTop: 10,
   },
   previewRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginTop: 15,
   },
-  previewExpiry: { color: '#fff', fontSize: 16 },
-  previewCvc: { color: '#fff', fontSize: 16 },
+  previewExpiry: { color: "#fff", fontSize: 16 },
+  previewCvc: { color: "#fff", fontSize: 16 },
 
   form: { flex: 1 },
   inputLabel: {
     fontSize: 12,
-    color: 'gray',
+    color: "gray",
     marginBottom: 5,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#f9f9f9",
     marginBottom: 10,
   },
-  errorInput: { borderColor: 'red' },
-  errorText: { color: 'red', fontSize: 12, marginBottom: 8 },
+  errorInput: { borderColor: "red" },
+  errorText: { color: "red", fontSize: 12, marginBottom: 8 },
 
   inputWithIcon: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderRadius: 8,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#f9f9f9",
     paddingHorizontal: 10,
   },
   cvcInput: {
@@ -308,50 +314,50 @@ const styles = StyleSheet.create({
   iconInsideInput: {
     width: 20,
     height: 20,
-    tintColor: 'gray',
+    tintColor: "gray",
     marginLeft: 8,
   },
 
-  row: { flexDirection: 'row' },
+  row: { flexDirection: "row" },
 
   switchRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginVertical: 15,
   },
-  switchLabel: { fontSize: 14, color: '#333' },
+  switchLabel: { fontSize: 14, color: "#333" },
 
   button: {
     padding: 16,
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 10,
     marginBottom: 10,
   },
-  buttonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
+  buttonText: { color: "#fff", fontSize: 16, fontWeight: "600" },
 
   secureNote: {
     fontSize: 12,
-    color: 'gray',
-    textAlign: 'center',
+    color: "gray",
+    textAlign: "center",
     marginBottom: 20,
   },
 
   // Tooltip
   tooltipOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
   },
   tooltipBox: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 15,
     borderRadius: 10,
-    maxWidth: '80%',
+    maxWidth: "80%",
   },
-  tooltipText: { fontSize: 14, color: '#333' },
+  tooltipText: { fontSize: 14, color: "#333" },
 });
 
 export default NewCardScreen;
