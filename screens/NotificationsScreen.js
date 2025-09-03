@@ -4,6 +4,7 @@ import Notification from '../assets/images/vector.png';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ROUTES } from '../helper/routes';
 import { useNavigation } from '@react-navigation/native';
+import Header from '../components/Header';
 
 const Icons = {
   back: require('../assets/backButtonImage.png'),
@@ -14,19 +15,7 @@ const NotificationsScreen = () => {
   const navigation = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={Icons.back} style={styles.headerIcon} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Account</Text>
-        <TouchableOpacity
-          onPress={() => navigation.navigate(ROUTES.Notification_Screen)}
-        >
-          <Image source={Icons.bell} style={styles.headerIcon} />
-        </TouchableOpacity>
-      </View>
-
+     <Header headerTitle = {"Notification"}/>
       <View style={styles.emptyContainer}>
         <Image source={Icons.bell} style={styles.staticHeartIcon} />
         <Text style={styles.emptyTitle}>
@@ -42,19 +31,6 @@ const NotificationsScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f7f7f7' },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  headerTitle: { fontSize: 18, fontWeight: 'bold', color: '#000' },
-  headerIcon: { width: 22, height: 22, tintColor: '#000' },
   topText: {
     fontWeight: 'bold',
     alignItems: 'center',

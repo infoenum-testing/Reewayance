@@ -13,6 +13,7 @@ import { ROUTES } from '../helper/routes';
 import AppButton from '../components/AppButton'; // ✅ make sure you already have this
 import { useDispatch } from 'react-redux';
 import { logout, logoutUser } from '../src/redux/slices/authSlice'; // ✅ add your logout action
+import Header from '../components/Header';
 
 const Icons = {
   back: require('../assets/backButtonImage.png'),
@@ -99,7 +100,7 @@ const AccountScreen = ({ navigation }) => {
           navigation.navigate(ROUTES.FAQ_Screen);
         } else if (item.title === 'Help Center') {
           navigation.navigate(ROUTES.Help_Center_Screen);
-        } else if (item.title === "My Details") {
+        } else if (item.title === 'My Details') {
           navigation.navigate(ROUTES.My_Details_Screen);
         } else {
           console.log('Navigate to:', item.title);
@@ -120,17 +121,7 @@ const AccountScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={Icons.back} style={styles.headerIcon} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Account</Text>
-        <TouchableOpacity onPress={() => navigation.navigate(ROUTES.Notification_Screen)}>
-          <Image source={Icons.vector} style={styles.headerIcon} />
-        </TouchableOpacity>
-      </View>
-
+      <Header headerTitle={'Account'} />
       {/* List */}
       <SectionList
         sections={ACCOUNT_SECTIONS}
@@ -180,19 +171,6 @@ const AccountScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f7f7f7' },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  headerTitle: { fontSize: 18, fontWeight: 'bold', color: '#000' },
-  headerIcon: { width: 22, height: 22, tintColor: '#000' },
   sectionTitle: {
     fontSize: 13,
     fontWeight: '600',

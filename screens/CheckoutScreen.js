@@ -1,6 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Modal,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -16,6 +22,7 @@ import paymentMethods from '../assets/accountImages/cardImage.png';
 import VisaIcon from '../assets/images/visa.png';
 import EditIcon from '../assets/images/edit.png';
 import AppButton from '../components/AppButton';
+import Header from '../components/Header';
 
 const CheckoutScreen = () => {
   const navigation = useNavigation();
@@ -35,7 +42,10 @@ const CheckoutScreen = () => {
     return () => ref.off('value', cb);
   }, [userId]);
 
-  const subtotal = useMemo(() => cartItems.reduce((s, it) => s + (it.price * it.quantity), 0), [cartItems]);
+  const subtotal = useMemo(
+    () => cartItems.reduce((s, it) => s + it.price * it.quantity, 0),
+    [cartItems],
+  );
   const shipping = cartItems.length > 0 ? 80 : 0;
   const total = subtotal + shipping;
 
@@ -57,7 +67,7 @@ const CheckoutScreen = () => {
     });
 
     await cartRef.remove();
-    setModalVisible(true)
+    setModalVisible(true);
   };
 
   const closeModal = () => {
@@ -67,14 +77,7 @@ const CheckoutScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={Arrow} style={styles.headerIcon} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Checkout</Text>
-        <Image source={NotificationIcon} style={styles.headerIcon} />
-      </View>
+      <Header headerTitle={'Checkout'} />
 
       {/* Delivery Address */}
       <View style={styles.section}>
@@ -183,16 +186,6 @@ const CheckoutScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
-
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
-  },
-  headerTitle: { fontSize: 18, fontWeight: '600' },
-  headerIcon: { width: 22, height: 22, tintColor: '#000' },
-
   section: {
     paddingHorizontal: 20,
     paddingVertical: 16,

@@ -1,6 +1,11 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity, Image, FlatList,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  FlatList,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -12,6 +17,7 @@ import NotificationIcon from '../assets/images/vector.png';
 import Trash from '../assets/images/trash.png';
 import RightArrow from '../assets/images/arrowRight.png';
 import { ROUTES } from '../helper/routes';
+import Header from '../components/Header';
 
 const CartScreen = () => {
   const navigation = useNavigation();
@@ -29,15 +35,21 @@ const CartScreen = () => {
     return () => ref.off('value', cb);
   }, [userId]);
 
-  const subtotal = useMemo(() => items.reduce((s, it) => s + (it.price * it.quantity), 0), [items]);
+  const subtotal = useMemo(
+    () => items.reduce((s, it) => s + it.price * it.quantity, 0),
+    [items],
+  );
   const shipping = items.length > 0 ? 80 : 0;
   const total = subtotal + shipping;
 
   const updateQty = (it, next) =>
-    database().ref(`users/${userId}/cart/${it.id}_${it.selectedSize}`).update({ quantity: next });
+    database()
+      .ref(`users/${userId}/cart/${it.id}_${it.selectedSize}`)
+      .update({ quantity: next });
 
   const inc = it => updateQty(it, it.quantity + 1);
-  const dec = it => (it.quantity > 1 ? updateQty(it, it.quantity - 1) : remove(it));
+  const dec = it =>
+    it.quantity > 1 ? updateQty(it, it.quantity - 1) : remove(it);
   const remove = it =>
     database().ref(`users/${userId}/cart/${it.id}_${it.selectedSize}`).remove();
 
@@ -55,11 +67,17 @@ const CartScreen = () => {
         <View style={styles.cartTop}>
           <Text style={styles.itemPrice}>${item.price}</Text>
           <View style={styles.quantityContainer}>
-            <TouchableOpacity onPress={() => dec(item)} style={styles.qtyButton}>
+            <TouchableOpacity
+              onPress={() => dec(item)}
+              style={styles.qtyButton}
+            >
               <Text style={styles.qtyText}>-</Text>
             </TouchableOpacity>
             <Text style={styles.qtyNumber}>{item.quantity}</Text>
-            <TouchableOpacity onPress={() => inc(item)} style={styles.qtyButton}>
+            <TouchableOpacity
+              onPress={() => inc(item)}
+              style={styles.qtyButton}
+            >
               <Text style={styles.qtyText}>+</Text>
             </TouchableOpacity>
           </View>
@@ -70,19 +88,12 @@ const CartScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={Arrow} style={styles.headerIcon} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>My Cart</Text>
-        <Image source={NotificationIcon} style={styles.headerIcon} />
-      </View>
+      <Header headerTitle={'My Cart'} />
 
       {/* Cart Items */}
       <FlatList
         data={items}
-        keyExtractor={(it) => `${it.id}_${it.selectedSize}`}
+        keyExtractor={it => `${it.id}_${it.selectedSize}`}
         renderItem={renderItem}
         contentContainerStyle={{ paddingBottom: 20, flexGrow: 1 }}
         ListEmptyComponent={
@@ -135,43 +146,92 @@ export default CartScreen;
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
-  header: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    paddingHorizontal: 16, paddingVertical: 12,
-  },
-  headerTitle: { fontSize: 20, fontWeight: 'bold' },
-  headerIcon: { width: 22, height: 22, tintColor: '#000' },
   trashIcon: { width: 15, height: 15, tintColor: 'red' },
   cartItem: {
-    flexDirection: 'row', backgroundColor: '#fff', marginHorizontal: 16, marginBottom: 12,
-    borderRadius: 10, padding: 12, alignItems: 'center',
-    shadowColor: '#000', shadowOpacity: 0.05, shadowOffset: { width: 0, height: 1 }, shadowRadius: 3, elevation: 2,
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    marginHorizontal: 16,
+    marginBottom: 12,
+    borderRadius: 10,
+    padding: 12,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowOffset: { width: 0, height: 1 },
+    shadowRadius: 3,
+    elevation: 2,
   },
-  cartTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  cartTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   itemImage: { width: 79, height: 83, borderRadius: 8 },
   itemName: { fontSize: 16, fontWeight: '600' },
   itemSize: { fontSize: 14, color: 'gray', marginVertical: 2 },
   itemPrice: { fontSize: 15, fontWeight: 'bold' },
   quantityContainer: {
-    flexDirection: 'row', alignItems: 'center', marginVertical: 5,
-    backgroundColor: '#f8f8f8', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 3,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 5,
+    backgroundColor: '#f8f8f8',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
   },
   qtyButton: { paddingHorizontal: 6, paddingVertical: 2 },
   qtyText: { fontSize: 18, fontWeight: '600' },
   qtyNumber: { fontSize: 16, marginHorizontal: 6 },
   deleteIcon: { fontSize: 18, color: 'red', marginLeft: 6 },
-  summary: { marginHorizontal: 30, paddingVertical: 20, borderTopWidth: 1, borderColor: '#eee' },
-  summaryRow: { flexDirection: 'row', justifyContent: 'space-between', marginVertical: 2 },
+  summary: {
+    marginHorizontal: 30,
+    paddingVertical: 20,
+    borderTopWidth: 1,
+    borderColor: '#eee',
+  },
+  summaryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 2,
+  },
   summaryText: { fontSize: 15, color: '#333', paddingVertical: 10 },
   totalText: { fontSize: 17, fontWeight: 'bold' },
   checkOutButton: {
-    backgroundColor: 'black', paddingVertical: 15, alignItems: 'center',
-    marginHorizontal: 20, borderRadius: 8, marginTop: 20, marginBottom: 10,
-    flexDirection: 'row', justifyContent: 'center',
+    backgroundColor: 'black',
+    paddingVertical: 15,
+    alignItems: 'center',
+    marginHorizontal: 20,
+    borderRadius: 8,
+    marginTop: 20,
+    marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
-  checkoutText: { fontSize: 16, fontWeight: 'bold', color: 'white', marginRight: 15 },
-  emptyContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 60, paddingHorizontal: 20 },
-  emptyImage: { width: 100, height: 100, tintColor: 'gray', marginBottom: 20, resizeMode: 'contain' },
-  emptyTitle: { fontSize: 18, fontWeight: 'bold', color: '#333', marginBottom: 8 },
+  checkoutText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'white',
+    marginRight: 15,
+  },
+  emptyContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 60,
+    paddingHorizontal: 20,
+  },
+  emptyImage: {
+    width: 100,
+    height: 100,
+    tintColor: 'gray',
+    marginBottom: 20,
+    resizeMode: 'contain',
+  },
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 8,
+  },
   emptySubtitle: { fontSize: 14, color: 'gray', textAlign: 'center' },
 });

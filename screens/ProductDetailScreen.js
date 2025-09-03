@@ -19,6 +19,7 @@ import Heart from '../assets/images/heart.png';
 import HeartFill from '../assets/images/heartFill.png';
 import { getCategoryPath } from '../utils/firebasePaths';
 import AppButton from '../components/AppButton';
+import Header from '../components/Header';
 
 const SIZES = ['S', 'M', 'L', 'XL'];
 
@@ -72,7 +73,7 @@ const ProductDetailScreen = () => {
         quantity: 1,
       });
     }
-    setModalVisible(true)
+    setModalVisible(true);
   }, [product, selectedSize, userId]);
 
   // “you may also like”
@@ -106,26 +107,14 @@ const ProductDetailScreen = () => {
     [product.rating, product.reviews],
   );
 
-    const closeModal = () => {
+  const closeModal = () => {
     setModalVisible(false);
     navigation.goBack();
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={BackIcon} style={styles.headerIcon} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Details</Text>
-        <TouchableOpacity onPress={toggleFavourite}>
-          <Image
-            source={isFavourite ? HeartFill : Heart}
-            style={styles.headerIcon}
-          />
-        </TouchableOpacity>
-      </View>
+      <Header headerTitle={'Details'} />
 
       <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
         <Image source={{ uri: product.image }} style={styles.image} />
@@ -227,15 +216,6 @@ export default ProductDetailScreen;
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  headerIcon: { width: 22, height: 22, tintColor: '#000' },
-  headerTitle: { fontSize: 18, fontWeight: 'bold' },
   image: {
     width: '100%',
     height: 320,
@@ -292,8 +272,8 @@ const styles = StyleSheet.create({
   },
   suggestName: { fontSize: 12, fontWeight: '500', marginTop: 6, color: '#333' },
   suggestPrice: { fontSize: 13, fontWeight: 'bold', marginTop: 2 },
-  
-    // 🔹 Modal Styles
+
+  // 🔹 Modal Styles
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',

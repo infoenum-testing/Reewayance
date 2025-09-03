@@ -18,6 +18,7 @@ import Notification from '../assets/images/vector.png';
 import BackIcon from '../assets/backButtonImage.png';
 import SideArrow from '../assets/images/sideArrow.png';
 import XMark from '../assets/images/xMark.png';
+import Header from '../components/Header';
 
 const searchIcon = require('../assets/images/search.png');
 
@@ -91,18 +92,7 @@ const SearchScreen = () => {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image source={BackIcon} style={styles.icon} />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Search</Text>
-          <TouchableOpacity>
-            <Image source={Notification} style={styles.icon} />
-          </TouchableOpacity>
-        </View>
-
-
+     <Header headerTitle = {"Search"}/>
         <View style={styles.searchBar}>
           <Image source={searchIcon} style={styles.searchIcon} />
           <TextInput
@@ -196,22 +186,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 16,
     paddingTop: 12,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 6,
-    paddingVertical: 12,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  icon: {
-    width: 22,
-    height: 22,
-    tintColor: 'black',
   },
   listIcon: {
     width: 20,

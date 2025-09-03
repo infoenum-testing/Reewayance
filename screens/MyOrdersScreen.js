@@ -11,6 +11,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import database from "@react-native-firebase/database";
 import auth from "@react-native-firebase/auth";
+import Header from '../components/Header';
 
 const TABS = {
   ONGOING: "Ongoing",
@@ -21,18 +22,6 @@ const Icons = {
   back: require("../assets/backButtonImage.png"),
   bell: require("../assets/images/vector.png"),
 };
-
-const Header = ({ title, onBackPress }) => (
-  <View style={styles.header}>
-    <TouchableOpacity onPress={onBackPress}>
-      <Image source={Icons.back} style={styles.headerIcon} />
-    </TouchableOpacity>
-    <Text style={styles.headerTitle}>{title}</Text>
-    <TouchableOpacity>
-      <Image source={Icons.bell} style={styles.headerIcon} />
-    </TouchableOpacity>
-  </View>
-);
 
 const TabSwitcher = ({ selectedTab, onTabChange }) => (
   <View style={styles.tabContainer}>
@@ -136,7 +125,7 @@ const MyOrdersScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="My Orders" onBackPress={() => navigation.goBack()} />
+      <Header headerTitle = {"My Orders"} />
       <TabSwitcher selectedTab={selectedTab} onTabChange={setSelectedTab} />
 
       {loading ? (
@@ -162,16 +151,7 @@ const MyOrdersScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff" },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 16,
-    elevation: 2,
-    backgroundColor: "#fff",
-  },
-  headerTitle: { fontSize: 18, fontWeight: "bold", color: "#000" },
-  headerIcon: { width: 22, height: 22, tintColor: "#000" },
+
   tabContainer: {
     flexDirection: "row",
     margin: 16,

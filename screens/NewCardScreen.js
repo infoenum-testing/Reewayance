@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -12,19 +12,20 @@ import {
   Modal,
   TouchableWithoutFeedback,
   Animated,
-} from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+} from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import Header from '../components/Header';
 
 // Assets
-import Arrow from "../assets/backButtonImage.png";
-import NotificationIcon from "../assets/images/vector.png";
-import Visa from "../assets/images/visa.png";
-import QuestionMark from "../assets/images/question.png";
+import Arrow from '../assets/backButtonImage.png';
+import NotificationIcon from '../assets/images/vector.png';
+import Visa from '../assets/images/visa.png';
+import QuestionMark from '../assets/images/question.png';
 
 const NewCardScreen = ({ navigation }) => {
-  const [cardNumber, setCardNumber] = useState("");
-  const [expiry, setExpiry] = useState("");
-  const [cvc, setCvc] = useState("");
+  const [cardNumber, setCardNumber] = useState('');
+  const [expiry, setExpiry] = useState('');
+  const [cvc, setCvc] = useState('');
   const [isDefault, setIsDefault] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
 
@@ -34,39 +35,41 @@ const NewCardScreen = ({ navigation }) => {
   // ----------- Utility Functions ------------ //
 
   // Auto-format card number
-  const handleCardNumber = (text) => {
-    const cleaned = text.replace(/\D/g, ""); // remove non-digits
-    const formatted = cleaned.match(/.{1,4}/g)?.join(" ") || "";
+  const handleCardNumber = text => {
+    const cleaned = text.replace(/\D/g, ''); // remove non-digits
+    const formatted = cleaned.match(/.{1,4}/g)?.join(' ') || '';
     setCardNumber(formatted);
   };
 
   // Auto-format expiry date as MM/YY
-  const handleExpiry = (text) => {
-    const cleaned = text.replace(/\D/g, "");
+  const handleExpiry = text => {
+    const cleaned = text.replace(/\D/g, '');
     let formatted = cleaned;
     if (cleaned.length > 2) {
-      formatted = cleaned.slice(0, 2) + "/" + cleaned.slice(2, 4);
+      formatted = cleaned.slice(0, 2) + '/' + cleaned.slice(2, 4);
     }
     setExpiry(formatted);
   };
 
   // Mask CVC input (still numeric but hides with dots)
-  const handleCvc = (text) => {
-    setCvc(text.replace(/\D/g, ""));
+  const handleCvc = text => {
+    setCvc(text.replace(/\D/g, ''));
   };
 
   // Detect card brand based on number
   const getCardBrand = () => {
     if (/^4/.test(cardNumber)) return Visa; // local asset
     if (/^5[1-5]/.test(cardNumber))
-      return { uri: "https://img.icons8.com/color/96/mastercard.png" };
+      return { uri: 'https://img.icons8.com/color/96/mastercard.png' };
     if (/^3[47]/.test(cardNumber))
-      return { uri: "https://img.icons8.com/color/96/amex.png" };
-     return { uri: "https://img.icons8.com/ios-filled/100/bank-card-back-side.png" };
+      return { uri: 'https://img.icons8.com/color/96/amex.png' };
+    return {
+      uri: 'https://img.icons8.com/ios-filled/100/bank-card-back-side.png',
+    };
   };
 
   // Validation
-  const isCardNumberValid = cardNumber.replace(/\s/g, "").length >= 16;
+  const isCardNumberValid = cardNumber.replace(/\s/g, '').length >= 16;
   const isExpiryValid = /^((0[1-9])|(1[0-2]))\/\d{2}$/.test(expiry);
   const isCvcValid = cvc.length >= 3 && cvc.length <= 4;
 
@@ -92,18 +95,10 @@ const NewCardScreen = ({ navigation }) => {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.mainContainer}>
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image source={Arrow} style={styles.headerIcon} />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Add Card</Text>
-          <Image source={NotificationIcon} style={styles.headerIcon} />
-        </View>
-
+        <Header headerTitle={'Add Card'} />
         <KeyboardAvoidingView
           style={styles.container}
-          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
           {/* Live Card Preview */}
           <Animated.View
@@ -113,11 +108,11 @@ const NewCardScreen = ({ navigation }) => {
               <Image source={getCardBrand()} style={styles.cardBrand} />
             )}
             <Text style={styles.previewNumber}>
-              {cardNumber || "•••• •••• •••• ••••"}
+              {cardNumber || '•••• •••• •••• ••••'}
             </Text>
             <View style={styles.previewRow}>
-              <Text style={styles.previewExpiry}>{expiry || "MM/YY"}</Text>
-              <Text style={styles.previewCvc}>{cvc ? "•••" : "CVC"}</Text>
+              <Text style={styles.previewExpiry}>{expiry || 'MM/YY'}</Text>
+              <Text style={styles.previewCvc}>{cvc ? '•••' : 'CVC'}</Text>
             </View>
           </Animated.View>
 
@@ -174,9 +169,7 @@ const NewCardScreen = ({ navigation }) => {
                   <TextInput
                     style={[
                       styles.cvcInput,
-                      !isCvcValid && cvc.length > 0
-                        ? styles.errorInput
-                        : null,
+                      !isCvcValid && cvc.length > 0 ? styles.errorInput : null,
                     ]}
                     placeholder="CVC"
                     keyboardType="number-pad"
@@ -212,10 +205,10 @@ const NewCardScreen = ({ navigation }) => {
           <TouchableOpacity
             style={[
               styles.button,
-              { backgroundColor: isFormValid ? "#000" : "#ccc" },
+              { backgroundColor: isFormValid ? '#000' : '#ccc' },
             ]}
             disabled={!isFormValid}
-            onPress={() => alert("Card Added")}
+            onPress={() => alert('Card Added')}
             accessible
             accessibilityLabel="Add Card"
           >
@@ -246,30 +239,15 @@ const NewCardScreen = ({ navigation }) => {
 
 // ----------- Styles ------------ //
 const styles = StyleSheet.create({
-  mainContainer: { flex: 1, backgroundColor: "#fff" },
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingHorizontal: 20,
-    paddingTop: 10,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  headerTitle: { fontSize: 20, fontWeight: "bold" },
-  headerIcon: { width: 22, height: 22, tintColor: "#000" },
+  mainContainer: { flex: 1, backgroundColor: '#fff' },
 
   // Card Preview
   cardPreview: {
-    backgroundColor: "#5d5d6fff",
+    backgroundColor: '#5d5d6fff',
     borderRadius: 16,
     padding: 20,
     marginVertical: 20,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOpacity: 0.2,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 4 },
@@ -278,48 +256,48 @@ const styles = StyleSheet.create({
   cardBrand: {
     width: 50,
     height: 30,
-    resizeMode: "contain",
-    alignSelf: "flex-end",
+    resizeMode: 'contain',
+    alignSelf: 'flex-end',
   },
   previewNumber: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 20,
     letterSpacing: 2,
     marginTop: 10,
   },
   previewRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: 15,
   },
-  previewExpiry: { color: "#fff", fontSize: 16 },
-  previewCvc: { color: "#fff", fontSize: 16 },
+  previewExpiry: { color: '#fff', fontSize: 16 },
+  previewCvc: { color: '#fff', fontSize: 16 },
 
   form: { flex: 1 },
   inputLabel: {
     fontSize: 12,
-    color: "gray",
+    color: 'gray',
     marginBottom: 5,
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: '#ddd',
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: '#f9f9f9',
     marginBottom: 10,
   },
-  errorInput: { borderColor: "red" },
-  errorText: { color: "red", fontSize: 12, marginBottom: 8 },
+  errorInput: { borderColor: 'red' },
+  errorText: { color: 'red', fontSize: 12, marginBottom: 8 },
 
   inputWithIcon: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: '#ddd',
     borderRadius: 8,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: '#f9f9f9',
     paddingHorizontal: 10,
   },
   cvcInput: {
@@ -330,50 +308,50 @@ const styles = StyleSheet.create({
   iconInsideInput: {
     width: 20,
     height: 20,
-    tintColor: "gray",
+    tintColor: 'gray',
     marginLeft: 8,
   },
 
-  row: { flexDirection: "row" },
+  row: { flexDirection: 'row' },
 
   switchRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginVertical: 15,
   },
-  switchLabel: { fontSize: 14, color: "#333" },
+  switchLabel: { fontSize: 14, color: '#333' },
 
   button: {
     padding: 16,
     borderRadius: 10,
-    alignItems: "center",
+    alignItems: 'center',
     marginTop: 10,
     marginBottom: 10,
   },
-  buttonText: { color: "#fff", fontSize: 16, fontWeight: "600" },
+  buttonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
 
   secureNote: {
     fontSize: 12,
-    color: "gray",
-    textAlign: "center",
+    color: 'gray',
+    textAlign: 'center',
     marginBottom: 20,
   },
 
   // Tooltip
   tooltipOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   tooltipBox: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     padding: 15,
     borderRadius: 10,
-    maxWidth: "80%",
+    maxWidth: '80%',
   },
-  tooltipText: { fontSize: 14, color: "#333" },
+  tooltipText: { fontSize: 14, color: '#333' },
 });
 
 export default NewCardScreen;

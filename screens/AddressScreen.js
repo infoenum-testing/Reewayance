@@ -12,9 +12,10 @@ import { useNavigation } from '@react-navigation/native';
 import Arrow from '../assets/backButtonImage.png';
 import NotificationIcon from '../assets/images/vector.png';
 import AddressList from '../components/AddressList';
+import Header from '../components/Header';
 
 const addresses = [
-    {
+  {
     id: 1,
     label: 'Home',
     address: '925 S Chugach St #APT 10, Alaska',
@@ -46,14 +47,7 @@ const AddressScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={Arrow} style={styles.headerIcon} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Address</Text>
-        <Image source={NotificationIcon} style={styles.headerIcon} />
-      </View>
+      <Header headerTitle={'Address'} />
 
       <ScrollView style={{ flex: 1 }}>
         <View style={styles.sectionTitleContainer}>
@@ -87,15 +81,6 @@ const AddressScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
-  },
-  headerTitle: { fontSize: 18, fontWeight: '600' },
-  headerIcon: { width: 22, height: 22, tintColor: '#000' },
-
   sectionTitleContainer: {
     paddingHorizontal: 16,
     marginTop: 8,
