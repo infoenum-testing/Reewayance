@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   FlatList,
+  Modal,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -17,6 +18,7 @@ import BackIcon from '../assets/backButtonImage.png';
 import Heart from '../assets/images/heart.png';
 import HeartFill from '../assets/images/heartFill.png';
 import { getCategoryPath } from '../utils/firebasePaths';
+import AppButton from '../components/AppButton';
 
 const SIZES = ['S', 'M', 'L', 'XL'];
 
@@ -28,7 +30,7 @@ const ProductDetailScreen = () => {
   const [selectedSize, setSelectedSize] = useState(null);
   const [suggested, setSuggested] = useState([]);
   const [isFavourite, setIsFavourite] = useState(!!product?.isFavourite);
-
+  const [modalVisible, setModalVisible] = useState(false);
   const userId = auth().currentUser?.uid;
 
   // toggle favourite – same pattern as HomeScreen
@@ -70,7 +72,7 @@ const ProductDetailScreen = () => {
         quantity: 1,
       });
     }
-    alert('Added to cart');
+    setModalVisible(true)
   }, [product, selectedSize, userId]);
 
   // “you may also like”
@@ -103,6 +105,11 @@ const ProductDetailScreen = () => {
     () => `⭐ ${product.rating ?? 4.0} (${product.reviews ?? 45} reviews)`,
     [product.rating, product.reviews],
   );
+
+    const closeModal = () => {
+    setModalVisible(false);
+    navigation.goBack();
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -192,6 +199,26 @@ const ProductDetailScreen = () => {
           <Text style={styles.cartText}>Add to Cart</Text>
         </TouchableOpacity>
       </View>
+      <Modal
+        transparent
+        animationType="fade"
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Image
+              source={require('../assets/images/check.png')}
+              style={styles.modalImage}
+            />
+            <Text style={styles.modalTitle}>Added To Cart!</Text>
+            <View style={{ width: '100%', marginTop: 10 }}>
+              <AppButton title="Done" onPress={closeModal} color="black" />
+              <View style={{ height: 10 }} />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -265,4 +292,39 @@ const styles = StyleSheet.create({
   },
   suggestName: { fontSize: 12, fontWeight: '500', marginTop: 6, color: '#333' },
   suggestPrice: { fontSize: 13, fontWeight: 'bold', marginTop: 2 },
+  
+    // 🔹 Modal Styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 24,
+    width: '100%',
+    alignItems: 'center',
+  },
+  modalImage: {
+    width: 70,
+    height: 70,
+    marginBottom: 16,
+    resizeMode: 'contain',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 8,
+    color: '#000',
+    textAlign: 'center',
+  },
+  modalSubtitle: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 24,
+    textAlign: 'center',
+  },
 });
