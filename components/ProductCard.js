@@ -51,5 +51,7 @@ const styles = StyleSheet.create({
   },
   heartImage: { width: 20, height: 20 },
   name: { marginTop: 8, fontSize: 14, fontWeight: "500" , paddingLeft: 5 },
-  price: { fontSize: 14, fontWeight: "bold", marginVertical: 4, paddingLeft: 5 },
+  price: { fontSize: 14, fontWeight: '500', marginVertical: 4, paddingLeft: 5,  textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 2, height: 1 },
+    textShadowRadius: 1, },
 });
