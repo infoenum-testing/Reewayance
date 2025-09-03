@@ -56,7 +56,7 @@ const MyDetailsScreen = ({ navigation }) => {
 
         if (snap.exists) {
           const data = snap.data() || {};
-          if (data.fullName) setFullName(String(data.fullName));
+          if (data.fullName) setFullName(String(data.fullName)); 
           if (data.phone) setPhone(String(data.phone));
           if (data.address) setAddress(String(data.address));
           if (data.email) setEmail(String(data.email));
