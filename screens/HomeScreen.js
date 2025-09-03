@@ -1,13 +1,6 @@
 // screens/HomeScreen.js
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import {
-  View,
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import database from '@react-native-firebase/database';
 
@@ -32,62 +25,62 @@ const HomeScreen = ({ navigation }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // 🔹 Fetch products from Firebase
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const path = getCategoryPath(selectedCategory);
+        const snapshot = await database().ref(path).once('value');
 
-  // Fetch products from Firebase
-// Fetch products from Firebase
-useEffect(() => {
-  const fetchProducts = async () => {
-    setLoading(true);
-    try {
-      const path = getCategoryPath(selectedCategory);
-      const snapshot = await database().ref(path).once('value');
+        if (!snapshot.exists()) {
+          setProducts([]);
+          return;
+        }
 
-      if (!snapshot.exists()) {
-        setProducts([]);
-        return;
-      }
+        const data = snapshot.val();
+        const list = [];
 
-      const data = snapshot.val();
-      const list = [];
-
-      if (selectedCategory === 'All') {
-        Object.entries(data).forEach(([categoryName, subcats]) => {
-          Object.entries(subcats).forEach(([subCatName, products]) => {
+        if (selectedCategory === 'All') {
+          Object.entries(data).forEach(([categoryName, subcats]) => {
+            Object.entries(subcats).forEach(([subCatName, products]) => {
+              Object.entries(products).forEach(([id, product]) => {
+                list.push({
+                  ...product, // spread first
+                  id: `${categoryName}_${subCatName}_${id}`, // FlatList ID
+                  firebaseId: id, // Firebase node ID
+                  category: categoryName,
+                  subCategory: subCatName,
+                });
+              });
+            });
+          });
+        } else {
+          Object.entries(data).forEach(([subCatName, products]) => {
             Object.entries(products).forEach(([id, product]) => {
               list.push({
-                id: `${categoryName}_${subCatName}_${id}`, // 🔹 unique ID
                 ...product,
-                category: categoryName,
+                id: `${selectedCategory}_${subCatName}_${id}`,
+                firebaseId: id,
+                category: selectedCategory,
                 subCategory: subCatName,
               });
             });
           });
-        });
-      } else {
-        Object.entries(data).forEach(([subCatName, products]) => {
-          Object.entries(products).forEach(([id, product]) => {
-            list.push({
-              id: `${selectedCategory}_${subCatName}_${id}`,
-              ...product,
-              category: selectedCategory,
-              subCategory: subCatName,
-            });
-          });
-        });
+        }
+
+        setProducts(list);
+      } catch (error) {
+        console.error('🔥 Firebase fetch error:', error);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      setProducts(list); // ✅ this was inside try, missing closing brace before
-    } catch (error) {
-      console.error("🔥 Firebase fetch error:", error);
-    } finally {
-      setLoading(false); // ye hamesha chalega
-    }
-  };
+    fetchProducts();
+  }, [selectedCategory]);
 
-  fetchProducts();
-}, [selectedCategory]);
-
-  // Product detail navigation
+  // 🔹 Product detail navigation
   const handleProductPress = useCallback(
     product =>
       navigation.navigate(ROUTES.PRODUCT_DETAIL, {
@@ -97,13 +90,17 @@ useEffect(() => {
     [navigation, selectedCategory],
   );
 
+  // 🔹 Toggle favourite
   const handleToggleFavourite = useCallback(product => {
     const productRef = database().ref(
-      `categories/${product.category}/${product.subCategory}/${product.id}`,
+      `categories/${product.category}/${product.subCategory}/${product.firebaseId}`,
     );
 
+    // strip out client-only fields
+    const { id, firebaseId, category, subCategory, ...productData } = product;
+
     productRef.set({
-      ...product,
+      ...productData,
       isFavourite: !product.isFavourite,
     });
 
@@ -116,17 +113,16 @@ useEffect(() => {
     );
   }, []);
 
+  // 🔹 Render item
   const renderItem = useCallback(
-    ({ item }) => {
-      return (
-        <ProductCard
-          product={item}
-          HeartIcon={item.isFavourite ? HeartFill : Heart}
-          onPress={() => handleProductPress(item)}
-          onToggleFavourite={handleToggleFavourite}
-        />
-      );
-    },
+    ({ item }) => (
+      <ProductCard
+        product={item}
+        HeartIcon={item.isFavourite ? HeartFill : Heart}
+        onPress={() => handleProductPress(item)}
+        onToggleFavourite={handleToggleFavourite}
+      />
+    ),
     [handleProductPress, handleToggleFavourite],
   );
 
@@ -136,7 +132,7 @@ useEffect(() => {
         {/* Header */}
         <Header title="Discover" rightIcon={Notification} />
 
-        {/* SearchBar → tap kare toh SearchScreen */}
+        {/* SearchBar → opens SearchScreen */}
         <SearchBar
           searchIcon={Search}
           filterIcon={Filter}
@@ -159,17 +155,16 @@ useEffect(() => {
             <ActivityIndicator size="large" color="#000" />
           </View>
         ) : (
-        <FlatList
-          data={products}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderItem}
-          numColumns={2}
-          removeClippedSubviews={true}
-          initialNumToRender={10}
-
-          columnWrapperStyle={{ justifyContent: 'space-between' }}
-          contentContainerStyle={{ paddingBottom: 80 }}
-        />
+          <FlatList
+            data={products}
+            keyExtractor={item => item.id} // ✅ fixed
+            renderItem={renderItem}
+            numColumns={2}
+            removeClippedSubviews={true}
+            initialNumToRender={10}
+            columnWrapperStyle={{ justifyContent: 'space-between' }}
+            contentContainerStyle={{ paddingBottom: 80 }}
+          />
         )}
       </SafeAreaView>
     </SafeAreaProvider>
@@ -180,6 +175,12 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff', paddingHorizontal: 16 },
+
+  loaderWrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 
   dropdown: {
     backgroundColor: '#fff',
