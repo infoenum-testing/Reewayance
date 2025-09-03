@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     tintColor: '#000',
-    marginBottom: 10,
+    marginVertical: 30,
   },
   emptyContainer: {
     flex: 1,
