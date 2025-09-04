@@ -17,6 +17,7 @@ import Heart from '../assets/images/heart.png';
 import HeartFill from '../assets/images/heartFill.png';
 import { ROUTES } from '../helper/routes';
 import Header from '../components/Header';
+import { productKeyOf } from '../utils/firebasePaths';
 
 const SavedScreen = ({ navigation }) => {
   const [favourites, setFavourites] = useState([]);
@@ -24,59 +25,70 @@ const SavedScreen = ({ navigation }) => {
 
   const userId = auth().currentUser?.uid || null;
 
- useEffect(() => {
-  if (!userId) {
-    setFavourites([]);
-    setLoading(false);
-    return;
-  }
-
-  const favRef = database().ref(`users/${userId}/favorites`);
-
-  const handleSnapshot = async (snapshot) => {
-    if (!snapshot.exists()) {
+  useEffect(() => {
+    if (!userId) {
       setFavourites([]);
       setLoading(false);
       return;
     }
 
-    const favKeys = Object.keys(snapshot.val());
-    const products = [];
+    const favRef = database().ref(`users/${userId}/favorites`);
 
-    for (const key of favKeys) {
-      const [category, subCategory, productId] = key.split('|');
-      if (!category || !subCategory || !productId) continue;
-
-      const prodRef = database().ref(
-        `categories/${category}/${subCategory}/${productId}`
-      );
-      const prodSnap = await prodRef.once('value');
-      if (prodSnap.exists()) {
-        products.push({
-          id: productId,
-          ...prodSnap.val(),
-          category,
-          subCategory,
-          isFavourite: true,
-        });
+    const handleSnapshot = async snapshot => {
+      if (!snapshot.exists()) {
+        setFavourites([]);
+        setLoading(false);
+        return;
       }
-    }
 
-    setFavourites(products);
-    setLoading(false);
-  };
+      const favKeys = Object.keys(snapshot.val());
+      const products = [];
 
-  favRef.on('value', handleSnapshot);
+      for (const key of favKeys) {
+        const [category, subCategory, productId] = key.split('|');
+        if (!category || !subCategory || !productId) continue;
 
-  return () => favRef.off('value', handleSnapshot); // ✅ exact reference
-}, [userId]);
+        const prodRef = database().ref(
+          `categories/${category}/${subCategory}/${productId}`,
+        );
+        const prodSnap = await prodRef.once('value');
+        if (prodSnap.exists()) {
+          products.push({
+            id: productId,
+            favKey: key, // store original key from DB
+            ...prodSnap.val(),
+            category,
+            subCategory,
+            isFavourite: true,
+          });
+        }
+      }
 
+      setFavourites(products);
+      setLoading(false);
+    };
 
-  const handleToggleFavourite = async (product) => {
+    favRef.on('value', handleSnapshot);
+
+    return () => favRef.off('value', handleSnapshot); // ✅ exact reference
+  }, [userId]);
+
+  const handleToggleFavourite = async product => {
     if (!userId) return;
-    const favKey = `${product.category}|${product.subCategory}|${product.id}`;
-    await database().ref(`users/${userId}/favorites/${favKey}`).remove();
-    setFavourites((prev) => prev.filter((item) => item.id !== product.id));
+
+    const favKey = product.favKey; // always correct
+
+    const ref = database().ref(`users/${userId}/favorites/${favKey}`);
+
+    try {
+      await ref.remove();
+
+      setFavourites(prev => prev.filter(item => item.favKey !== favKey));
+
+      console.log('Removed successfully ✅', favKey);
+    } catch (error) {
+      console.error('Error removing favourite:', error);
+    }
   };
 
   const renderEmptyComponent = () => (
