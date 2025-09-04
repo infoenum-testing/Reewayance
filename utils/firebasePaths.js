@@ -1,4 +1,5 @@
-// helper/categoryPaths.js
+// utils/firebasePaths.js
+
 export const CATEGORY_PATHS = {
   mens: {
     mensPants: "/categories/mens/mensPants",
@@ -23,12 +24,27 @@ export const CATEGORY_PATHS = {
 };
 
 export const getCategoryPath = (category) => {
-  if (category === "All") return "categories"; // fetch everything
+  if (category === "All") return "categories";
 
   const lowerCat = category.toLowerCase();
   if (CATEGORY_PATHS[lowerCat]) {
-    return `categories/${lowerCat}`; // fetch all subcategories inside main category
+    return `categories/${lowerCat}`;
+  }
+
+  // check subcategories
+  for (const main in CATEGORY_PATHS) {
+    for (const sub in CATEGORY_PATHS[main]) {
+      if (sub.toLowerCase() === lowerCat) {
+        return CATEGORY_PATHS[main][sub];
+      }
+    }
   }
 
   return "categories/mens"; // fallback
+};
+
+// 🔑 generate a unique key for product favourites
+export const productKeyOf = (category, subCategory, firebaseId) => {
+  if (!category || !subCategory || !firebaseId) return null;
+  return `${category}|${subCategory}|${firebaseId}`;
 };

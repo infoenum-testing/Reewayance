@@ -6,63 +6,77 @@ import {
   View,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 
 import ProductCard from '../components/ProductCard';
-import Vector from '../assets/images/vector.png';
 import Heart from '../assets/images/heart.png';
 import HeartFill from '../assets/images/heartFill.png';
-import BackIcon from '../assets/backButtonImage.png';
 import { ROUTES } from '../helper/routes';
 import Header from '../components/Header';
 
 const SavedScreen = ({ navigation }) => {
   const [favourites, setFavourites] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const ref = database().ref('categories');
+  const userId = auth().currentUser?.uid || null;
 
-    const handleSnapshot = snapshot => {
-      if (!snapshot.exists()) {
-        setFavourites([]);
-        return;
-      }
+ useEffect(() => {
+  if (!userId) {
+    setFavourites([]);
+    setLoading(false);
+    return;
+  }
 
-      const data = snapshot.val();
-      const list = [];
+  const favRef = database().ref(`users/${userId}/favorites`);
 
-      Object.entries(data).forEach(([categoryName, subcats]) => {
-        Object.entries(subcats).forEach(([subCategoryName, products]) => {
-          Object.entries(products).forEach(([id, product]) => {
-            if (product && product.isFavourite) {
-              list.push({
-                id,
-                ...product,
-                category: categoryName,
-                subCategory: subCategoryName,
-              });
-            }
-          });
+  const handleSnapshot = async (snapshot) => {
+    if (!snapshot.exists()) {
+      setFavourites([]);
+      setLoading(false);
+      return;
+    }
+
+    const favKeys = Object.keys(snapshot.val());
+    const products = [];
+
+    for (const key of favKeys) {
+      const [category, subCategory, productId] = key.split('|');
+      if (!category || !subCategory || !productId) continue;
+
+      const prodRef = database().ref(
+        `categories/${category}/${subCategory}/${productId}`
+      );
+      const prodSnap = await prodRef.once('value');
+      if (prodSnap.exists()) {
+        products.push({
+          id: productId,
+          ...prodSnap.val(),
+          category,
+          subCategory,
+          isFavourite: true,
         });
-      });
+      }
+    }
 
-      setFavourites(list);
-    };
+    setFavourites(products);
+    setLoading(false);
+  };
 
-    ref.on('value', handleSnapshot);
-    return () => ref.off('value', handleSnapshot);
-  }, []);
+  favRef.on('value', handleSnapshot);
 
-  const handleToggleFavourite = product => {
-    const productRef = database().ref(
-      `categories/${product.category}/${product.subCategory}/${product.id}`,
-    );
+  return () => favRef.off('value', handleSnapshot); // ✅ exact reference
+}, [userId]);
 
-    productRef.remove();
 
-    setFavourites(prev => prev.filter(item => item.id !== product.id));
+  const handleToggleFavourite = async (product) => {
+    if (!userId) return;
+    const favKey = `${product.category}|${product.subCategory}|${product.id}`;
+    await database().ref(`users/${userId}/favorites/${favKey}`).remove();
+    setFavourites((prev) => prev.filter((item) => item.id !== product.id));
   };
 
   const renderEmptyComponent = () => (
@@ -78,7 +92,12 @@ const SavedScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header headerTitle={'Saved Items'} />
-      {favourites.length === 0 ? (
+
+      {loading ? (
+        <View style={styles.loaderWrapper}>
+          <ActivityIndicator size="large" color="#000" />
+        </View>
+      ) : favourites.length === 0 ? (
         renderEmptyComponent()
       ) : (
         <FlatList

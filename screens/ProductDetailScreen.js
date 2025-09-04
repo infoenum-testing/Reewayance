@@ -1,25 +1,19 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  FlatList,
-  Modal,
+  View, Text, Image, StyleSheet, TouchableOpacity,
+  ScrollView, FlatList, Modal, Alert
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 
-import BackIcon from '../assets/backButtonImage.png';
+import AppButton from '../components/AppButton';
+import Header from '../components/Header';
 import Heart from '../assets/images/heart.png';
 import HeartFill from '../assets/images/heartFill.png';
 import { getCategoryPath } from '../utils/firebasePaths';
-import AppButton from '../components/AppButton';
-import Header from '../components/Header';
+import { productKeyOf } from '../utils/firebasePaths';
 
 const SIZES = ['S', 'M', 'L', 'XL'];
 
@@ -28,58 +22,53 @@ const ProductDetailScreen = () => {
   const { params } = useRoute();
   const { product, category } = params;
 
+  const userId = auth().currentUser?.uid || null;
+
   const [selectedSize, setSelectedSize] = useState(null);
   const [suggested, setSuggested] = useState([]);
-  const [isFavourite, setIsFavourite] = useState(!!product?.isFavourite);
+  // const [isFavourite, setIsFavourite] = useState(!!product?.isFavourite);
   const [modalVisible, setModalVisible] = useState(false);
-  const userId = auth().currentUser?.uid;
 
-  // toggle favourite – same pattern as HomeScreen
-  const toggleFavourite = useCallback(async () => {
-    const ref = database().ref(
-      `categories/${product.category || category}/${product.subCategory}/${
-        product.id
-      }`,
-    );
-    await ref.set({ ...product, isFavourite: !isFavourite });
-    setIsFavourite(v => !v);
-  }, [category, isFavourite, product]);
+  // Build a robust key regardless of how product was passed
 
-  // add to cart in Firebase
-  const handleAddToCart = useCallback(async () => {
-    if (!selectedSize) {
-      alert('Please select size');
-      return;
-    }
-    if (!userId) {
-      alert('Please login first');
-      return;
-    }
-    const key = `${product.id}_${selectedSize}`;
-    const cartRef = database().ref(`users/${userId}/cart/${key}`);
+const resolvedCategory = product.category || category;
+const resolvedSubCat  = product.subCategory;
+const resolvedId      = product.firebaseId;
+const favKey = productKeyOf(resolvedCategory, resolvedSubCat, resolvedId);
 
-    // if already exists, just increment
-    const snap = await cartRef.once('value');
-    if (snap.exists()) {
-      const q = snap.val()?.quantity || 1;
-      await cartRef.update({ quantity: q + 1 });
+const [isFavourite, setIsFavourite] = useState(false);
+
+useEffect(() => {
+  if (!userId || !favKey) return;
+  const ref = database().ref(`users/${userId}/favorites/${favKey}`);
+  const cb = snap => setIsFavourite(!!snap.val());
+  ref.on('value', cb);
+  return () => ref.off('value', cb);
+}, [userId, favKey]);
+
+// 2) Toggle favorite
+const toggleFavourite = useCallback(async () => {
+  if (!userId) {
+    Alert.alert('Login required', 'Please sign in to save favorites.');
+    return;
+  }
+  const ref = database().ref(`users/${userId}/favorites/${favKey}`);
+  try {
+    if (isFavourite) {
+      await ref.remove();
     } else {
-      await cartRef.set({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.image,
-        selectedSize,
-        quantity: 1,
-      });
+      await ref.set(true);
     }
-    setModalVisible(true);
-  }, [product, selectedSize, userId]);
+  } catch (e) {
+    console.error('toggleFavourite error:', e);
+    Alert.alert('Error', 'Could not update favorite.');
+  }
+}, [userId, favKey, isFavourite]);
 
-  // “you may also like”
+  // 3) “You may also like” (same as before)
   useEffect(() => {
-    if (!category || category === 'All') return;
-    const path = getCategoryPath(category);
+    if (!resolvedCategory || resolvedCategory === 'All') return;
+    const path = getCategoryPath(resolvedCategory);
     const ref = database().ref(path);
 
     const cb = snap => {
@@ -89,23 +78,66 @@ const ProductDetailScreen = () => {
       }
       const data = snap.val(); // { subCat: { id: product } }
       const list = [];
-      Object.values(data).forEach(productsObj => {
-        Object.entries(productsObj).forEach(([id, item]) => {
-          if (id !== product.id) list.push({ id, ...item });
+      Object.entries(data).forEach(([subCatName, productsObj]) => {
+        Object.entries(productsObj).forEach(([fid, item]) => {
+          const isSame =
+            fid === resolvedId &&
+            subCatName === resolvedSubCat;
+          if (!isSame) {
+            list.push({
+              ...item,
+              id: `${resolvedCategory}_${subCatName}_${fid}`,
+              firebaseId: fid,
+              category: resolvedCategory,
+              subCategory: subCatName,
+            });
+          }
         });
       });
-      // random 10
       setSuggested(list.sort(() => 0.5 - Math.random()).slice(0, 10));
     };
 
     ref.on('value', cb);
     return () => ref.off('value', cb);
-  }, [category, product?.id]);
+  }, [resolvedCategory, resolvedSubCat, resolvedId]);
 
   const ratingText = useMemo(
     () => `⭐ ${product.rating ?? 4.0} (${product.reviews ?? 45} reviews)`,
-    [product.rating, product.reviews],
+    [product.rating, product.reviews]
   );
+
+  // 4) Add to cart (unchanged; still under users/{uid}/cart/*)
+  const handleAddToCart = useCallback(async () => {
+    if (!selectedSize) {
+      Alert.alert('Select size', 'Please select a size first.');
+      return;
+    }
+    if (!userId) {
+      Alert.alert('Login required', 'Please sign in to add to cart.');
+      return;
+    }
+    const key = `${resolvedId}_${selectedSize}`;
+    const cartRef = database().ref(`users/${userId}/cart/${key}`);
+
+    const snap = await cartRef.once('value');
+    if (snap.exists()) {
+      const q = snap.val()?.quantity || 1;
+      await cartRef.update({ quantity: q + 1 });
+    } else {
+      await cartRef.set({
+        id: resolvedId,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        selectedSize,
+        quantity: 1,
+        category: resolvedCategory,
+        subCategory: resolvedSubCat,
+        firebaseId: resolvedId, // helpful for later
+      });
+    }
+    setModalVisible(true);
+  }, [selectedSize, userId, resolvedId, resolvedCategory, resolvedSubCat, product]);
 
   const closeModal = () => {
     setModalVisible(false);
@@ -114,13 +146,19 @@ const ProductDetailScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header headerTitle={'Details'} />
+      <Header headerTitle={'Details'} rightIcon={isFavourite ? HeartFill : Heart} onRightPress={toggleFavourite} />
 
       <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
         <Image source={{ uri: product.image }} style={styles.image} />
 
         <View style={styles.sectionPad}>
-          <Text style={styles.name}>{product.name}</Text>
+          <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}>
+            <Text style={styles.name}>{product.name}</Text>
+            <TouchableOpacity onPress={toggleFavourite}>
+              <Image source={isFavourite ? HeartFill : Heart} style={{width:24, height:24}} />
+            </TouchableOpacity>
+          </View>
+
           <Text style={styles.rating}>{ratingText}</Text>
           <Text style={styles.desc}>
             {product.description || 'No description available.'}
@@ -136,9 +174,7 @@ const ProductDetailScreen = () => {
                   onPress={() => setSelectedSize(size)}
                   style={[styles.sizeBtn, active && styles.sizeBtnActive]}
                 >
-                  <Text style={[styles.sizeText, active && { color: '#fff' }]}>
-                    {size}
-                  </Text>
+                  <Text style={[styles.sizeText, active && { color: '#fff' }]}>{size}</Text>
                 </TouchableOpacity>
               );
             })}
@@ -147,9 +183,7 @@ const ProductDetailScreen = () => {
 
         {suggested.length > 0 && (
           <View style={{ marginTop: 20 }}>
-            <Text style={[styles.sectionTitle, { marginLeft: 16 }]}>
-              You may also like
-            </Text>
+            <Text style={[styles.sectionTitle, { marginLeft: 16 }]}>You may also like</Text>
             <FlatList
               data={suggested}
               horizontal
@@ -160,18 +194,13 @@ const ProductDetailScreen = () => {
                   onPress={() =>
                     navigation.push('ProductDetailScreen', {
                       product: item,
-                      category,
+                      category: resolvedCategory,
                     })
                   }
                   style={styles.suggestCard}
                 >
-                  <Image
-                    source={{ uri: item.image }}
-                    style={styles.suggestImg}
-                  />
-                  <Text numberOfLines={1} style={styles.suggestName}>
-                    {item.name}
-                  </Text>
+                  <Image source={{ uri: item.image }} style={styles.suggestImg} />
+                  <Text numberOfLines={1} style={styles.suggestName}>{item.name}</Text>
                   <Text style={styles.suggestPrice}>${item.price}</Text>
                 </TouchableOpacity>
               )}
@@ -188,18 +217,11 @@ const ProductDetailScreen = () => {
           <Text style={styles.cartText}>Add to Cart</Text>
         </TouchableOpacity>
       </View>
-      <Modal
-        transparent
-        animationType="fade"
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
+
+      <Modal transparent animationType="fade" visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Image
-              source={require('../assets/images/check.png')}
-              style={styles.modalImage}
-            />
+            <Image source={require('../assets/images/check.png')} style={styles.modalImage} />
             <Text style={styles.modalTitle}>Added To Cart!</Text>
             <View style={{ width: '100%', marginTop: 10 }}>
               <AppButton title="Done" onPress={closeModal} color="black" />

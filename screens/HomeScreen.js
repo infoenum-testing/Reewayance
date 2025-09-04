@@ -1,7 +1,8 @@
-// screens/HomeScreen.js
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+// HomeScreen.js
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { View, FlatList, StyleSheet, ActivityIndicator, Alert, Text } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 
 import Header from '../components/HomeHeader';
@@ -15,18 +16,30 @@ import Search from '../assets/images/search.png';
 import Heart from '../assets/images/heart.png';
 import HeartFill from '../assets/images/heartFill.png';
 
-import { getCategoryPath } from '../utils/firebasePaths';
+import { getCategoryPath, productKeyOf } from '../utils/firebasePaths';
 import { ROUTES } from '../helper/routes';
 
 const CATEGORIES = ['All', 'Mens', 'Womens', 'Kids', 'Unisex'];
 
 const HomeScreen = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [products, setProducts] = useState([]);
+  const [rawProducts, setRawProducts] = useState([]);
+  const [favKeys, setFavKeys] = useState(new Set());
   const [loading, setLoading] = useState(true);
 
-  // 🔹 Fetch products from Firebase
+  const userId = auth().currentUser?.uid || null;
+
+  // ✅ helper to validate products
+  const isValidProduct = (product) => {
+    if (!product || typeof product !== 'object') return false;
+    if (!product.name || !product.price || !product.image) return false;
+    return true;
+  };
+
+  // 1) Fetch products
   useEffect(() => {
+    let isMounted = true;
+
     const fetchProducts = async () => {
       setLoading(true);
       try {
@@ -34,7 +47,7 @@ const HomeScreen = ({ navigation }) => {
         const snapshot = await database().ref(path).once('value');
 
         if (!snapshot.exists()) {
-          setProducts([]);
+          if (isMounted) setRawProducts([]);
           return;
         }
 
@@ -42,78 +55,126 @@ const HomeScreen = ({ navigation }) => {
         const list = [];
 
         if (selectedCategory === 'All') {
-          Object.entries(data).forEach(([categoryName, subcats]) => {
-            Object.entries(subcats).forEach(([subCatName, products]) => {
-              Object.entries(products).forEach(([id, product]) => {
-                list.push({
-                  ...product, // spread first
-                  id: `${categoryName}_${subCatName}_${id}`, // FlatList ID
-                  firebaseId: id, // Firebase node ID
-                  category: categoryName,
-                  subCategory: subCatName,
-                });
+          Object.entries(data || {}).forEach(([categoryName, subcats]) => {
+            Object.entries(subcats || {}).forEach(([subCatName, productsObj]) => {
+              Object.entries(productsObj || {}).forEach(([firebaseId, product]) => {
+                if (isValidProduct(product)) {
+                  list.push({
+                    ...product,
+                    id: `${categoryName}_${subCatName}_${firebaseId}`,
+                    firebaseId,
+                    category: categoryName,
+                    subCategory: subCatName,
+                  });
+                } else {
+                  console.warn('🚨 Skipped invalid product', {
+                    categoryName,
+                    subCatName,
+                    firebaseId,
+                    product,
+                  });
+                }
               });
             });
           });
         } else {
-          Object.entries(data).forEach(([subCatName, products]) => {
-            Object.entries(products).forEach(([id, product]) => {
-              list.push({
-                ...product,
-                id: `${selectedCategory}_${subCatName}_${id}`,
-                firebaseId: id,
-                category: selectedCategory,
-                subCategory: subCatName,
-              });
+          Object.entries(data || {}).forEach(([subCatName, productsObj]) => {
+            Object.entries(productsObj || {}).forEach(([firebaseId, product]) => {
+              if (isValidProduct(product)) {
+                list.push({
+                  ...product,
+                  id: `${selectedCategory}_${subCatName}_${firebaseId}`,
+                  firebaseId,
+                  category: selectedCategory,
+                  subCategory: subCatName,
+                });
+              } else {
+                console.warn('🚨 Skipped invalid product', {
+                  category: selectedCategory,
+                  subCatName,
+                  firebaseId,
+                  product,
+                });
+              }
             });
           });
         }
 
-        setProducts(list);
+        if (isMounted) setRawProducts(list);
       } catch (error) {
         console.error('🔥 Firebase fetch error:', error);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
 
     fetchProducts();
+    return () => {
+      isMounted = false;
+    };
   }, [selectedCategory]);
 
-  // 🔹 Product detail navigation
+  // 2) Subscribe to favorites
+  useEffect(() => {
+    if (!userId) {
+      setFavKeys(new Set());
+      return;
+    }
+    const ref = database().ref(`users/${userId}/favorites`);
+    const listener = ref.on('value', (snap) => {
+      if (!snap.exists()) {
+        setFavKeys(new Set());
+      } else {
+        const obj = snap.val(); // { "Mens|Shirts|prod123": true }
+        setFavKeys(new Set(Object.keys(obj).filter((k) => obj[k])));
+      }
+    });
+    return () => ref.off('value', listener);
+  }, [userId]);
+
+  // 3) Merge favorite status
+  const products = useMemo(() => {
+    return rawProducts.map((p) => {
+      const key = productKeyOf(p.category, p.subCategory, p.firebaseId);
+      return { ...p, isFavourite: favKeys.has(key) };
+    });
+  }, [rawProducts, favKeys]);
+
+  // 4) Handle product click
   const handleProductPress = useCallback(
-    product =>
+    (product) =>
       navigation.navigate(ROUTES.PRODUCT_DETAIL, {
         product,
         category: selectedCategory,
       }),
-    [navigation, selectedCategory],
+    [navigation, selectedCategory]
   );
 
-  // 🔹 Toggle favourite
-  const handleToggleFavourite = useCallback(product => {
-    const productRef = database().ref(
-      `categories/${product.category}/${product.subCategory}/${product.firebaseId}`,
-    );
+  // 5) Toggle favorites
+  const handleToggleFavourite = useCallback(
+    async (product) => {
+      if (!userId) {
+        Alert.alert('Login required', 'Please sign in to save favorites.');
+        return;
+      }
+      const favKey = productKeyOf(product.category, product.subCategory, product.firebaseId);
+      const favRef = database().ref(`users/${userId}/favorites/${favKey}`);
 
-    // strip out client-only fields
-    const { id, firebaseId, category, subCategory, ...productData } = product;
+      try {
+        if (product.isFavourite) {
+          await favRef.remove();
+        } else {
+          await favRef.set(true);
+        }
+      } catch (e) {
+        console.error('Favorite toggle error:', e);
+        Alert.alert('Error', 'Could not update favorite. Please try again.');
+      }
+    },
+    [userId]
+  );
 
-    productRef.set({
-      ...productData,
-      isFavourite: !product.isFavourite,
-    });
-
-    setProducts(prevProducts =>
-      prevProducts.map(item =>
-        item.id === product.id
-          ? { ...item, isFavourite: !item.isFavourite }
-          : item,
-      ),
-    );
-  }, []);
-
-  // 🔹 Render item
+  // 6) Render
   const renderItem = useCallback(
     ({ item }) => (
       <ProductCard
@@ -123,33 +184,27 @@ const HomeScreen = ({ navigation }) => {
         onToggleFavourite={handleToggleFavourite}
       />
     ),
-    [handleProductPress, handleToggleFavourite],
+    [handleProductPress, handleToggleFavourite]
   );
 
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        {/* Header */}
         <Header title="Discover" rightIcon={Notification} />
 
-        {/* SearchBar → opens SearchScreen */}
         <SearchBar
           searchIcon={Search}
           filterIcon={Filter}
           value={''}
-          onPress={() =>
-            navigation.navigate(ROUTES.SEARCH_SCREEN, { products })
-          }
+          onPress={() => navigation.navigate(ROUTES.SEARCH_SCREEN, { products })}
         />
 
-        {/* Category Tabs */}
         <CategoryList
           categories={CATEGORIES}
           selectedCategory={selectedCategory}
           onSelect={setSelectedCategory}
         />
 
-        {/* Products Grid */}
         {loading ? (
           <View style={styles.loaderWrapper}>
             <ActivityIndicator size="large" color="#000" />
@@ -157,13 +212,18 @@ const HomeScreen = ({ navigation }) => {
         ) : (
           <FlatList
             data={products}
-            keyExtractor={item => item.id} // ✅ fixed
+            keyExtractor={(item) => item.id}
             renderItem={renderItem}
             numColumns={2}
-            removeClippedSubviews={true}
-            initialNumToRender={10}
             columnWrapperStyle={{ justifyContent: 'space-between' }}
-            contentContainerStyle={{ paddingBottom: 80 }}
+            contentContainerStyle={{ paddingBottom: 80, flexGrow: 1 }}
+            ListEmptyComponent={
+              <View style={{ flex: 1, alignItems: 'center', marginTop: 40 }}>
+                <Text style={{ color: 'gray', fontSize: 16 }}>
+                  No products found in this category
+                </Text>
+              </View>
+            }
           />
         )}
       </SafeAreaView>
@@ -172,6 +232,7 @@ const HomeScreen = ({ navigation }) => {
 };
 
 export default HomeScreen;
+
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff', paddingHorizontal: 16 },
