@@ -19,22 +19,22 @@ import BackIcon from '../assets/backButtonImage.png';
 import SideArrow from '../assets/images/sideArrow.png';
 import XMark from '../assets/images/xMark.png';
 import Header from '../components/Header';
+import { useSelector } from 'react-redux';
 
 const searchIcon = require('../assets/images/search.png');
 
 const SearchScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
+const products = useSelector(state => state.products);
 
-  // Get products from HomeScreen
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const routeProducts = route.params?.products || [];
+
 
   const [searchText, setSearchText] = useState('');
   const [recentSearches, setRecentSearches] = useState([]);
 
   // ✅ Memoize products (eslint dependency fix)
-  const products = useMemo(() => routeProducts, [routeProducts]);
+  // const products = useMemo(() => routeProducts, [routeProducts]);
 
   // Load recent searches on mount
   useEffect(() => {
