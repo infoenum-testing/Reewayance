@@ -202,6 +202,7 @@ const HomeScreen = ({ navigation }) => {
           filterIcon={Filter}
           value={''}
           onPress={() => navigation.navigate(ROUTES.SEARCH_SCREEN, { products })}
+          editable={false}
         />
 
         <CategoryList

@@ -11,7 +11,7 @@ import {
   Keyboard,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import Notification from '../assets/images/vector.png';
@@ -88,6 +88,16 @@ const products = useSelector(state => state.products);
     setSearchText('');
     navigation.navigate('ProductDetailScreen', { product: item });
   };
+
+    // Handle search bar text change
+  useFocusEffect(
+  React.useCallback(() => {
+    setSearchText('');  // स्क्रीन पर आने पर खाली भी कर सकते हैं
+    return () => {
+      setSearchText('');  // स्क्रीन से जाते समय भी text clear करें
+    };
+  }, [])
+);
 
   return (
     <SafeAreaProvider>
