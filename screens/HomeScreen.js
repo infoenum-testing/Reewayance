@@ -30,22 +30,14 @@ import { getCategoryPath, productKeyOf } from '../utils/firebasePaths';
 import { ROUTES } from '../helper/routes';
 
 const CATEGORIES = ['All', 'Mens', 'Womens', 'Kids', 'Unisex'];
-const PAGE_LIMIT = 10;
 
 const HomeScreen = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [rawProducts, setRawProducts] = useState([]); // flattened items shown
   const [favKeys, setFavKeys] = useState(new Set());
   const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [lastKey, setLastKey] = useState(null); // last firebaseId of last appended page
-  const [hasMore, setHasMore] = useState(true);
-
   const dispatch = useDispatch();
   const userId = auth().currentUser?.uid || null;
-
-  // Use a ref to track firebaseIds we've already displayed (avoids duplicates)
-  const seenIdsRef = useRef(new Set());
 
   // ✅ helper to validate products
   const isValidProduct = (product) => {
@@ -54,128 +46,87 @@ const HomeScreen = ({ navigation }) => {
     return true;
   };
 
-  // helper: flatten snapshot data (handles nested category/subcategory structure)
-  const flattenProductsFromSnapshot = (data, category) => {
-    const list = [];
-    if (!data || typeof data !== 'object') return list;
-
-    if (category === 'All') {
-      // data structure: { categoryName: { subCatName: { productId: productObj } } }
-      Object.entries(data).forEach(([categoryName, subcats]) => {
-        Object.entries(subcats || {}).forEach(([subCatName, productsObj]) => {
-          Object.entries(productsObj || {}).forEach(([firebaseId, product]) => {
-            if (isValidProduct(product)) {
-              list.push({
-                ...product,
-                id: `${categoryName}_${subCatName}_${firebaseId}`,
-                firebaseId,
-                category: categoryName,
-                subCategory: subCatName,
-              });
-            }
-          });
-        });
-      });
-    } else {
-      // data structure: { subCatName: { productId: productObj } }
-      Object.entries(data || {}).forEach(([subCatName, productsObj]) => {
-        Object.entries(productsObj || {}).forEach(([firebaseId, product]) => {
-          if (isValidProduct(product)) {
-            list.push({
-              ...product,
-              id: `${category}_${subCatName}_${firebaseId}`,
-              firebaseId,
-              category,
-              subCategory: subCatName,
-            });
-          }
-        });
-      });
-    }
-
-    return list;
-  };
-
-  // --- Fetch products paginated ---
-  const fetchProducts = async (isLoadMore = false) => {
-    try {
-      if (isLoadMore) setLoadingMore(true);
-      else setLoading(true);
-
-      const path = getCategoryPath(selectedCategory);
-      const ref = database().ref(path);
-
-      let query = ref.orderByKey();
-      if (isLoadMore && lastKey) {
-        query = query.startAt(lastKey).limitToFirst(PAGE_LIMIT + 1);
-      } else {
-        query = query.limitToFirst(PAGE_LIMIT);
-      }
-
-      const snapshot = await query.once('value');
-
-      if (!snapshot.exists()) {
-        if (!isLoadMore) setRawProducts([]);
-        setHasMore(false);
-        return;
-      }
-
-      const data = snapshot.val() || {};
-
-      // Flatten the nested structure into a list of product objects
-      let list = flattenProductsFromSnapshot(data, selectedCategory);
-
-      list.sort((a, b) => a.firebaseId.localeCompare(b.firebaseId));
-
-      // Remove already seen IDs and the duplicate lastKey when loading more
-      if (isLoadMore) {
-        while (list.length && (list[0].firebaseId === lastKey || seenIdsRef.current.has(list[0].firebaseId))) {
-          list.shift();
-        }
-      } else {
-        // For fresh loads also filter any previously seen ids (defensive)
-        list = list.filter((it) => !seenIdsRef.current.has(it.firebaseId));
-      }
-
-      const pageItems = list.slice(0, PAGE_LIMIT);
-
-      if (isLoadMore) {
-        setRawProducts((prev) => [...prev, ...pageItems]);
-      } else {
-        setRawProducts(pageItems);
-      }
-
-      // Mark appended items as seen (to avoid duplicates across pages)
-      pageItems.forEach((it) => seenIdsRef.current.add(it.firebaseId));
-
-      // Update lastKey to the last item we actually appended (used as the cursor)
-      if (pageItems.length > 0) {
-        setLastKey(pageItems[pageItems.length - 1].firebaseId);
-      }
-
-      setHasMore(list.length > PAGE_LIMIT);
-    } catch (error) {
-      console.error('🔥 Firebase fetch error:', error);
-    } finally {
-      if (isLoadMore) setLoadingMore(false);
-      else setLoading(false);
-    }
-  };
-
-  // Reset on category change
+  // 1) Fetch products
   useEffect(() => {
-    // reset paging + seen ids
-    setRawProducts([]);
-    setLastKey(null);
-    setHasMore(true);
-    seenIdsRef.current = new Set();
+    let isMounted = true;
 
-    // fetch first page for new category
-    fetchProducts(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCategory]);
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const path = getCategoryPath(selectedCategory);
+        const snapshot = await database().ref(path).once('value');
 
-  // --- Subscribe to favorites ---
+        if (!snapshot.exists()) {
+          if (isMounted) setRawProducts([]);
+          return;
+        }
+
+        const data = snapshot.val();
+        const list = [];
+
+        if (selectedCategory === 'All') {
+          Object.entries(data || {}).forEach(([categoryName, subcats]) => {
+            Object.entries(subcats || {}).forEach(([subCatName, productsObj]) => {
+              Object.entries(productsObj || {}).forEach(([firebaseId, product]) => {
+                if (isValidProduct(product)) {
+                  list.push({
+                    ...product,
+                    id: `${categoryName}_${subCatName}_${firebaseId}`,
+                    firebaseId,
+                    category: categoryName,
+                    subCategory: subCatName,
+                  });
+                } else {
+                  console.warn('🚨 Skipped invalid product', {
+                    categoryName,
+                    subCatName,
+                    firebaseId,
+                    product,
+                  });
+                }
+              });
+            });
+          });
+        } else {
+          Object.entries(data || {}).forEach(([subCatName, productsObj]) => {
+            Object.entries(productsObj || {}).forEach(([firebaseId, product]) => {
+              if (isValidProduct(product)) {
+                list.push({
+                  ...product,
+                  id: `${selectedCategory}_${subCatName}_${firebaseId}`,
+                  firebaseId,
+                  category: selectedCategory,
+                  subCategory: subCatName,
+                });
+              } else {
+                console.warn('🚨 Skipped invalid product', {
+                  category: selectedCategory,
+                  subCatName,
+                  firebaseId,
+                  product,
+                });
+              }
+            });
+          });
+        }
+
+        if (isMounted)
+           setRawProducts(list);
+          dispatch(setProducts(list));
+      } catch (error) {
+        console.error('🔥 Firebase fetch error:', error);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    fetchProducts();
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedCategory , dispatch]);
+
+  // 2) Subscribe to favorites
   useEffect(() => {
     if (!userId) {
       setFavKeys(new Set());
@@ -322,13 +273,6 @@ const handleToggleFavourite = useCallback(
     [handleProductPress, handleToggleFavourite]
   );
 
-  // --- Handle pagination ---
-  const handleLoadMore = () => {
-    if (!loadingMore && hasMore && !loading) {
-      fetchProducts(true);
-    }
-  };
-
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
@@ -360,19 +304,6 @@ const handleToggleFavourite = useCallback(
             numColumns={2}
             columnWrapperStyle={{ justifyContent: 'space-between' }}
             contentContainerStyle={{ paddingBottom: 80, flexGrow: 1 }}
-            onEndReached={handleLoadMore}
-            onEndReachedThreshold={0.5}
-            ListFooterComponent={
-              loadingMore ? (
-                <View style={{ padding: 16 }}>
-                  <ActivityIndicator size="small" color="#000" />
-                </View>
-              ) : !hasMore ? (
-                <View style={{ padding: 12, alignItems: 'center' }}>
-                  <Text style={{ color: 'gray' }}>No more products</Text>
-                </View>
-              ) : null
-            }
             ListEmptyComponent={
               <View style={{ flex: 1, alignItems: 'center', marginTop: 40 }}>
                 <Text style={{ color: 'gray', fontSize: 16 }}>
