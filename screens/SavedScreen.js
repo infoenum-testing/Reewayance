@@ -90,8 +90,9 @@ const SavedScreen = ({ navigation }) => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.mainContainer}>
       <Header headerTitle={'Saved Items'} />
+<View style={styles.container}>
 
       {loading ? (
         <View style={styles.loaderWrapper}>
@@ -118,6 +119,7 @@ const SavedScreen = ({ navigation }) => {
           contentContainerStyle={{ paddingBottom: 80 }}
         />
       )}
+</View>
     </SafeAreaView>
   );
 };
@@ -125,6 +127,10 @@ const SavedScreen = ({ navigation }) => {
 export default SavedScreen;
 
 const styles = StyleSheet.create({
+    mainContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',

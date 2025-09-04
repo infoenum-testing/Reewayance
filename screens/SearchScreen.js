@@ -101,8 +101,10 @@ const products = useSelector(state => state.products);
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.mainContainer}>
      <Header headerTitle = {"Search"}/>
+        <View style={styles.container}>
+
         <View style={styles.searchBar}>
           <Image source={searchIcon} style={styles.searchIcon} />
           <TextInput
@@ -183,6 +185,7 @@ const products = useSelector(state => state.products);
               </Text>
             </View>
           ))}
+        </View>
       </SafeAreaView>
     </SafeAreaProvider>
   );
@@ -191,6 +194,10 @@ const products = useSelector(state => state.products);
 export default SearchScreen;
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
