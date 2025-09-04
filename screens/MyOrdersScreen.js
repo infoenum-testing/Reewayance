@@ -55,7 +55,7 @@ const OrderCard = ({ order, isOngoing }) => {
         <Text style={styles.productSize}>
           {Object.keys(order.items).length} item(s)
         </Text>
-        <Text style={styles.price}>${order.total}</Text>
+        <Text style={styles.price}>${order.total.toFixed(2)}</Text>
       </View>
 
       <View style={styles.rightSection}>

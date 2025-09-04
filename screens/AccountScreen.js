@@ -98,6 +98,8 @@ const AccountScreen = ({ navigation }) => {
           navigation.navigate(ROUTES.NEWCARD_SCREEN);
         } else if (item.title === 'FAQs') {
           navigation.navigate(ROUTES.FAQ_Screen);
+        } else if (item.title === 'Notifications') {
+          navigation.navigate(ROUTES.Notification_Screen);
         } else if (item.title === 'Help Center') {
           navigation.navigate(ROUTES.Help_Center_Screen);
         } else if (item.title === 'My Details') {

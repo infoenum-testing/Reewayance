@@ -2,13 +2,12 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
-import ProductDetailScreen from '../screens/ProductDetailScreen';
 import CartScreen from '../screens/CartScreen';
 import SearchScreen from '../screens/SearchScreen';
 import SavedScreen from '../screens/SavedScreen';
 import AccountScreen from '../screens/AccountScreen';
 import { ROUTES } from '../helper/routes';
-import { Text , Image } from 'react-native';
+import { Image } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,9 +26,11 @@ const BottomTabNavigator = () => {
         component={HomeScreen}
         options={{
           tabBarLabel: "HOME",
+          // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({ focused }) => (
             <Image
               source={require("../assets/tabImage/homeActiveImage.png")}
+              // eslint-disable-next-line react-native/no-inline-styles
               style={{
                 width: 24,
                 height: 24,
@@ -46,9 +47,11 @@ const BottomTabNavigator = () => {
         component={SearchScreen}
         options={{
           tabBarLabel: "Search",
+          // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({ focused }) => (
             <Image
               source={require("../assets/tabImage/searchActiveImage.png")}
+              // eslint-disable-next-line react-native/no-inline-styles
               style={{
                 width: 24,
                 height: 24,
@@ -65,9 +68,11 @@ const BottomTabNavigator = () => {
         component={SavedScreen}
         options={{
           tabBarLabel: "Saved",
+          // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({ focused }) => (
             <Image
               source={require("../assets/tabImage/saveActiveImage.png")}
+              // eslint-disable-next-line react-native/no-inline-styles
               style={{
                 width: 24,
                 height: 24,
@@ -84,9 +89,11 @@ const BottomTabNavigator = () => {
         component={CartScreen}
         options={{
           tabBarLabel: "CART",
+          // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({ focused }) => (
             <Image
               source={require("../assets/tabImage/cartActiveImage.png")}
+              // eslint-disable-next-line react-native/no-inline-styles
               style={{
                 width: 24,
                 height: 24,
@@ -103,9 +110,11 @@ const BottomTabNavigator = () => {
         component={AccountScreen}
         options={{
           tabBarLabel: "Account",
+          // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({ focused }) => (
             <Image
               source={require("../assets/tabImage/accountActiveImage.png")}
+              // eslint-disable-next-line react-native/no-inline-styles
               style={{
                 width: 24,
                 height: 24,
