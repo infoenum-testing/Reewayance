@@ -16,6 +16,9 @@ import Search from '../assets/images/search.png';
 import Heart from '../assets/images/heart.png';
 import HeartFill from '../assets/images/heartFill.png';
 
+import { useDispatch } from 'react-redux';
+import { setProducts } from '../src/redux/slices/productsSlice';
+
 import { getCategoryPath, productKeyOf } from '../utils/firebasePaths';
 import { ROUTES } from '../helper/routes';
 
@@ -26,7 +29,7 @@ const HomeScreen = ({ navigation }) => {
   const [rawProducts, setRawProducts] = useState([]);
   const [favKeys, setFavKeys] = useState(new Set());
   const [loading, setLoading] = useState(true);
-
+  const dispatch = useDispatch();
   const userId = auth().currentUser?.uid || null;
 
   // ✅ helper to validate products
@@ -100,7 +103,9 @@ const HomeScreen = ({ navigation }) => {
           });
         }
 
-        if (isMounted) setRawProducts(list);
+        if (isMounted)
+           setRawProducts(list);
+          dispatch(setProducts(list));
       } catch (error) {
         console.error('🔥 Firebase fetch error:', error);
       } finally {
@@ -112,7 +117,7 @@ const HomeScreen = ({ navigation }) => {
     return () => {
       isMounted = false;
     };
-  }, [selectedCategory]);
+  }, [selectedCategory , dispatch]);
 
   // 2) Subscribe to favorites
   useEffect(() => {
@@ -197,6 +202,7 @@ const HomeScreen = ({ navigation }) => {
           filterIcon={Filter}
           value={''}
           onPress={() => navigation.navigate(ROUTES.SEARCH_SCREEN, { products })}
+          editable={false}
         />
 
         <CategoryList
