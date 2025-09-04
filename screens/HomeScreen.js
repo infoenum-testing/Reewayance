@@ -23,6 +23,9 @@ import Search from '../assets/images/search.png';
 import Heart from '../assets/images/heart.png';
 import HeartFill from '../assets/images/heartFill.png';
 
+import { useDispatch } from 'react-redux';
+import { setProducts } from '../src/redux/slices/productsSlice';
+
 import { getCategoryPath, productKeyOf } from '../utils/firebasePaths';
 import { ROUTES } from '../helper/routes';
 
@@ -38,6 +41,7 @@ const HomeScreen = ({ navigation }) => {
   const [lastKey, setLastKey] = useState(null); // last firebaseId of last appended page
   const [hasMore, setHasMore] = useState(true);
 
+  const dispatch = useDispatch();
   const userId = auth().currentUser?.uid || null;
 
   // Use a ref to track firebaseIds we've already displayed (avoids duplicates)
@@ -305,7 +309,7 @@ const handleToggleFavourite = useCallback(
   [userId]
 );
 
-  // --- Render product ---
+  // 6) Render
   const renderItem = useCallback(
     ({ item }) => (
       <ProductCard
@@ -335,6 +339,7 @@ const handleToggleFavourite = useCallback(
           filterIcon={Filter}
           value={''}
           onPress={() => navigation.navigate(ROUTES.SEARCH_SCREEN, { products })}
+          editable={false}
         />
 
         <CategoryList
@@ -383,6 +388,7 @@ const handleToggleFavourite = useCallback(
 };
 
 export default HomeScreen;
+
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff', paddingHorizontal: 16 },

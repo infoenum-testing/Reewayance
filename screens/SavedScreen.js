@@ -228,24 +228,28 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 16,
   },
+
   staticHeartIcon: {
     width: 30,
     height: 30,
     tintColor: '#000',
     marginBottom: 10,
   },
+
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
   },
+
   emptyTitle: {
     fontSize: 24,
     fontWeight: '600',
     marginBottom: 8,
     color: '#000',
   },
+
   emptySubtitle: {
     fontSize: 14,
     color: 'gray',

@@ -11,7 +11,7 @@ import {
   Keyboard,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 import Notification from '../assets/images/vector.png';
@@ -19,22 +19,22 @@ import BackIcon from '../assets/backButtonImage.png';
 import SideArrow from '../assets/images/sideArrow.png';
 import XMark from '../assets/images/xMark.png';
 import Header from '../components/Header';
+import { useSelector } from 'react-redux';
 
 const searchIcon = require('../assets/images/search.png');
 
 const SearchScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
+const products = useSelector(state => state.products);
 
-  // Get products from HomeScreen
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const routeProducts = route.params?.products || [];
+
 
   const [searchText, setSearchText] = useState('');
   const [recentSearches, setRecentSearches] = useState([]);
 
   // ✅ Memoize products (eslint dependency fix)
-  const products = useMemo(() => routeProducts, [routeProducts]);
+  // const products = useMemo(() => routeProducts, [routeProducts]);
 
   // Load recent searches on mount
   useEffect(() => {
@@ -89,10 +89,22 @@ const SearchScreen = () => {
     navigation.navigate('ProductDetailScreen', { product: item });
   };
 
+    // Handle search bar text change
+  useFocusEffect(
+  React.useCallback(() => {
+    setSearchText('');  // स्क्रीन पर आने पर खाली भी कर सकते हैं
+    return () => {
+      setSearchText('');  // स्क्रीन से जाते समय भी text clear करें
+    };
+  }, [])
+);
+
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.mainContainer}>
      <Header headerTitle = {"Search"}/>
+        <View style={styles.container}>
+
         <View style={styles.searchBar}>
           <Image source={searchIcon} style={styles.searchIcon} />
           <TextInput
@@ -173,6 +185,7 @@ const SearchScreen = () => {
               </Text>
             </View>
           ))}
+        </View>
       </SafeAreaView>
     </SafeAreaProvider>
   );
@@ -181,6 +194,10 @@ const SearchScreen = () => {
 export default SearchScreen;
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
