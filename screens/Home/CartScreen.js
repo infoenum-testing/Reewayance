@@ -12,12 +12,10 @@ import { useNavigation } from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 
-import Arrow from '../assets/backButtonImage.png';
-import NotificationIcon from '../assets/images/vector.png';
-import Trash from '../assets/images/trash.png';
-import RightArrow from '../assets/images/arrowRight.png';
-import { ROUTES } from '../helper/routes';
-import Header from '../components/Header';
+import  Images from '../../constants/images';
+
+import { ROUTES } from '../../helper/routes';
+import Header from '../../components/Header';
 
 const CartScreen = () => {
   const navigation = useNavigation();
@@ -60,7 +58,7 @@ const CartScreen = () => {
         <View style={styles.cartTop}>
           <Text style={styles.itemName}>{item.name}</Text>
           <TouchableOpacity onPress={() => remove(item)}>
-            <Image source={Trash} style={styles.trashIcon} />
+            <Image source={Images.Trash} style={styles.trashIcon} />
           </TouchableOpacity>
         </View>
         <Text style={styles.itemSize}>Size {item.selectedSize}</Text>
@@ -99,7 +97,7 @@ const CartScreen = () => {
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Image
-              source={require('../assets/images/emptyCart.png')}
+              source={Images.emptyCart}
               style={styles.emptyImage}
             />
             <Text style={styles.emptyTitle}>Your Cart Is Empty!</Text>
@@ -132,7 +130,7 @@ const CartScreen = () => {
                 onPress={() => navigation.navigate(ROUTES.CHECKOUT_SCREEN)}
               >
                 <Text style={styles.checkoutText}>Go To Checkout</Text>
-                <Image source={RightArrow} style={styles.deleteIcon} />
+                <Image source={Images.RightArrow} style={styles.deleteIcon} />
               </TouchableOpacity>
             </View>
           )

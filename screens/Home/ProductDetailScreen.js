@@ -15,12 +15,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 
-import AppButton from '../components/AppButton';
-import Header from '../components/Header';
-import Heart from '../assets/images/heart.png';
-import HeartFill from '../assets/images/heartFill.png';
-import { getCategoryPath } from '../utils/firebasePaths';
-import { productKeyOf } from '../utils/firebasePaths';
+import  Images from '../../constants/images';
+
+import AppButton from '../../components/AppButton';
+import Header from '../../components/Header';
+
+import { getCategoryPath } from '../../utils/firebasePaths';
+import { productKeyOf } from '../../utils/firebasePaths';
 
 const SIZES = ['S', 'M', 'L', 'XL'];
 
@@ -171,7 +172,7 @@ const ProductDetailScreen = () => {
     <SafeAreaView style={styles.container}>
       <Header
         headerTitle={'Details'}
-        rightIcon={isFavourite ? HeartFill : Heart}
+        rightIcon={isFavourite ? Images.HeartFill : Images.Heart}
         onRightPress={toggleFavourite}
       />
 
@@ -189,7 +190,7 @@ const ProductDetailScreen = () => {
             <Text style={styles.name}>{product.name}</Text>
             <TouchableOpacity onPress={toggleFavourite}>
               <Image
-                source={isFavourite ? HeartFill : Heart}
+                source={isFavourite ? Images.HeartFill : Images.Heart}
                 style={{ width: 24, height: 24 }}
               />
             </TouchableOpacity>
@@ -272,7 +273,7 @@ const ProductDetailScreen = () => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Image
-              source={require('../assets/images/check.png')}
+              source={Images.check}
               style={styles.modalImage}
             />
             <Text style={styles.modalTitle}>Added To Cart!</Text>

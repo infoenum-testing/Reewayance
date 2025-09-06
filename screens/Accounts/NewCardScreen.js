@@ -14,13 +14,9 @@ import {
   Animated,
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import Header from '../components/Header';
+import Header from '../../components/Header';
 
-// Assets
-import Arrow from '../assets/backButtonImage.png';
-import NotificationIcon from '../assets/images/vector.png';
-import Visa from '../assets/images/visa.png';
-import QuestionMark from '../assets/images/question.png';
+import  Images from '../../constants/images';
 
 const NewCardScreen = ({ navigation }) => {
   const [cardNumber, setCardNumber] = useState('');
@@ -58,7 +54,7 @@ const NewCardScreen = ({ navigation }) => {
 
   // Detect card brand based on number
   const getCardBrand = () => {
-    if (/^4/.test(cardNumber)) return Visa; // local asset
+    if (/^4/.test(cardNumber)) return Images.visa; // local asset
     if (/^5[1-5]/.test(cardNumber))
       return { uri: 'https://img.icons8.com/color/96/mastercard.png' };
     if (/^3[47]/.test(cardNumber))
@@ -183,7 +179,7 @@ const NewCardScreen = ({ navigation }) => {
                   />
                   <TouchableOpacity onPress={() => setShowTooltip(true)}>
                     <Image
-                      source={QuestionMark}
+                      source={Images.question}
                       style={styles.iconInsideInput}
                     />
                   </TouchableOpacity>

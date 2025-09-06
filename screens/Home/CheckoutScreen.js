@@ -13,16 +13,10 @@ import { useNavigation } from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 
-import Arrow from '../assets/backButtonImage.png';
-import NotificationIcon from '../assets/images/vector.png';
-import Location from '../assets/images/location.png';
-import cash from '../assets/images/cash.png';
-import apple from '../assets/images/applePay.png';
-import paymentMethods from '../assets/accountImages/cardImage.png';
-import VisaIcon from '../assets/images/visa.png';
-import EditIcon from '../assets/images/edit.png';
-import AppButton from '../components/AppButton';
-import Header from '../components/Header';
+import  Images from '../../constants/images';
+
+import AppButton from '../../components/AppButton';
+import Header from '../../components/Header';
 
 const CheckoutScreen = () => {
   const navigation = useNavigation();
@@ -86,7 +80,7 @@ const CheckoutScreen = () => {
           <Text style={styles.link}>Change</Text>
         </View>
         <View style={styles.row}>
-          <Image source={Location} style={styles.iconSmall} />
+          <Image source={Images.location} style={styles.iconSmall} />
           <Text style={styles.bold}>Office</Text>
         </View>
         <Text style={styles.subText}>
@@ -99,23 +93,23 @@ const CheckoutScreen = () => {
         <Text style={styles.sectionTitle}>Payment Method</Text>
         <View style={styles.rowBetween}>
           <TouchableOpacity style={styles.paymentButton}>
-            <Image source={paymentMethods} style={styles.paymentIcon} />
+            <Image source={Images.paymentMethods} style={styles.paymentIcon} />
             <Text style={styles.paymentText}>Card</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.paymentButton}>
-            <Image source={cash} style={styles.paymentIcon} />
+            <Image source={Images.cash} style={styles.paymentIcon} />
             <Text style={styles.paymentText}>Cash</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.paymentButton}>
-            <Image source={apple} style={styles.appleIcon} />
+            <Image source={Images.applePay} style={styles.appleIcon} />
           </TouchableOpacity>
         </View>
 
         <View style={styles.cardBox}>
-          <Image source={VisaIcon} style={styles.visaIcon} />
+          <Image source={Images.visa} style={styles.visaIcon} />
           <Text style={styles.cardText}>**** **** **** 2512</Text>
           <TouchableOpacity>
-            <Image source={EditIcon} style={styles.editIcon} />
+            <Image source={Images.edit} style={styles.editIcon} />
           </TouchableOpacity>
         </View>
       </View>
@@ -167,7 +161,7 @@ const CheckoutScreen = () => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Image
-              source={require('../assets/images/check.png')}
+              source={Images.check}
               style={styles.modalImage}
             />
             <Text style={styles.modalTitle}>Congratulations!</Text>

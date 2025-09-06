@@ -14,14 +14,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
-import Notification from '../assets/images/vector.png';
-import BackIcon from '../assets/backButtonImage.png';
-import SideArrow from '../assets/images/sideArrow.png';
-import XMark from '../assets/images/xMark.png';
-import Header from '../components/Header';
+import  Images from '../../constants/images';
+
+import Header from '../../components/Header';
 import { useSelector } from 'react-redux';
 
-const searchIcon = require('../assets/images/search.png');
 
 const SearchScreen = () => {
   const navigation = useNavigation();
@@ -106,7 +103,7 @@ const products = useSelector(state => state.products);
         <View style={styles.container}>
 
         <View style={styles.searchBar}>
-          <Image source={searchIcon} style={styles.searchIcon} />
+          <Image source={Images.Search} style={styles.searchIcon} />
           <TextInput
             style={styles.input}
             placeholder="Search for clothes..."
@@ -136,7 +133,7 @@ const products = useSelector(state => state.products);
                   <Text style={styles.recentItemText}>{item}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => removeRecentSearch(idx)}>
-                  <Image source={XMark} style={styles.listIcon} />
+                  <Image source={Images.xMark} style={styles.listIcon} />
                 </TouchableOpacity>
               </View>
             ))}
@@ -172,7 +169,7 @@ const products = useSelector(state => state.products);
                       )}
                     </View>
                   </View>
-                  <Image source={SideArrow} style={styles.listIcon} />
+                  <Image source={Images.sideArrow} style={styles.listIcon} />
                 </TouchableOpacity>
               )}
             />

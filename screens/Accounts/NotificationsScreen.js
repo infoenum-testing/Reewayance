@@ -1,15 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import Notification from '../assets/images/vector.png';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ROUTES } from '../helper/routes';
 import { useNavigation } from '@react-navigation/native';
-import Header from '../components/Header';
+import Header from '../../components/Header';
 
-const Icons = {
-  back: require('../assets/backButtonImage.png'),
-  bell: require('../assets/images/vector.png'),
-};
+import  Images from '../../constants/images';
 
 const NotificationsScreen = () => {
   const navigation = useNavigation();
@@ -17,7 +12,7 @@ const NotificationsScreen = () => {
     <SafeAreaView style={styles.container}>
      <Header headerTitle = {"Notification"}/>
       <View style={styles.emptyContainer}>
-        <Image source={Icons.bell} style={styles.staticHeartIcon} />
+        <Image source={Images.Notification} style={styles.staticHeartIcon} />
         <Text style={styles.emptyTitle}>
           You haven’t gotten any notifications yet!
         </Text>

@@ -11,16 +11,11 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import database from "@react-native-firebase/database";
 import auth from "@react-native-firebase/auth";
-import Header from '../components/Header';
+import Header from '../../components/Header';
 
 const TABS = {
   ONGOING: "Ongoing",
   COMPLETED: "Completed",
-};
-
-const Icons = {
-  back: require("../assets/backButtonImage.png"),
-  bell: require("../assets/images/vector.png"),
 };
 
 const TabSwitcher = ({ selectedTab, onTabChange }) => (

@@ -14,13 +14,9 @@ import {
   ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Header from '../components/Header';
+import Header from '../../components/Header';
 
-const Icons = {
-  back: require('../assets/backButtonImage.png'),
-  vector: require('../assets/images/vector.png'),
-  mic: require('../assets/images/search.png'), // search/mic icon
-};
+import  Images from '../../constants/images';
 
 // Enable LayoutAnimation on Android
 if (
@@ -153,7 +149,7 @@ const FAQScreen = ({ navigation }) => {
           onChangeText={setSearch}
           style={styles.searchInput}
         />
-        <Image source={Icons.mic} style={styles.micIcon} />
+        <Image source={Images.Search} style={styles.micIcon} />
       </View>
 
       {/* 🔹 FAQ List */}

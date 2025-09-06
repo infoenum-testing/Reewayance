@@ -16,12 +16,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import Header from '../components/Header';
-
-const Icons = {
-  back: require('../assets/backButtonImage.png'),
-  vector: require('../assets/images/vector.png'),
-};
+import Header from '../../components/Header';
 
 const MyDetailsScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true); // initial fetch

@@ -12,22 +12,18 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 
-import Header from '../components/HomeHeader';
-import SearchBar from '../components/SearchBar';
-import CategoryList from '../components/CategoryList';
-import ProductCard from '../components/ProductCard';
+import Header from '../../components/HomeHeader';
+import SearchBar from '../../components/SearchBar';
+import CategoryList from '../../components/CategoryList';
+import ProductCard from '../../components/ProductCard';
 
-import Notification from '../assets/images/vector.png';
-import Filter from '../assets/images/filter.png';
-import Search from '../assets/images/search.png';
-import Heart from '../assets/images/heart.png';
-import HeartFill from '../assets/images/heartFill.png';
+import  Images from '../../constants/images';
 
 import { useDispatch } from 'react-redux';
-import { setProducts } from '../src/redux/slices/productsSlice';
+import { setProducts } from '../../src/redux/slices/productsSlice';
 
-import { getCategoryPath, productKeyOf } from '../utils/firebasePaths';
-import { ROUTES } from '../helper/routes';
+import { getCategoryPath, productKeyOf } from '../../utils/firebasePaths';
+import { ROUTES } from '../../helper/routes';
 
 const CATEGORIES = ['All', 'Mens', 'Womens', 'Kids', 'Unisex'];
 const PAGE_LIMIT = 10;
@@ -333,7 +329,7 @@ const HomeScreen = ({ navigation }) => {
     ({ item }) => (
       <ProductCard
         product={item}
-        HeartIcon={item.isFavourite ? HeartFill : Heart}
+        HeartIcon={item.isFavourite ? Images.HeartFill : Images.Heart}
         onPress={() => handleProductPress(item)}
         onToggleFavourite={handleToggleFavourite}
       />
@@ -350,11 +346,11 @@ const HomeScreen = ({ navigation }) => {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        <Header title="Discover" rightIcon={Notification} />
+        <Header title="Discover" rightIcon={Images.Notification} />
 
         <SearchBar
-          searchIcon={Search}
-          filterIcon={Filter}
+          searchIcon={Images.Search}
+          filterIcon={Images.Filter}
           value={''}
           onPress={() => navigation.navigate(ROUTES.SEARCH_SCREEN, { products })}
           editable={false}
@@ -380,6 +376,7 @@ const HomeScreen = ({ navigation }) => {
             contentContainerStyle={{ paddingBottom: 80, flexGrow: 1 }}
             onEndReached={handleLoadMore}
             onEndReachedThreshold={0.5}
+            showsVerticalScrollIndicator={false}
             ListFooterComponent={
               loadingMore ? (
                 <View style={{ padding: 16 }}>

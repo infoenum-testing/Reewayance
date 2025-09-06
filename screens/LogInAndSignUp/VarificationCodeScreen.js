@@ -10,11 +10,10 @@ import {
     ScrollView,
     Image
 } from "react-native";
-// import colors from "../constants/colors";
-import AppButton from "../components/AppButton";
+import AppButton from "../../components/AppButton";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import BackButtonImage from "../assets/backButtonImage.png";
-import { ROUTES } from "../helper/routes";
+import  {tabImages} from '../../constants/images';
+import { ROUTES } from '../../helper/routes';
 
 const VerificationCodeScreen = ({ navigation }) => {
     const [code, setCode] = useState("");
@@ -47,7 +46,7 @@ const VerificationCodeScreen = ({ navigation }) => {
                                 onPress={() => navigation.goBack()}
                                 activeOpacity={0.7}
                             >
-                                <Image source={BackButtonImage} style={styles.backIcon} />
+                                <Image source={tabImages.backButtonImage} style={styles.backIcon} />
                             </TouchableOpacity>
                         )}
 

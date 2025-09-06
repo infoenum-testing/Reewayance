@@ -10,12 +10,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
-import Header from '../components/Header';
-
-const Icons = {
-  back: require('../assets/backButtonImage.png'),
-  vector: require('../assets/images/vector.png'),
-};
+import Header from '../../components/Header';
 
 const HelpCenterScreen = ({ navigation }) => {
   const handleEmailSupport = () => {

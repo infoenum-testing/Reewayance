@@ -11,15 +11,15 @@ import {
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../src/redux/slices/authSlice";
-import { ROUTES } from "../helper/routes";
-import { validateInput } from "../validation/validateInput";
-import AppTextInput from "../components/AppTextInput";
-import AppButton from "../components/AppButton";
-import { getErrorMessage } from "../helper/firebaseErrorMessages";
+import { loginUser } from "../../src/redux/slices/authSlice";
+import { ROUTES } from '../../helper/routes';
+import { validateInput } from "../../validation/validateInput";
+import AppTextInput from "../../components/AppTextInput";
+import AppButton from "../../components/AppButton";
+import { getErrorMessage } from "../../helper/firebaseErrorMessages";
 
-import Google from "../assets/googleIcon.png";
-import Facebook from "../assets/facebookIcon.png";
+
+import  {tabImages} from '../../constants/images';
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -114,14 +114,14 @@ export default function LoginScreen({ navigation }) {
           <TouchableOpacity
             style={[styles.socialButton, { backgroundColor: "#fff" }]}
           >
-            <Image source={Google} style={styles.socialIcon} />
+            <Image source={tabImages.googleIcon} style={styles.socialIcon} />
             <Text style={styles.socialText}>Login with Google</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.socialButton, { backgroundColor: "#1877F2" }]}
           >
-            <Image source={Facebook} style={styles.socialIcon} />
+            <Image source={tabImages.facebookIcon} style={styles.socialIcon} />
             <Text style={styles.socialFacebookText}>Login with Facebook</Text>
           </TouchableOpacity>
 

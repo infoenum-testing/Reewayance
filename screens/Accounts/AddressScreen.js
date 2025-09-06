@@ -9,10 +9,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import Arrow from '../assets/backButtonImage.png';
-import NotificationIcon from '../assets/images/vector.png';
-import AddressList from '../components/AddressList';
-import Header from '../components/Header';
+
+import AddressList from '../../components/AddressList';
+import Header from '../../components/Header';
 
 const addresses = [
   {

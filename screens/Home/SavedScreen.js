@@ -13,11 +13,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 
-import Header from '../components/Header';
-import ProductCard from '../components/ProductCard';
-import Heart from '../assets/images/heart.png';
-import HeartFill from '../assets/images/heartFill.png';
-import { ROUTES } from '../helper/routes';
+import  Images from '../../constants/images';
+
+import Header from '../../components/Header';
+import ProductCard from '../../components/ProductCard';
+import { ROUTES } from '../../helper/routes';
 
 const parseFavKey = (key) => {
   if (!key || typeof key !== 'string') return { category: null, subCategory: null, productId: null };
@@ -172,7 +172,7 @@ const SavedScreen = ({ navigation }) => {
 
   const renderEmpty = () => (
     <View style={styles.emptyContainer}>
-      <Image source={Heart} style={styles.staticHeartIcon} />
+      <Image source={Images.Heart} style={styles.staticHeartIcon} />
       <Text style={styles.emptyTitle}>No Saved Items!</Text>
       <Text style={styles.emptySubtitle}>You don’t have any saved items. Go to home and add some.</Text>
       {failedKeys.length > 0 && (
@@ -209,11 +209,12 @@ const SavedScreen = ({ navigation }) => {
           renderItem={({ item }) => (
             <ProductCard
               product={item}
-              HeartIcon={item.isFavourite ? HeartFill : Heart}
+              HeartIcon={item.isFavourite ? Images.HeartFill: Images.Heart}
               onPress={() => navigation.navigate(ROUTES.PRODUCT_DETAIL, { product: item })}
               onToggleFavourite={() => removeFavorite(item)}
             />
           )}
+          showsVerticalScrollIndicator={false}
           numColumns={2}
           columnWrapperStyle={{ justifyContent: 'space-between' }}
           contentContainerStyle={{ paddingBottom: 80 }}

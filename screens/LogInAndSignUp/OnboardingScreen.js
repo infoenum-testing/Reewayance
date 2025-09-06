@@ -7,9 +7,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import MenImage from '../assets/images/menImage.png'
 import { useNavigation } from '@react-navigation/native';
-import { ROUTES } from '../helper/routes';
+import { ROUTES } from '../../helper/routes';
+
+import  Images from '../../constants/images';
 
 const OnboardingScreen = () => {
 
@@ -31,7 +32,7 @@ const OnboardingScreen = () => {
 
         <View style={styles.imageWrapper}>
           <Image
-            source={MenImage}
+            source={Images.menImage}
             style={styles.image}
             resizeMode="cover"
           />

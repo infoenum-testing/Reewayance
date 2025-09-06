@@ -11,14 +11,14 @@ import {
     Modal,
     Alert
 } from "react-native";
-import AppTextInput from "../components/AppTextInput";
-import { validateInput } from "../validation/validateInput";
-import AppButton from "../components/AppButton";
+import AppTextInput from "../../components/AppTextInput";
+import { validateInput } from "../../validation/validateInput";
+import AppButton from "../../components/AppButton";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import BackButtonImage from "../assets/backButtonImage.png";
-import { ROUTES } from "../helper/routes";
-import { getErrorMessage } from "../helper/firebaseErrorMessages";
-import { AuthService } from "../services/authService"; // ✅ import service
+
+import { getErrorMessage } from "../../helper/firebaseErrorMessages";
+import { AuthService } from "../..services/authService"; // ✅ import service
+import  {tabImages , onboardingImages} from '../../constants/images';
 
 export default function ForgotPasswordScreen({ navigation }) {
     const [email, setEmail] = useState("");
@@ -62,7 +62,7 @@ export default function ForgotPasswordScreen({ navigation }) {
                                 onPress={() => navigation.goBack()}
                                 activeOpacity={0.7}
                             >
-                                <Image source={BackButtonImage} style={styles.backIcon} />
+                                <Image source={tabImages.backButtonImage} style={styles.backIcon} />
                             </TouchableOpacity>
                         )}
 
@@ -105,7 +105,7 @@ export default function ForgotPasswordScreen({ navigation }) {
                     <View style={styles.modalOverlay}>
                         <View style={styles.modalContent}>
                             <Image
-                                source={require("../assets/ModalCheckmark.png")}
+                                source={onboardingImages.modalCheckMark}
                                 style={styles.modalImage}
                             />
                             <Text style={styles.modalTitle}>Password Reset Link Sent!</Text>

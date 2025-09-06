@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert } from "react-native";
-import AppTextInput from "../components/AppTextInput";
-import { validateInput } from "../validation/validateInput";
-import AppButton from "../components/AppButton";
-import Google from "../assets/googleIcon.png";
-import Facebook from "../assets/facebookIcon.png";
-// import colors from "../constants/colors";
+import AppTextInput from '../../components/AppTextInput';
+import { validateInput } from '../../validation/validateInput';
+import AppButton from "../../components/AppButton";
+
+
+import  {tabImages} from '../../constants/images';
+
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { ROUTES } from "../helper/routes";
-import { AuthService } from "../services/authService";
-import { getErrorMessage } from "../helper/firebaseErrorMessages";
+import { ROUTES } from '../../helper/routes';
+import { AuthService } from '../../services/authService';
+import { getErrorMessage } from '../../helper/firebaseErrorMessages';
 
 export default function CreateAccountScreen({ navigation }) {
     const [fullName, setFullName] = useState("");
@@ -102,12 +103,12 @@ export default function CreateAccountScreen({ navigation }) {
                     </View>
 
                     <TouchableOpacity style={[styles.socialButton, { backgroundColor: "#fff" }]}>
-                        <Image source={Google} style={styles.socialIcon}></Image>
+                        <Image source={tabImages.googleIcon} style={styles.socialIcon}></Image>
                         <Text style={styles.socialText}>Sign Up with Google</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={[styles.socialButton, { backgroundColor: "#1877F2" }]}>
-                        <Image source={Facebook} style={styles.socialIcon}></Image>
+                        <Image source={tabImages.facebookIcon} style={styles.socialIcon}></Image>
                         <Text style={styles.socialFacebookText}>Sign Up with Facebook</Text>
                     </TouchableOpacity>
 

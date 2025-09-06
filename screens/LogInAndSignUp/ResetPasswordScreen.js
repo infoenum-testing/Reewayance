@@ -7,9 +7,12 @@ import {
     Image,
     Modal,
 } from "react-native";
-import AppTextInput from "../components/AppTextInput";
-import AppButton from "../components/AppButton";
+import AppTextInput from "../../components/AppTextInput";
+import AppButton from "../../components/AppButton";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+
+import  {tabImages , onboardingImages} from '../../constants/images';
+
 
 export default function ResetPasswordScreen({ navigation }) {
     const [password, setPassword] = useState("");
@@ -34,7 +37,7 @@ export default function ResetPasswordScreen({ navigation }) {
                         onPress={() => navigation.goBack()}
                     >
                         <Image
-                            source={require("../assets/backButtonImage.png")}
+                            source={tabImages.backButtonImage}
                             style={styles.backIcon}
                         />
                     </TouchableOpacity>
@@ -79,7 +82,7 @@ export default function ResetPasswordScreen({ navigation }) {
                     <View style={styles.modalOverlay}>
                         <View style={styles.modalContent}>
                             <Image
-                                source={require("../assets/ModalCheckmark.png")}
+                                source={onboardingImages.modalCheckMark}
                                 style={styles.modalImage}
                             />
                             <Text style={styles.modalTitle}>Password Changed!</Text>

@@ -1,13 +1,15 @@
 // navigation/BottomTabNavigator.js
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from '../screens/HomeScreen';
-import CartScreen from '../screens/CartScreen';
-import SearchScreen from '../screens/SearchScreen';
-import SavedScreen from '../screens/SavedScreen';
-import AccountScreen from '../screens/AccountScreen';
+import HomeScreen from '../screens/Home/HomeScreen';
+import CartScreen from '../screens/Home/CartScreen';
+import SearchScreen from '../screens/Home/SearchScreen';
+import SavedScreen from '../screens/Home/SavedScreen';
+import AccountScreen from '../screens/Accounts/AccountScreen';
 import { ROUTES } from '../helper/routes';
 import { Image } from 'react-native';
+
+import {tabImages} from '../constants/images';
 
 const Tab = createBottomTabNavigator();
 
@@ -29,7 +31,7 @@ const BottomTabNavigator = () => {
           // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require("../assets/tabImage/homeActiveImage.png")}
+              source={tabImages.homeActiveImage}
               // eslint-disable-next-line react-native/no-inline-styles
               style={{
                 width: 24,
@@ -50,7 +52,7 @@ const BottomTabNavigator = () => {
           // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require("../assets/tabImage/searchActiveImage.png")}
+              source={tabImages.searchActiveImage}
               // eslint-disable-next-line react-native/no-inline-styles
               style={{
                 width: 24,
@@ -71,7 +73,7 @@ const BottomTabNavigator = () => {
           // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require("../assets/tabImage/saveActiveImage.png")}
+              source={tabImages.saveActiveImage}
               // eslint-disable-next-line react-native/no-inline-styles
               style={{
                 width: 24,
@@ -92,7 +94,7 @@ const BottomTabNavigator = () => {
           // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require("../assets/tabImage/cartActiveImage.png")}
+              source={tabImages.cartActiveImage}
               // eslint-disable-next-line react-native/no-inline-styles
               style={{
                 width: 24,
@@ -113,7 +115,7 @@ const BottomTabNavigator = () => {
           // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require("../assets/tabImage/accountActiveImage.png")}
+              source={tabImages.accountActiveImage}
               // eslint-disable-next-line react-native/no-inline-styles
               style={{
                 width: 24,

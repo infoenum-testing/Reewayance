@@ -9,53 +9,39 @@ import {
   Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ROUTES } from '../helper/routes';
-import AppButton from '../components/AppButton'; // ✅ make sure you already have this
+import { ROUTES } from '../../helper/routes';
+import AppButton from '../../components/AppButton'; // ✅ make sure you already have this
 import { useDispatch } from 'react-redux';
-import { logout, logoutUser } from '../src/redux/slices/authSlice'; // ✅ add your logout action
-import Header from '../components/Header';
+import { logout, logoutUser } from '../../src/redux/slices/authSlice'; // ✅ add your logout action
+import Header from '../../components/Header';
 
-const Icons = {
-  back: require('../assets/backButtonImage.png'),
-  vector: require('../assets/images/vector.png'),
-  chevronRight: require('../assets/accountImages/chevronRight.png'),
-};
-
-const AccountImages = {
-  myOrders: require('../assets/accountImages/myOrderImage.png'),
-  myDetails: require('../assets/accountImages/myDetailImage.png'),
-  addressBook: require('../assets/accountImages/addressImage.png'),
-  paymentMethods: require('../assets/accountImages/cardImage.png'),
-  notifications: require('../assets/images/vector.png'),
-  faq: require('../assets/accountImages/faqImage.png'),
-  helpCenter: require('../assets/accountImages/helpCenterImage.png'),
-  logout: require('../assets/accountImages/logoutImage.png'),
-};
+import  {AccountImages} from '../../constants/images';
+import  Images from '../../constants/images';
 
 const ACCOUNT_SECTIONS = [
   {
     title: 'Main',
-    data: [{ title: 'My Orders', icon: AccountImages.myOrders }],
+    data: [{ title: 'My Orders', icon: AccountImages.myOrderImages}],
   },
   {
     title: 'Profile',
     data: [
-      { title: 'My Details', icon: AccountImages.myDetails },
-      { title: 'Address Book', icon: AccountImages.addressBook },
-      { title: 'Payment Methods', icon: AccountImages.paymentMethods },
-      { title: 'Notifications', icon: AccountImages.notifications },
+      { title: 'My Details', icon: AccountImages.myDetailImages },
+      { title: 'Address Book', icon: AccountImages.addressImages },
+      { title: 'Payment Methods', icon: AccountImages.cardImage },
+      { title: 'Notifications', icon: Images.Notification },
     ],
   },
   {
     title: 'Support',
     data: [
-      { title: 'FAQs', icon: AccountImages.faq },
-      { title: 'Help Center', icon: AccountImages.helpCenter },
+      { title: 'FAQs', icon: AccountImages.faqImage },
+      { title: 'Help Center', icon: AccountImages.helpCenterImage },
     ],
   },
   {
     title: 'Logout',
-    data: [{ title: 'Logout', icon: AccountImages.logout, isLogout: true }],
+    data: [{ title: 'Logout', icon: AccountImages.logoutImage, isLogout: true }],
   },
 ];
 
@@ -75,7 +61,7 @@ const AccountItem = memo(({ item, onPress }) => (
       </Text>
     </View>
     {!item.isLogout && (
-      <Image source={Icons.chevronRight} style={styles.chevron} />
+      <Image source={AccountImages.chevronRight} style={styles.chevron} />
     )}
   </TouchableOpacity>
 ));
@@ -145,7 +131,7 @@ const AccountScreen = ({ navigation }) => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Image
-              source={require('../assets/accountImages/logoutConfirmImage.png')}
+              source={AccountImages.logoutConfirmImage}
               style={styles.modalImage}
             />
             <Text style={styles.modalTitle}>
