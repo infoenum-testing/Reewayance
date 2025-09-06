@@ -48,7 +48,7 @@ export  const onboardingImages  = {
     eyeOn: require('../assets/eyeOn.png'),
     facebookIcon: require('../assets/facebookIcon.png'),
     googleIcon: require('../assets/googleIcon.png'),
-    modalCheckMark: require('../assets/modalCheckMark.png'),
+    modalCheckMark: require('../assets/ModalCheckmark.png'),
     rightCheck: require('../assets/rightCheck.png'),
     warningCircle: require('../assets/warningCircle.png'),
 };
