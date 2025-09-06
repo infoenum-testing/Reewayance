@@ -19,7 +19,7 @@ import AppButton from "../../components/AppButton";
 import { getErrorMessage } from "../../helper/firebaseErrorMessages";
 
 
-import  {tabImages} from '../../constants/images';
+import  {onboardingImages} from '../../constants/images';
 
 export default function LoginScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -114,14 +114,14 @@ export default function LoginScreen({ navigation }) {
           <TouchableOpacity
             style={[styles.socialButton, { backgroundColor: "#fff" }]}
           >
-            <Image source={tabImages.googleIcon} style={styles.socialIcon} />
+            <Image source={onboardingImages.googleIcon} style={styles.socialIcon} />
             <Text style={styles.socialText}>Login with Google</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.socialButton, { backgroundColor: "#1877F2" }]}
           >
-            <Image source={tabImages.facebookIcon} style={styles.socialIcon} />
+            <Image source={onboardingImages.facebookIcon} style={styles.socialIcon} />
             <Text style={styles.socialFacebookText}>Login with Facebook</Text>
           </TouchableOpacity>
 
