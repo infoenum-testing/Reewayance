@@ -5,8 +5,7 @@ import { validateInput } from '../../validation/validateInput';
 import AppButton from "../../components/AppButton";
 
 
-import  {tabImages} from '../../constants/images';
-
+import  {onboardingImages} from '../../constants/images';
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { ROUTES } from '../../helper/routes';
 import { AuthService } from '../../services/authService';
@@ -103,12 +102,12 @@ export default function CreateAccountScreen({ navigation }) {
                     </View>
 
                     <TouchableOpacity style={[styles.socialButton, { backgroundColor: "#fff" }]}>
-                        <Image source={tabImages.googleIcon} style={styles.socialIcon}></Image>
+                        <Image source={onboardingImages.googleIcon} style={styles.socialIcon}></Image>
                         <Text style={styles.socialText}>Sign Up with Google</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={[styles.socialButton, { backgroundColor: "#1877F2" }]}>
-                        <Image source={tabImages.facebookIcon} style={styles.socialIcon}></Image>
+                        <Image source={onboardingImages.facebookIcon} style={styles.socialIcon}></Image>
                         <Text style={styles.socialFacebookText}>Sign Up with Facebook</Text>
                     </TouchableOpacity>
 
